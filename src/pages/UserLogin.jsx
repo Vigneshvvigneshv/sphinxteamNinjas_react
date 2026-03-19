@@ -48,8 +48,7 @@ const UserLogin = () => {
                 <LoginInput type="password" name='password' placeholder='Enter your password' required></LoginInput>
 
             </FieldContainer>
-
-
+            
             <LoginButton type='submit'>Login</LoginButton>
             </LoginForm>
         </LoginContainer>

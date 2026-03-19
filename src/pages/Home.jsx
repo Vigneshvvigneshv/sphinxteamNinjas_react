@@ -7,7 +7,7 @@ const Home = () => {
     <>
      
       <Layout>
-        <UserLogin></UserLogin>
+        
       </Layout>
     </>
   )
