@@ -1,10 +1,17 @@
 import React from 'react'
+import styled from 'styled-components'
+import Header from './Header';
 
-const Layout = () => {
+const MainConatainer=styled.div`
+margin:20px;`;
+
+const Layout = ({children}) => {
   return (
-    <div>
-      
-    </div>
+    <>
+    <Header></Header>
+    <MainConatainer>{children}</MainConatainer>
+    <Footer></Footer>
+    </>
   )
 }
 
