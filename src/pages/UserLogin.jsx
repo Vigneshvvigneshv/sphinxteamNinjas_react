@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from '../component/Layout'
 import { FieldContainer, LoginButton, LoginContainer, LoginForm, LoginHeading, LoginInput, LoginLabel } from '../Styles/UserLogin.style'
 
@@ -48,10 +48,9 @@ const UserLogin = () => {
                 <LoginInput type="password" name='password' placeholder='Enter your password' required></LoginInput>
 
             </FieldContainer>
-          
+            
             <LoginButton type='submit'>Login</LoginButton>
             </LoginForm>
-            
         </LoginContainer>
     </Layout>
   )
