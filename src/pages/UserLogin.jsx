@@ -50,8 +50,8 @@ const UserLogin = () => {
             </FieldContainer>
 
 
-            <LoginButton type='submit'>Login</LoginButton>
             </LoginForm>
+            <LoginButton type='submit'>Login</LoginButton>
         </LoginContainer>
     </Layout>
   )

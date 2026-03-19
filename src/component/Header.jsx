@@ -1,10 +1,19 @@
-import React from 'react'
+import { HeaderButton, HeaderContainer, HeaderLogo, NavButton } from '../Styles/HeaderStyle'
 
 const Header = () => {
   return (
-    <div>
-        
-    </div>
+   <>
+      <HeaderContainer>
+        <HeaderLogo>
+
+        </HeaderLogo>
+        <HeaderButton>
+            <NavButton to="/adminlogin">Admin Login</NavButton>
+            <NavButton to="/userlogin">User Login</NavButton>
+        </HeaderButton>
+      </HeaderContainer>
+    </>
+
   )
 }
 

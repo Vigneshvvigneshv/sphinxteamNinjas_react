@@ -1,5 +1,7 @@
 import React from 'react'
-import { AdminInput, AdminLabel, AdminLoginForm, FormContainer, AdminHeading, SubmitButton } from '../Styles/AdminLogin.style'
+
+import { AdminInput, AdminLabel, AdminLoginForm, FormContainer, FormHeading, SubmitButton } from '../Styles/AdminLogin.style'
+
 import Layout from '../component/Layout'
 const AdminLogin = () => {
   return (
