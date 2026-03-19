@@ -4,7 +4,6 @@ export const FormContainer=styled.div`]
     display:flex;
     flex-direction:column;
     gap:15px;
-    
 `
 export const FormHeading=styled.h2`
 
