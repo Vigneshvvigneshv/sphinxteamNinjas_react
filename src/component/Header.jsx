@@ -2,8 +2,7 @@ import { HeaderButton, HeaderContainer, HeaderLogo, NavButton } from '../Styles/
 
 const Header = () => {
   return (
-<<<<<<< HEAD
-    <>
+   <>
       <HeaderContainer>
         <HeaderLogo>
 
@@ -14,11 +13,7 @@ const Header = () => {
         </HeaderButton>
       </HeaderContainer>
     </>
-=======
-    <div>
-        
-    </div>
->>>>>>> 277a416d4c07dc70404604e09d9ae6872e84d298
+
   )
 }
 
