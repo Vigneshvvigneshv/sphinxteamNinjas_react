@@ -4,9 +4,8 @@ export const FormContainer=styled.div`]
     display:flex;
     flex-direction:column;
     gap:15px;
-    
 `
-export const FormHeading=styled.h2`
+export const AdminHeading=styled.h2`
 
 `
 export const AdminLoginForm=styled.form`
