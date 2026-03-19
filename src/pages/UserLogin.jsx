@@ -9,12 +9,12 @@ const UserLogin = () => {
         <LoginContainer>    
             <LoginForm>
             <FieldContainer>
-                <LoginLabel htmlFor='UserName'></LoginLabel>
+                <LoginLabel htmlFor='UserName'>UserName: </LoginLabel>
                 <LoginInput type="text" name='userName' placeholder='Enter your name'></LoginInput>
             </FieldContainer>
 
             <FieldContainer>
-                <LoginLabel htmlFor='UserName'></LoginLabel>
+                <LoginLabel htmlFor='UserName'>password:</LoginLabel>
                 <LoginInput type="password" name='userPassword' placeholder='Enter your password' required></LoginInput>
 
             </FieldContainer>

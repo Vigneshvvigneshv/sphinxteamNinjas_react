@@ -1,12 +1,14 @@
 import React from 'react'
 import Layout from '../component/Layout'
+import AdminLogin from './adminLogin'
+import UserLogin from './UserLogin'
 
 const Home = () => {
   return (
     <>
      
       <Layout>
-        <h2>Hello world</h2>
+        <UserLogin></UserLogin>
       </Layout>
     </>
   )
