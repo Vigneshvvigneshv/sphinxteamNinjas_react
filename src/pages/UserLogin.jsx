@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Layout from '../component/Layout'
-import { FieldContainer, LoginButton, LoginContainer, LoginForm, LoginHeading, LoginInput, LoginLabel } from '../Styles/UserLogin.style'
+import {  LoginContainer, LoginForm, LoginHeading } from '../Styles/UserLogin.style'
+import Login from '../component/Login';
 
 const UserLogin = () => {
 
@@ -38,25 +39,7 @@ const UserLogin = () => {
         <LoginContainer>    
         <LoginHeading>User Login</LoginHeading>
             <LoginForm onSubmit={handleSubmit}>
-
-            <FieldContainer>
-                <LoginLabel htmlFor='UserName'>UserName: </LoginLabel>
-                <LoginInput 
-                    type="text"  
-                    name='userName'
-                    placeholder='Enter your name'
-                    value={formData.userName}
-                    onChange={handleChange}>
-                     </LoginInput>
-            </FieldContainer>
-
-            <FieldContainer>
-                <LoginLabel htmlFor='password'>password:</LoginLabel>
-                <LoginInput type="password" name='password' placeholder='Enter your password' required></LoginInput>
-
-            </FieldContainer>
-            
-            <LoginButton type='submit'>Login</LoginButton>
+              <Login change={handleChange} username={formData}></Login>
             </LoginForm>
         </LoginContainer>
     </Layout>
