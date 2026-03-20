@@ -20,7 +20,7 @@ const UserLogin = () => {
  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("https://localhost:8443/sphinx/control/validateUserLogin", {
+    const response = await fetch("https://localhost:8443/sphinx/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -41,12 +41,19 @@ const UserLogin = () => {
 
             <FieldContainer>
                 <LoginLabel htmlFor='UserName'>UserName: </LoginLabel>
-                <LoginInput type="text" name='userName' placeholder='Enter your name'></LoginInput>
+                <LoginInput 
+                    type="text"  
+                    name='userName'
+                    placeholder='Enter your name'
+                    value={formData.userName}
+                    onChange={handleChange}>
+                     </LoginInput>
             </FieldContainer>
 
             <FieldContainer>
                 <LoginLabel htmlFor='password'>password:</LoginLabel>
                 <LoginInput type="password" name='password' placeholder='Enter your password' required></LoginInput>
+
             </FieldContainer>
             
             <LoginButton type='submit'>Login</LoginButton>
