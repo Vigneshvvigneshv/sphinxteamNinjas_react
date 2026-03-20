@@ -35,9 +35,10 @@ const UserLogin = () => {
 
   return (
     <Layout>
-        <LoginHeading>User Login</LoginHeading>
         <LoginContainer>    
+        <LoginHeading>User Login</LoginHeading>
             <LoginForm onSubmit={handleSubmit}>
+
             <FieldContainer>
                 <LoginLabel htmlFor='UserName'>UserName: </LoginLabel>
                 <LoginInput type="text" name='userName' placeholder='Enter your name'></LoginInput>
@@ -46,7 +47,6 @@ const UserLogin = () => {
             <FieldContainer>
                 <LoginLabel htmlFor='password'>password:</LoginLabel>
                 <LoginInput type="password" name='password' placeholder='Enter your password' required></LoginInput>
-
             </FieldContainer>
             
             <LoginButton type='submit'>Login</LoginButton>
