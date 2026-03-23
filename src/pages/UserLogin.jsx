@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import Layout from '../component/Layout'
-import { FieldContainer, LoginButton, LoginContainer, LoginForm, LoginHeading, LoginInput, LoginLabel } from '../Styles/UserLogin.style'
+import {  CreateAnAccount, LoginContainer, LoginForm, LoginHeading, NewAccountContainer, NLink } from '../styles/userlogin.style'
+import Login from '../component/Login';
+import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
-
+  const navigate = useNavigate();
     const[formData, setFormData] = useState({
         userName: "",
         password: "",
-        role: "USER"
   });
 
    const handleChange = (e) => {
@@ -19,8 +20,10 @@ const UserLogin = () => {
 
  const handleSubmit = async (e) => {
     e.preventDefault();
+  
 
-    const response = await fetch("http://localhost:8443/sphinx/control/validateuserLogin", {
+
+    const response = await fetch("https://localhost:8443/sphinx/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -30,28 +33,32 @@ const UserLogin = () => {
 
     const data = await response.json();
     console.log(data);
+
+   {
+    if (data.successMessage === "SPHINX_ADMIN") {
+      navigate("/admin-dashboard");
+    } else if(data.successMessage==="SPHINX_USER") {
+      navigate("/user-dashboard");
+    }else{
+      alert("Inavlid login")
+    }
+  } 
+
   };
 
 
   return (
     <Layout>
-        <LoginHeading>User Login</LoginHeading>
         <LoginContainer>    
+        <LoginHeading>User Login</LoginHeading>
             <LoginForm onSubmit={handleSubmit}>
-            <FieldContainer>
-                <LoginLabel htmlFor='UserName'>UserName: </LoginLabel>
-                <LoginInput type="text" name='userName' placeholder='Enter your name'></LoginInput>
-            </FieldContainer>
-
-            <FieldContainer>
-                <LoginLabel htmlFor='password'>password:</LoginLabel>
-                <LoginInput type="password" name='password' placeholder='Enter your password' required></LoginInput>
-
-            </FieldContainer>
-
-
+              <Login change={handleChange} username={formData}></Login>
             </LoginForm>
-            <LoginButton type='submit'>Login</LoginButton>
+
+           <NewAccountContainer>
+            <CreateAnAccount>CreateAnAccount?</CreateAnAccount>
+            <NLink to="/SignUp">SignUp</NLink>
+           </NewAccountContainer>
         </LoginContainer>
     </Layout>
   )

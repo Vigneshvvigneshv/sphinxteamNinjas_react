@@ -1,24 +1,47 @@
-import React from 'react'
-
-import { AdminInput, AdminLabel, AdminLoginForm, FormContainer, FormHeading, SubmitButton } from '../Styles/AdminLogin.style'
-
 import Layout from '../component/Layout'
+import Login from '../component/Login'
+import { LoginContainer, LoginForm, LoginHeading } from '../styles/userlogin.style'
+import { useState } from 'react'
+
 const AdminLogin = () => {
+
+    const[formData, setFormData] = useState({
+        userName: "",
+        password: "",
+        role: "ADMIN"
+  });
+
+   const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+ const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("https://localhost:8443/sphinx/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
+
+
   return (
-    <Layout>
-        
-        <FormContainer>
-
-        <AdminLoginForm action={""} method='post'>
-            <AdminLabel htmlFor='adminName'>AdminName:</AdminLabel>
-            <AdminInput type='text' placeholder='Enter your username' name='adminName' required></AdminInput>
-
-            <AdminLabel htmlFor='adminpassword'>AdminPassword</AdminLabel>
-                <AdminInput type='password' placeholder='Enter your password' name='adminPassword' required></AdminInput>
-            <SubmitButton type='submit'>Login</SubmitButton>
-        </AdminLoginForm>
-
-        </FormContainer>
+   <Layout>
+        <LoginContainer>    
+        <LoginHeading>Admin Login</LoginHeading>
+            <LoginForm onSubmit={handleSubmit}>
+              <Login change={handleChange} username={formData}></Login>
+            </LoginForm>
+        </LoginContainer>
     </Layout>
   )
 }

@@ -5,9 +5,8 @@ import UserLogin from './UserLogin'
 const Home = () => {
   return (
     <>
-     
       <Layout>
-        <UserLogin></UserLogin>
+        
       </Layout>
     </>
   )

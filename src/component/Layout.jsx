@@ -2,15 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 import Header from './Header';
 import Footer from './Footer';
+import {  MainContainer } from '../styles/layout.style';
 
-const MainConatainer=styled.div`
-margin:20px;`;
+
+
 
 const Layout = ({children}) => {
   return (
     <>
     <Header></Header>
-    <MainConatainer>{children}</MainConatainer>
+    <MainContainer>{children}</MainContainer>
     <Footer></Footer>
     </>
   )

@@ -1,4 +1,4 @@
-import { HeaderButton, HeaderContainer, HeaderLogo, NavButton } from '../Styles/HeaderStyle'
+import { HeaderButton, HeaderContainer, HeaderLogo, NavButton } from '../styles/header.style'
 
 const Header = () => {
   return (
@@ -10,6 +10,7 @@ const Header = () => {
         <HeaderButton>
             <NavButton to="/adminlogin">Admin Login</NavButton>
             <NavButton to="/userlogin">User Login</NavButton>
+            
         </HeaderButton>
       </HeaderContainer>
     </>
