@@ -1,5 +1,5 @@
 import React from 'react'
-import { FieldContainer, LoginButton, LoginInput, LoginLabel } from '../Styles/UserLogin.style'
+import { FieldContainer, LoginButton, LoginInput, LoginLabel } from '../styles/userlogin.style'
 
 const Login = ({change,username}) => {
   return (
@@ -9,17 +9,16 @@ const Login = ({change,username}) => {
                 <LoginInput 
                     type="text"  
                     name='userName'
-                    placeholder='Enter your name'
+                    placeholder='Enter your username'
                     value={username.userName}
-                    onChange={change}>
-                     </LoginInput>
+                    onChange={change}  required>
+                    </LoginInput>
             </FieldContainer>
 
             <FieldContainer>
                 <LoginLabel htmlFor='password'>Password:</LoginLabel>
                 <LoginInput type="password" name='password' placeholder='Enter your password' value={username.password}
                     onChange={change} required></LoginInput>
-
             </FieldContainer>
             
             <LoginButton type='submit'>Login</LoginButton>

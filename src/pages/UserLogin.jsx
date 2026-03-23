@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import Layout from '../component/Layout'
-import {  LoginContainer, LoginForm, LoginHeading } from '../Styles/UserLogin.style'
+import {  CreateAnAccount, LoginContainer, LoginForm, LoginHeading, NewAccountContainer, NLink } from '../styles/userlogin.style'
 import Login from '../component/Login';
+import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
-
+  const navigate = useNavigate();
     const[formData, setFormData] = useState({
         userName: "",
         password: "",
-        role: "USER"
   });
 
    const handleChange = (e) => {
@@ -20,6 +20,8 @@ const UserLogin = () => {
 
  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+
 
     const response = await fetch("https://localhost:8443/sphinx/api/user/login", {
       method: "POST",
@@ -31,6 +33,17 @@ const UserLogin = () => {
 
     const data = await response.json();
     console.log(data);
+
+   {
+    if (data.successMessage === "SPHINX_ADMIN") {
+      navigate("/admin-dashboard");
+    } else if(data.successMessage==="SPHINX_USER") {
+      navigate("/user-dashboard");
+    }else{
+      alert("Inavlid login")
+    }
+  } 
+
   };
 
 
@@ -41,6 +54,11 @@ const UserLogin = () => {
             <LoginForm onSubmit={handleSubmit}>
               <Login change={handleChange} username={formData}></Login>
             </LoginForm>
+
+           <NewAccountContainer>
+            <CreateAnAccount>CreateAnAccount?</CreateAnAccount>
+            <NLink to="/SignUp">SignUp</NLink>
+           </NewAccountContainer>
         </LoginContainer>
     </Layout>
   )

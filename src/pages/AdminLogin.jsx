@@ -1,6 +1,6 @@
 import Layout from '../component/Layout'
 import Login from '../component/Login'
-import { LoginContainer, LoginForm, LoginHeading } from '../Styles/UserLogin.style'
+import { LoginContainer, LoginForm, LoginHeading } from '../styles/userlogin.style'
 import { useState } from 'react'
 
 const AdminLogin = () => {
