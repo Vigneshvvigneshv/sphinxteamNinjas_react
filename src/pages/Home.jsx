@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../component/Layout'
-import UserLogin from './UserLogin'
+import UserLogin from './LoginPage'
 
 const Home = () => {
   return (
