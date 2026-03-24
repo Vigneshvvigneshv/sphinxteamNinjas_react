@@ -64,7 +64,7 @@ export const SubmitButton=styled.button`
 `;
 
 export const ErrorMessage=styled.p`
-    font-size:14px;
+    font-size:12px;
     color:red;
     margin:0;
 `
