@@ -4,7 +4,7 @@ import {  CreateAnAccount, LoginContainer, LoginForm, LoginHeading, NewAccountCo
 import Login from '../component/Login';
 import { useNavigate } from 'react-router-dom';
 
-const UserLogin = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
     const[formData, setFormData] = useState({
         userName: "",
@@ -48,20 +48,14 @@ const UserLogin = () => {
 
 
   return (
-    <Layout>
+    
         <LoginContainer>    
-        <LoginHeading>User Login</LoginHeading>
+        <LoginHeading>Login page</LoginHeading>
             <LoginForm onSubmit={handleSubmit}>
               <Login change={handleChange} username={formData}></Login>
             </LoginForm>
-
-           <NewAccountContainer>
-            <CreateAnAccount>CreateAnAccount?</CreateAnAccount>
-            <NLink to="/SignUp">SignUp</NLink>
-           </NewAccountContainer>
         </LoginContainer>
-    </Layout>
   )
 }
 
-export default UserLogin
+export default LoginPage
