@@ -35,9 +35,9 @@ const UserLogin = () => {
     console.log(data);
 
    {
-    if (data.successMessage === "SPHINX_ADMIN") {
+    if (data.role === "SPHINX_ADMIN") {
       navigate("/admin-dashboard");
-    } else if(data.successMessage==="SPHINX_USER") {
+    } else if(data.role==="SPHINX_USER") {
       navigate("/user-dashboard");
     }else{
       alert("Inavlid login")
