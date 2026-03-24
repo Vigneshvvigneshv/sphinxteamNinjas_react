@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
 
 const LoginPage = () => {
-  const[error,setError]=useState({});
+  const[error,setError]=useState("");
   const navigate = useNavigate();
     const[formData, setFormData] = useState({
         userName: "",
@@ -42,7 +42,7 @@ const LoginPage = () => {
     const data = await response.json();
     console.log(data);
     if(data.errorMessage!==null){
-        setError(data.errorMessage)
+        setError(data)
     }else{
 
       if (data.role === "SPHINX_ADMIN") {

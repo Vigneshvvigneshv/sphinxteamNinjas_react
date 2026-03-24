@@ -16,6 +16,7 @@ const Login = ({change,username,error}) => {
                     onChange={change} >
                     </LoginInput>
                   {error.userName && <ErrorMessage>{error.userName}</ErrorMessage>}
+                  
         </FieldContainer>
 
             <FieldContainer>
