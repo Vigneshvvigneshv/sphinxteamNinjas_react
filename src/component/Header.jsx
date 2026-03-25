@@ -7,6 +7,7 @@ const Header = () => {
         <HeaderLogo>
           <Title>Sphinx</Title>
         </HeaderLogo>
+        <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
       </HeaderContainer>
   )
 }

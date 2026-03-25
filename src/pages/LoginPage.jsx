@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import Layout from '../component/Layout'
-import {  LoginContainer, LoginForm, LoginHeading } from '../styles/userlogin.style'
-import Login from '../component/Login';
 import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
+import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
+import { LoginContainer } from '../styles/common.style';
 
 const LoginPage = () => {
   const[error,setError]=useState("");
@@ -57,11 +56,33 @@ const LoginPage = () => {
 
   return (
     
-        <LoginContainer>    
-        <LoginHeading>Login page</LoginHeading>
-            <LoginForm onSubmit={handleSubmit}>
-              <Login change={handleChange} username={formData} error={error}></Login>
-            </LoginForm>
+        <LoginContainer>   
+          <FormContainer>
+        <FormHeading>Login page</FormHeading>
+            <Form onSubmit={handleSubmit}>
+              <FieldContainer>
+                <FormLabel htmlFor='UserName'>Username </FormLabel>
+                <FormInput 
+                    type="text"  
+                    name='userName'
+                    placeholder='Enter your username'
+                    value={formData.userName}
+                    onChange={handleChange} >
+                    </FormInput>
+                  {error.userName && <ErrorMessage>{error.userName}</ErrorMessage>}
+                  
+        </FieldContainer>
+
+            <FieldContainer>
+                <FormLabel htmlFor='password'>Password</FormLabel>
+                <FormInput type="password" name='password' placeholder='Enter your password' value={formData.password}
+                    onChange={handleChange} ></FormInput>
+                      {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
+            </FieldContainer>
+            
+            <SubmitButton type='submit'>Login</SubmitButton>
+            </Form>
+          </FormContainer> 
         </LoginContainer>
   )
 }

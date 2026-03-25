@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { ErrorMessage, FieldContainer, SignUpContainer, SignupForm, SignUpHeading, SignUpInput, SignUpLabel, SingupLayout, SubmitButton} from '../styles/signup.style'
 import { validate } from '../Validation/SignUpFormValidation';
+import Layout from '../component/Layout';
+import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
 
 
 
@@ -49,66 +50,66 @@ const SignUp = () => {
         console.log(data);
       };
   return (
-    <SingupLayout>
-      <SignUpContainer>
-        <SignUpHeading>Singup Form</SignUpHeading>
-            <SignupForm onSubmit={handleSubmit}>
+    <Layout>
+      <FormContainer>
+        <FormHeading>Singup Form</FormHeading>
+            <Form onSubmit={handleSubmit}>
                 <FieldContainer>
-                <SignUpLabel htmlFor='userName'>Username </SignUpLabel>
-                <SignUpInput type='text'
+                <FormLabel htmlFor='userName'>Username </FormLabel>
+                <FormInput type='text'
                         name="userName"
                         placeholder='Enter your username'
                         value={formData.userName}
-                        onChange={handleChange}></SignUpInput>
+                        onChange={handleChange}></FormInput>
 
                  {error.userName && <ErrorMessage>{error.userName}</ErrorMessage>}
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='firstName'>First Name </SignUpLabel>
-                <SignUpInput type='text'
+                <FormLabel htmlFor='firstName'>First Name </FormLabel>
+                <FormInput type='text'
                         name="firstName"
                         placeholder='Enter your first name'
                         value={formData.firstName}
-                        onChange={handleChange}></SignUpInput>
+                        onChange={handleChange}></FormInput>
                         {error.firstName && <ErrorMessage>{error.firstName}</ErrorMessage>}
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='lastName'>Last Name </SignUpLabel>
-                <SignUpInput type='text'
+                <FormLabel htmlFor='lastName'>Last Name </FormLabel>
+                <FormInput type='text'
                         name="lastName"
                         placeholder='Enter your last name'
                         value={formData.lastName}
-                        onChange={handleChange}></SignUpInput>
+                        onChange={handleChange}></FormInput>
                         {error.lastName && <ErrorMessage>{error.lastName}</ErrorMessage>}
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='email'>Email </SignUpLabel>
-                <SignUpInput type='text'
+                <FormLabel htmlFor='email'>Email </FormLabel>
+                <FormInput type='text'
                         name="email"
                         placeholder='Enter your email'
                         value={formData.email}
-                        onChange={handleChange}></SignUpInput>
+                        onChange={handleChange}></FormInput>
                         {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='password'>Password </SignUpLabel>
-                <SignUpInput type='password'
+                <FormLabel htmlFor='password'>Password </FormLabel>
+                <FormInput type='password'
                         name="password"
                         placeholder='Enter your password'
                         value={formData.password}
-                        onChange={handleChange}></SignUpInput>
+                        onChange={handleChange}></FormInput>
                         {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
                 </FieldContainer>
 
                 <SubmitButton>Submit</SubmitButton>
-            </SignupForm>
+            </Form>
             
-      </SignUpContainer>
-     </SingupLayout>
+      </FormContainer>
+     </Layout>
   )
 }
 
