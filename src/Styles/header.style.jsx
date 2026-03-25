@@ -2,6 +2,8 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const HeaderContainer=styled.div`
+    background-color:rgb(132, 96, 46);
+    padding:10px 15px;
 `;
 
 export const HeaderLogo=styled.div`

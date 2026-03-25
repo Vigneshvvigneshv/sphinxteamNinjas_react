@@ -10,9 +10,9 @@ import {  MainContainer } from '../styles/layout.style';
 const Layout = ({children}) => {
   return (
     <>
-    <Header></Header>
-    <MainContainer>{children}</MainContainer>
-    <Footer></Footer>
+      <Header></Header>
+      <MainContainer>{children}</MainContainer>
+      <Footer></Footer>
     </>
   )
 }

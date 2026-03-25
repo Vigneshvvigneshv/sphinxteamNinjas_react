@@ -1,8 +1,15 @@
 import React from 'react'
+import Layout from '../component/Layout'
+import { Button } from '../styles/overall.style'
+import { NLink } from '../styles/userlogin.style'
+import { NavButton } from '../styles/header.style'
 
 const AdminDashBoard = () => {
   return (
-    <h1>Welcome to the admin dashBoard</h1>
+    <Layout> 
+      <NavButton to="/addUser">Add user</NavButton>
+      <NavButton to="/addUser">Add user</NavButton>  
+    </Layout>
   )
 }
 

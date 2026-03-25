@@ -54,7 +54,7 @@ const SignUp = () => {
         <SignUpHeading>Singup Form</SignUpHeading>
             <SignupForm onSubmit={handleSubmit}>
                 <FieldContainer>
-                <SignUpLabel htmlFor='userName'>Username: </SignUpLabel>
+                <SignUpLabel htmlFor='userName'>Username </SignUpLabel>
                 <SignUpInput type='text'
                         name="userName"
                         placeholder='Enter your username'
@@ -65,7 +65,7 @@ const SignUp = () => {
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='firstName'>First Name: </SignUpLabel>
+                <SignUpLabel htmlFor='firstName'>First Name </SignUpLabel>
                 <SignUpInput type='text'
                         name="firstName"
                         placeholder='Enter your first name'
@@ -75,7 +75,7 @@ const SignUp = () => {
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='lastName'>Last Name: </SignUpLabel>
+                <SignUpLabel htmlFor='lastName'>Last Name </SignUpLabel>
                 <SignUpInput type='text'
                         name="lastName"
                         placeholder='Enter your last name'
@@ -85,7 +85,7 @@ const SignUp = () => {
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='email'>Email: </SignUpLabel>
+                <SignUpLabel htmlFor='email'>Email </SignUpLabel>
                 <SignUpInput type='text'
                         name="email"
                         placeholder='Enter your email'
@@ -95,7 +95,7 @@ const SignUp = () => {
                 </FieldContainer>
 
                 <FieldContainer>
-                <SignUpLabel htmlFor='password'>Password: </SignUpLabel>
+                <SignUpLabel htmlFor='password'>Password </SignUpLabel>
                 <SignUpInput type='password'
                         name="password"
                         placeholder='Enter your password'

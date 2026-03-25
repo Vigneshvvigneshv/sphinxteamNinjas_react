@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../component/Layout'
-import {  CreateAnAccount, LoginContainer, LoginForm, LoginHeading, NLink } from '../styles/userlogin.style'
+import {  LoginContainer, LoginForm, LoginHeading } from '../styles/userlogin.style'
 import Login from '../component/Login';
 import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
@@ -43,16 +43,15 @@ const LoginPage = () => {
     console.log(data);
     if(data.errorMessage!==null){
         setError(data)
-    }else{
+    }
 
       if (data.role === "SPHINX_ADMIN") {
+        console.log(data.role);
+        
         navigate("/admin-dashboard");
       } else if(data.role==="SPHINX_USER") {
         navigate("/user-dashboard");
-      }else{
-        alert("Inavlid login")
       }
-    }
   };
 
 
