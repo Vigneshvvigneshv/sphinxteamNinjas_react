@@ -68,3 +68,8 @@ export const ErrorMessage=styled.p`
     color:red;
     margin:0;
 `
+export const SuccessMessage=styled.p`
+    font-size:12px;
+    color:green;
+    margin:0;
+`

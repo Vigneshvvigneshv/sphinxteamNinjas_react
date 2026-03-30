@@ -6,7 +6,9 @@ import UserDashBoard from './pages/UserDashBoard'
 import LoginPage from './pages/LoginPage'
 import CreateQuestionPage from './pages/CreateQuestionPage'
 import TopicPage from './pages/TopicPage'
-
+import AddTopic from './pages/AddEditTopic'
+import QuestionPage from './pages/QuestionPage'
+import AddExam from './pages/AddEditExam'
 
 const App = () => {
   return (
@@ -16,8 +18,14 @@ const App = () => {
       <Route path="/adduser" element={<SignUp></SignUp>}></Route>
       <Route path="/admin-dashboard" element={<AdminDashBoard />} />
       <Route path="/user-dashboard" element={<UserDashBoard />} />
-     <Route path="/topic" element={<TopicPage />} />
-     <Route path='/createquestion' element={<CreateQuestionPage/>}/>
+      <Route path="/topic" element={<TopicPage />} />
+      <Route path='/createquestion' element={<CreateQuestionPage/>}/>
+      <Route path='/addtopic/' element={<AddTopic/>}/>
+      <Route path='/addtopic/:id' element={<AddTopic/>}/>
+      <Route path='/question/:id' element={<QuestionPage/>}/>
+      <Route path='/question/addquestion' element={<CreateQuestionPage/>}/>
+      <Route path='/addexam' element={<AddExam/>}/>
+      <Route path='/getexam/:id' element={<AddExam/>}/>
     </Routes>
     </>
   )

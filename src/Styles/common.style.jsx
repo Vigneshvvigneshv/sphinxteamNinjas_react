@@ -21,10 +21,10 @@ export const Button=styled.button`
   border-radius: 6px;
   background: rgb(205 161 100);
   color: white;
-  font-size: 16px;
   cursor: pointer;
   transition: 0.3s;
-
+  font-weight:bold;
+  font-size:14px;
   &:hover {
     background: rgb(132, 96, 46);
   }
@@ -39,9 +39,9 @@ export const CommonContainer=styled.div`
     display:flex;
     align-items:center;
     justify-content:center;
-    background-color:rgb(255, 255, 255);
-    padding:10px 15px;
     border-radius:8px;
+    flex-direction:column;
+    gap:10px;
 `;
 
 export const CommonHeader=styled.div`
@@ -49,7 +49,51 @@ export const CommonHeader=styled.div`
     align-items:center;
     justify-content:space-between;
     width:100%;
+    background-color:rgb(255, 255, 255);
+    padding:10px 15px;
+    border-radius:8px;
 `;
 export const CommonSection=styled.section`
     margin-top:15px;
+    border-radius:8px;
+    width:100%;
+`;
+
+export const CommonTable=styled.div`
+
+`;
+
+export const TableRow=styled.div`
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:15px;
+    background-color:rgb(255, 255, 255);
+    padding:10px 15px;
+    border-radius:8px;
+`;
+
+export const Content=styled.p`
+    font-weight:bold;
+    font-size:16px;
+`;
+
+export const ButtonContainer=styled.div`
+    display:flex;
+    gap:10px;
+    button{
+        padding:7px 9px;
+    }
+`;
+
+export const EmptyContent=styled.p`
+    font-weight:bold;
+    font-size:16px;
+    text-align:center;
+    flex:1;
+`;
+
+export const Backdrop=styled.div`
+    background-color:rgb(95, 89, 89);
+    z-index:100;
 `;

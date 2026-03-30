@@ -16,12 +16,13 @@ export const HeaderButton=styled(NavLink)`
     text-decoration:none;
     background:none;
     font-size:16px;
-    padding:5px 10px;
+    padding:7px 10px;
     color:white;
     font-weight:bold;
     border:none;
     &:hover{
         border:1px solid white;
+        font-size:14px;
     }
 `;
 

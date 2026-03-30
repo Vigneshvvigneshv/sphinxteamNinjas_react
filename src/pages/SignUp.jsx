@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { validate } from '../Validation/SignUpFormValidation';
 import Layout from '../component/Layout';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
+import { CommonContainer } from '../styles/common.style';
 
 
 
@@ -51,6 +52,8 @@ const SignUp = () => {
       };
   return (
     <Layout>
+      <CommonContainer>
+
       <FormContainer>
         <FormHeading>Singup Form</FormHeading>
             <Form onSubmit={handleSubmit}>
@@ -109,6 +112,7 @@ const SignUp = () => {
             </Form>
             
       </FormContainer>
+      </CommonContainer>
      </Layout>
   )
 }
