@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout';
-import { CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common.style';
+import { CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common.style';
 import { NavButton } from '../styles/header.style';
 import Table from '../component/Table';
 import Empty from '../component/Empty';
 import { useParams } from 'react-router-dom';
 import QuestionTable from '../component/QuestionTable';
-import { apiGet } from '../ApiServices/apiServices';
 
 const QuestionPage = () => {
  const[data,setData]=useState("");
@@ -14,9 +13,14 @@ const QuestionPage = () => {
   useEffect(()=>{
   
     const fetchData = async () => {
-    const response= await apiGet('/question/getquestionsbytopic?topicId='+id)
-    
-      setData(response);
+    const response= await fetch("https://localhost:8443/sphinx/api/question/getquestionsbytopic?topicId="+id,{
+      method:"GET",
+      headers:{
+        "Content-Type":"application/json"
+      },
+    });
+      const value=await response.json();
+      setData(value);
     }
 
     fetchData();
@@ -29,14 +33,13 @@ const QuestionPage = () => {
     <Layout>
       <CommonContainer>
         <CommonHeader>
-          <Content>{data.topicName}</Content>
-          <Content>Question type</Content>
+          <CommonHeading>{data.topicName}</CommonHeading>
           <NavButton to="/createquestion" state={{topicId:data.topicId}}>Add question</NavButton>
         </CommonHeader>
         
         <CommonSection>
             { (data.status=== 'SUCCESS')?
-               data.questionList.map((e)=>{ return <QuestionTable data={e} key={e.questionId}></QuestionTable>}):<Empty>No question table</Empty>
+               data.questionList.map((e)=>{ return <QuestionTable data={e} key={e.questionId}></QuestionTable>}):<Empty>{data.errorMessage}</Empty>
             }
             
         </CommonSection>

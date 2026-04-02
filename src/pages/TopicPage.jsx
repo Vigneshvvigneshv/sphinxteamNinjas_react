@@ -4,20 +4,15 @@ import { NavButton } from '../styles/header.style'
 import { CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable , TableRow } from '../styles/common.style'
 import Table from '../component/Table'
 import Empty from '../component/Empty'
+import { apiGet } from '../ApiServices/apiServices'
 
 const TopicPage = () => {
   const[data,setData]=useState("");
  
   useEffect(()=>{
-     const fetchData = async () => {
-    const response= await fetch("https://localhost:8443/sphinx/api/topic/getalltopic",{
-      method:"GET",
-      headers:{
-        "Content-Type":"application/json"
-      }
-    });
-    const value=await response.json();
-    setData(value);
+    const fetchData =async () => {
+    const response= await apiGet('/topic/getalltopic')
+    setData(response);
   }
     fetchData()
   },[]);
@@ -33,7 +28,7 @@ const TopicPage = () => {
         
         <CommonSection>
             { (data.responseMessage=== 'success')?
-               data.topicList.map((e)=>{ return <Table data={e} key={e.topicId} ></Table>}):<Empty>{data.errorMessage}</Empty>
+               data.topicList.map((e)=>{ return <Table data={e} key={e.topicId} ></Table>}):<Empty>No topic available</Empty>
             }
             
         </CommonSection>

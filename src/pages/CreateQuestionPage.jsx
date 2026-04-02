@@ -1,20 +1,68 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
-import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
-import { CommonContainer } from '../styles/common.style';
+import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, FormText, SubmitButton, SuccessMessage } from '../styles/form.style';
+import { CommonContainer, CommonHeading, Container, Content, Dropdown, Title } from '../styles/common.style';
+import { useLocation, useParams } from 'react-router-dom';
+import SingleChoice from '../component/SingleChoice';
+import MultiChoice from '../component/MultiChoice';
+import { QuestionContainer, QuestionFieldContainer, QuestionFormContainer, QuestionHeaderContainer } from '../styles/question.style';
+import { validateQuestion } from '../validation/ValidationUtil';
+import { apiPost } from '../ApiServices/apiServices';
 
 const CreateQuestionPage = () => {
+    const {id}=useParams();
+    const location=useLocation();
+    const topicId=location.state?.topicId;
     const [error,setError]=useState("");
+    const[questionType,setQuestionType]=useState('SINGLE_CHOICE');
+    const[difficultyLevel,setDifficultyLevel]=useState('1');
+
         console.log(error);
-        
          const[formData, setFormData] = useState({
-                topicName: ""
+                topicId: topicId,
+                questionDetail:"",
+                optionA:"",
+                optionB:"",
+                optionC:"",
+                optionD:"",
+                answer:"",
+                numAnswers:1,
+                questionTypeId:questionType,
+                difficultyLevel:difficultyLevel,
+                answerValue:"",
+                negativeMarkValue:""
           });
     
+        useEffect(()=>{
+                console.log(id);
+                
+                if(id!==undefined){
+                    const fetchData = async () => {
+                    const response= await apiGet('/question/getquestionbyid'+id);
+               
+                    console.log(response);
+        
+                         
+                         setFormData({
+                            ...formData,
+                            examName: response.examList.examName,
+                            description:response.examList.description,
+                            noOfQuestions:response.examList.noOfQuestions,
+                            duration:response.examList.duration,
+                            passPercentage:response.examList.passPercentage
+                         })
+                         
+                    }
+                     fetchData()    
+                }
+            },[])
           const handleChange=(e)=>{
             setFormData({
                 ...formData,
-                [e.target.name]:e.target.value
+                [e.target.name]:e.target.value,
+                questionTypeId:questionType,
+                difficultyLevel:difficultyLevel
+
             });
             setError({
                 ...error,
@@ -23,90 +71,94 @@ const CreateQuestionPage = () => {
           }
         const handleSubmit=async(e)=>{
             e.preventDefault();
-            const validationErrors = validateEmpty(formData);
+            const validationErrors = validateQuestion(formData);
                       setError(validationErrors);
                       if (Object.keys(validationErrors).length > 0) return;
-            const response=await fetch("https://localhost:8443/sphinx/api/topic/createtopic",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify(formData)
-            });
-    
-            const data=await response.json();
-            console.log(data);
-            if(data.errorMessage!==null){
-                setError(data);
+            const response=await apiPost('/question/createquestion',formData);
+            
+            console.log(response);
+            if(response.errorMessage!==null){
+                setError(response);
+            }else if(response.successMessage!==null){
+                setError(response);
+                setFormData({
+                    ...formData,
+                    [e.target.name]: ""
+                })
             }
         }
   return (
     <Layout>
-            <CommonContainer>
+        <QuestionContainer>
+        <QuestionHeaderContainer className='flex-style'>
+            <CommonHeading>Question type</CommonHeading>    
+             <Dropdown value={questionType} onChange={(e)=>{setQuestionType(e.target.value);setError("")}}>
+                <option value='SINGLE_CHOICE'>Single choice</option>
+                <option value='MULTI_CHOICE'>Multiple choice</option>
+                <option value='TRUE_FALSE'>True or false</option>
+                <option value='FILL_BLANKS'>Fill in the blanks</option>
+                <option value='DETAILED_ANSWER'>Detailed answer</option>
+              </Dropdown>     
+        </QuestionHeaderContainer>
+            
+            <QuestionFormContainer>
+                <Form onSubmit={handleSubmit}>
 
-            <FormContainer>
-            <FormHeading>Create question</FormHeading>
-            <Form onSubmit={handleSubmit}>
-                    <FieldContainer>
+                <QuestionFieldContainer>
                         <FormLabel>Question text</FormLabel>
-                        <FormInput name='questionDetail' placeholder='Enter the question'
+                        <FormText name='questionDetail' placeholder='Enter the question'
                         type='text'
+                        value={formData.questionDetail}
                         onChange={handleChange}
                         />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
-                    <FieldContainer>
-                        <FormLabel>Option A</FormLabel>
-                        <FormInput name='optionA' placeholder='Enter the option A'
+                        {error.questionDetail && <ErrorMessage>{error.questionDetail}</ErrorMessage>}
+                    </QuestionFieldContainer>
+                    {questionType==='SINGLE_CHOICE'&& <SingleChoice change={handleChange} error={error} data={formData}/>}
+                    {questionType==='MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData}/>}
+                     <QuestionFieldContainer>
+                        <FormLabel>Answer</FormLabel>
+                        <FormInput name='answer' placeholder='Enter the answer option'
                         type='text'
+                        value={formData.answer}
                         onChange={handleChange}
                         />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
-                    <FieldContainer>
-                        <FormLabel>Option B</FormLabel>
-                        <FormInput name='optionB' placeholder='Enter the option B'
-                        type='text'
-                        onChange={handleChange}
-                        />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
-                    <FieldContainer>
-                        <FormLabel>Option C</FormLabel>
-                        <FormInput name='optionC' placeholder='Enter the option C'
-                        type='text'
-                        onChange={handleChange}
-                        />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
-                    <FieldContainer>
-                        <FormLabel>Option D</FormLabel>
-                        <FormInput name='optionD' placeholder='Enter the option D'
-                        type='text'
-                        onChange={handleChange}
-                        />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
-                    <FieldContainer>
-                        <FormLabel>Number of answers</FormLabel>
-                        <FormInput name='numAnswers' placeholder='Enter the number of answers'
-                        type='text'
-                        onChange={handleChange}
-                        />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
-                    <FieldContainer>
+                        {error.answer && <ErrorMessage>{error.answer}</ErrorMessage>}
+                    </QuestionFieldContainer>
+                    <QuestionFieldContainer>
                         <FormLabel>Mark</FormLabel>
                         <FormInput name='answerValue' placeholder='Enter the mark'
                         type='text'
+                        value={formData.answerValue}
                         onChange={handleChange}
                         />
-                        {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                    </FieldContainer>
+                        {error.answerValue && <ErrorMessage>{error.answerValue}</ErrorMessage>}
+                    </QuestionFieldContainer>
+                    <QuestionFieldContainer>
+                        <FormLabel>Negative mark</FormLabel>
+                        <FormInput name='negativeMarkValue' placeholder='Enter the negative mark'
+                        type='text'
+                        value={formData.negativeMarkValue}
+                        onChange={handleChange}
+                        />
+                        {error.negativeMarkValue && <ErrorMessage>{error.negativeMarkValue}</ErrorMessage>}
+                    </QuestionFieldContainer>
+                    <QuestionFieldContainer>
+                        <FormLabel>Difficulty level</FormLabel>
+                        
+                        <Dropdown value={difficultyLevel} onChange={(e)=>setDifficultyLevel(e.target.value)}>
+                            <option value='1'>Easy</option>
+                            <option value='2'>Medium</option>
+                            <option value='3'>Hard</option>
+                        </Dropdown>
+                       
+                    </QuestionFieldContainer>
+                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     <SubmitButton type='submit'>Add</SubmitButton>
-            </Form>
-            </FormContainer>
-        </CommonContainer>
+                </Form>
+
+            </QuestionFormContainer>
+        </QuestionContainer>
+       
     </Layout>
   )
 }

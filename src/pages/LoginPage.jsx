@@ -1,16 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
-import { LoginContainer } from '../styles/common.style';
+import { Loader, LoginContainer } from '../styles/common.style';
+import { apiPost } from '../ApiServices/apiServices';
 
 const LoginPage = () => {
   const[error,setError]=useState("");
   const navigate = useNavigate();
+  const[loading,setLoading]=useState(false);
+  console.log(loading);
+  
     const[formData, setFormData] = useState({
         userName: "",
         password: "",
   });
+
+ 
 
    const handleChange = (e) => {
     setFormData({
@@ -29,28 +35,25 @@ const LoginPage = () => {
     const validationErrors = validate(formData);
           setError(validationErrors);
           if (Object.keys(validationErrors).length > 0) return;
-
-    const response = await fetch("https://localhost:8443/sphinx/api/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if(data.errorMessage!==null){
-        setError(data)
-    }
-
-      if (data.role === "SPHINX_ADMIN") {
-        console.log(data.role);
-        
-        navigate("/admin-dashboard");
-      } else if(data.role==="SPHINX_USER") {
-        navigate("/user-dashboard");
+          try{
+            
+            setLoading(!loading);
+            const response=await apiPost('/user/login',formData);
+      if(response.errorMessage!==null){
+          setError(response)
       }
+      if (response.role === "SPHINX_ADMIN") {
+          console.log(response.role); 
+          navigate("/admin-dashboard");
+      } else if(response.role==="SPHINX_USER") {
+          navigate("/user-dashboard");
+      }
+    }catch(err){
+      setLoading(!loading);
+      console.log(err);
+    }finally{
+      setLoading(false);
+    }
   };
 
 
@@ -82,6 +85,7 @@ const LoginPage = () => {
             
             <SubmitButton type='submit'>Login</SubmitButton>
             </Form>
+            {loading && <Loader/>}
           </FormContainer> 
         </LoginContainer>
   )

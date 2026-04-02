@@ -1,36 +1,36 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { Button, ButtonContainer, CommonTable, Content, TableRow } from '../styles/common.style';
+import { NavButton } from '../styles/header.style';
+import { apiDelete } from '../ApiServices/apiServices';
 
 const QuestionTable = ({data}) => {
-
+    
+    
    const navigate=useNavigate();
     const handleSubmit=async()=>{
-           const response=await fetch("https://localhost:8443/sphinx/api/question/deletequestion",{
-               method:"DELETE",
-               headers:{
-                   "Content-Type":"application/json"
-               },
-               body: JSON.stringify({"questionId":data.questionId})
-           });
-        const deleteData= await response.json();
-        console.log(deleteData);
-        navigate(0);
+        console.log('handle submit called');
+        const response=await apiDelete('/question/deletequestion',{"questionId":data.questionId});
+        console.log(response);
+        navigate(0)
+       
     }
     
    
   return (
      <CommonTable>
         <TableRow>
-            <Content>{data.topicName}</Content>
+            <Content>{data.questionDetail}</Content>
+            <Content>{data.questionTypeId}</Content>
             <ButtonContainer>
-              <NavButton to={`/question/${data.topicId}`} >Answers</NavButton>
-              <NavButton to={`/updatetopic/${data.topicId}`}>Edit question</NavButton>
+              <NavButton to={'/getanswers'}>Answers</NavButton>
+              <NavButton to={'/createquestion'}>Edit question</NavButton>
               <Button onClick={()=>{handleSubmit();}}>Delete question</Button>
             </ButtonContainer>
         </TableRow>
      </CommonTable>
   )
-  )
+  
 }
 
 export default QuestionTable

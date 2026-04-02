@@ -2,19 +2,21 @@ import React, { useState } from 'react'
 import { validate } from '../Validation/SignUpFormValidation';
 import Layout from '../component/Layout';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
-import { CommonContainer } from '../styles/common.style';
+import { CommonContainer, Dropdown } from '../styles/common.style';
+import { apiPost } from '../ApiServices/apiServices';
 
 
 
 const SignUp = () => {
      const[error,setError]=useState({});
+     const[role,setRole]=useState('SPHINX_USER');
      const[formData, setFormData] = useState({
             userName: "",
             firstName:"",
             lastName:"",
             email:"",
             password: "",
-            role: "USER"
+            role: role,
       });
     
        const handleChange = (e) => {
@@ -38,17 +40,8 @@ const SignUp = () => {
       setError(validationErrors);
       if (Object.keys(validationErrors).length > 0) return;
 
-
-        const response = await fetch("https://localhost:8443/sphinx/api/user/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData)
-        });
-    
-        const data = await response.json();
-        console.log(data);
+        const response = await apiPost('user/signup',formData);
+        console.log(response);
       };
   return (
     <Layout>
@@ -107,7 +100,12 @@ const SignUp = () => {
                         onChange={handleChange}></FormInput>
                         {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
                 </FieldContainer>
-
+                <FieldContainer>
+                  <Dropdown value={role} onChange={(e)=> setRole(e.target.value)}>
+                    <option value='SPHINX_USER'>User</option>
+                    <option value='SPHINX_ADMIN'>Admin</option>
+                  </Dropdown>
+                </FieldContainer>
                 <SubmitButton>Submit</SubmitButton>
             </Form>
             

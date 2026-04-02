@@ -5,6 +5,7 @@ import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInp
 import { CommonContainer } from '../styles/common.style'
 import { NavButton } from '../styles/header.style'
 import { useParams } from 'react-router-dom'
+import { apiPost, apiPut } from '../ApiServices/apiServices'
 
 const AddTopic = () => {
     const {id}=useParams();
@@ -58,47 +59,30 @@ const AddTopic = () => {
 
         if(id===undefined){
 
-            const response=await fetch("https://localhost:8443/sphinx/api/topic/createtopic",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify(formData)
-            });
+            const response=await apiPost('/topic/createtopic',formData);
     
-            const data=await response.json();
-            console.log(data);
-            if(data.errorMessage!==null){
-                setError(data);
-            }else if(data.successMessage!==null){
+            console.log(response);
+            if(response.errorMessage!==null){
+                setError(response);
+            }else if(response.successMessage!==null){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
-                setError(data);
+                setError(response);
             }
         }else{
-             const response=await fetch("https://localhost:8443/sphinx/api/topic/updatetopic",{
-                method:"PUT",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify({
-                    ...formData,
-                    topicId:id
-                })
-            });
-    
-            const data=await response.json();
-            console.log(data);
-            if(data.errorMessage!==null){
-                setError(data);
-            }else if(data.successMessage!==null){
+             const response=await apiPut('/topic/updatetopic',{...formData,topicId:id})
+            
+            console.log(response);
+            if(response.errorMessage!==null){
+                setError(response);
+            }else if(response.successMessage!==null){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
-                setError(data);
+                setError(response);
             }
         }
     }
@@ -124,6 +108,7 @@ const AddTopic = () => {
             </FormContainer>
             <NavButton to={'/topic'}>Back to topic</NavButton>
         </CommonContainer>
+        
     </Layout>
   )
 }

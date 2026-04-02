@@ -40,10 +40,97 @@ export const validateExam = (formData) => {
     newErrors.duration = "The duration must be in the range of 1 to 180";
   }
   if (formData.passPercentage === "") {
-    newErrors.passPercentage = "Percentage is required";
+    newErrors.passPercentage = "Pass percentage is required";
   } else if (!PERCENTAGE_REGEX.test(formData.passPercentage)) {
-    newErrors.passPercentage = "The Percentage must be in the range of 20 to 100";
+    newErrors.passPercentage = "The Pass percentage must be in the range of 20 to 100";
   }
 
   return newErrors;
 };
+
+export const validateExamTopic=(formData)=>{
+    let newErrors={};
+
+    if(formData.topic.trim()==="topic"){
+      newErrors.topicName="Select the correct topic";
+    }
+
+    if(formData.percentage===""){
+      newErrors.percentage='percentage is required';
+    }else if(!PERCENTAGE_REGEX.test(formData.percentage)){
+      newErrors.percentage='The Percentage must be in the range of 20 to 100';
+    }
+
+    if(formData.passPercentage===""){
+      newErrors.passPercentage='Pass percentage is required';
+    }else if(!PERCENTAGE_REGEX.test(formData.passPercentage)){
+      newErrors.passPercentage='The Pass percentage must be in the range of 20 to 100';
+    }
+    return newErrors;
+}
+
+export const validateQuestion=(formData)=>{
+     let newErrors={};
+
+    if(formData.questionDetail.trim()===""){
+      newErrors.questionDetail="Question is required";
+    } 
+    if(formData.negativeMarkValue===""){
+      newErrors.negativeMarkValue='Negative mark is required';
+    }
+
+    if(formData.questionTypeId==='MULTI_CHOICE' || formData.questionTypeId==='SINGLE_CHOICE'){
+     
+      
+      if(formData.optionA===""){
+        newErrors.optionA='option is required';
+      }
+      if(formData.optionB===""){
+        newErrors.optionB='option is required';
+      }
+      if(formData.optionC===""){
+        newErrors.optionC='option is required';
+      }
+      if(formData.optionD===""){
+        newErrors.optionD='option is required';
+      }
+      if(formData.questionTypeId==='MULTI_CHOICE'){
+        if(formData.numAnswers===""){
+          newErrors.numAnswers='option is required';
+        }
+      }
+    }
+    if(formData.answer===""){
+      newErrors.answer='answer is required';
+    }
+    if(formData.answerValue===""){
+      newErrors.answerValue='Mark is required';
+    }
+    
+  
+    return newErrors;
+}
+
+export const validateAddTopicExam=(formData)=>{
+     let newErrors={};
+
+   
+
+     if(formData.percentage===""){
+       newErrors.percentage="percentage is required";
+     }else if(!PERCENTAGE_REGEX.test(formData.percentage)){
+       newErrors.percentage='The Percentage must be in the range of 20 to 100';
+     }
+  
+     if(formData.topicPassPercentage===""){
+       newErrors.topicPassPercentage='Pass percentage is required';
+     }else if(!PERCENTAGE_REGEX.test(formData.topicPassPercentage)){
+       newErrors.topicPassPercentage='The Pass percentage must be in the range of 20 to 100';
+     }
+   
+   
+
+    return newErrors;
+}
+
+

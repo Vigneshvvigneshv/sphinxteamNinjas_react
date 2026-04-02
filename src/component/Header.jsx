@@ -5,12 +5,13 @@ const Header = () => {
  
       <HeaderContainer>
         <HeaderLogo>
-          <Title>Sphinx</Title>
+          <Title>Sphinx Admin</Title>
         </HeaderLogo>
         <Container>
         <HeaderButton to="/adduser">Add user</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
+        <HeaderButton to={'/'}>Logout</HeaderButton>
         </Container>
       </HeaderContainer>
   )

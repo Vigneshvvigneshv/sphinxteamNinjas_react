@@ -5,6 +5,7 @@ export const HeaderContainer=styled.div`
     background-color:rgb(132, 96, 46);
     padding:10px 15px;
     display:flex;
+    height:50px;
     align-items:center;
     justify-content:space-between;
 `;
@@ -15,14 +16,12 @@ export const HeaderLogo=styled.div`
 export const HeaderButton=styled(NavLink)`
     text-decoration:none;
     background:none;
-    font-size:16px;
+    font-size:14px;
     padding:7px 10px;
     color:white;
-    font-weight:bold;
     border:none;
     &:hover{
-        border:1px solid white;
-        font-size:14px;
+       color:black;
     }
 `;
 
@@ -35,7 +34,6 @@ export const NavButton=styled(NavLink)`
     background: rgb(205 161 100);
     color: white;
     font-size: 14px;
-    font-weight:bold;
     cursor: pointer;
     transition: 0.3s;
 

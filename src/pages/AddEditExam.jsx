@@ -5,6 +5,7 @@ import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInp
 import { NavButton } from '../styles/header.style';
 import { validateEmpty, validateExam } from '../validation/ValidationUtil';
 import { useParams } from 'react-router-dom';
+import { apiGet } from '../ApiServices/apiServices';
 
 const AddExam = () => {
     const {id}=useParams();
@@ -26,23 +27,18 @@ const AddExam = () => {
         
         if(id!==undefined){
             const fetchData = async () => {
-            const response= await fetch("https://localhost:8443/sphinx/api/exam/getexam/"+id,{
-             method:"GET",
-             headers:{
-                 "Content-Type":"application/json"
-             }
-            });
-            const value=await response.json();
-                 console.log(value);
+            const response= await apiGet('/exam/getexam'+id);
+       
+            console.log(response);
 
                  
                  setFormData({
                     ...formData,
-                    examName: value.examList.examName,
-                    description:value.examList.description,
-                    noOfQuestions:value.examList.noOfQuestions,
-                    duration:value.examList.duration,
-                    passPercentage:value.examList.passPercentage
+                    examName: response.examList.examName,
+                    description:response.examList.description,
+                    noOfQuestions:response.examList.noOfQuestions,
+                    duration:response.examList.duration,
+                    passPercentage:response.examList.passPercentage
                  })
                  
             }
