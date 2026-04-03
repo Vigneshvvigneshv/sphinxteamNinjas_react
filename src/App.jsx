@@ -4,7 +4,7 @@ import SignUp from './pages/SignUp'
 import AdminDashBoard from './pages/AdminDashBoard'
 import UserDashBoard from './pages/UserDashBoard'
 import LoginPage from './pages/LoginPage'
-import CreateQuestionPage from './pages/CreateQuestionPage'
+import CreateQuestionPage from './pages/AddEditQuestionPage'
 import TopicPage from './pages/TopicPage'
 import AddTopic from './pages/AddEditTopic'
 import QuestionPage from './pages/QuestionPage'
@@ -22,6 +22,7 @@ const App = () => {
       <Route path="/user-dashboard" element={<UserDashBoard />} />
       <Route path="/topic" element={<TopicPage />} />
       <Route path='/createquestion/:id' element={<CreateQuestionPage/>}/>
+      <Route path='/createquestion/' element={<CreateQuestionPage/>}/>
       <Route path='/addtopic/' element={<AddTopic/>}/>
       <Route path='/addtopic/:id' element={<AddTopic/>}/>
       <Route path='/question/:id' element={<QuestionPage/>}/>

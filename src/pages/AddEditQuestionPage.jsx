@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, FormText, SubmitButton, SuccessMessage } from '../styles/form.style';
-import { CommonContainer, CommonHeading, Container, Content, Dropdown, Title } from '../styles/common.style';
+import { ButtonContainer, CommonContainer, CommonHeading, Container, Content, Dropdown, Title } from '../styles/common.style';
 import { useLocation, useParams } from 'react-router-dom';
 import SingleChoice from '../component/SingleChoice';
 import MultiChoice from '../component/MultiChoice';
 import { QuestionContainer, QuestionFieldContainer, QuestionFormContainer, QuestionHeaderContainer } from '../styles/question.style';
 import { validateQuestion } from '../validation/ValidationUtil';
-import { apiPost } from '../ApiServices/apiServices';
+import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
+import { NavButton } from '../styles/header.style';
 
 const CreateQuestionPage = () => {
     const {id}=useParams();
@@ -15,6 +16,8 @@ const CreateQuestionPage = () => {
     
     const location=useLocation();
     const topicId=location.state?.topicId;
+    console.log('create question page topic id',topicId);
+    
     const [error,setError]=useState("");
     const[questionType,setQuestionType]=useState('SINGLE_CHOICE');
     const[difficultyLevel,setDifficultyLevel]=useState('1');
@@ -41,10 +44,23 @@ const CreateQuestionPage = () => {
                 if(id!==undefined){
                     const fetchData = async () => {
                     const response= await apiGet('/question/getquestionbyid?questionId='+id);
-               
-                    console.log(response);
-        
-                    }
+                    console.log('create question page',response);
+                    setFormData({
+                        questionDetail:response.question.questionDetail,
+                        optionA:response.question.optionA,
+                        optionB:response.question.optionB,
+                        optionC:response.question.optionC,
+                        optionD:response.question.optionD,
+                        answer:response.question.answer,
+                        numAnswers:response.question.numAnswers,
+                        answerValue:response.question.answerValue,
+                        negativeMarkValue:response.question.negativeMarkValue,
+                        questionTypeId:response.question.questionTypeId,
+                        difficultyLevel:response.question.difficultyLevel
+                    })
+                    setQuestionType(response.question.questionTypeId);
+                    setDifficultyLevel(response.question.difficultyLevel);
+                }
                      fetchData()    
                 }
             },[])
@@ -66,17 +82,33 @@ const CreateQuestionPage = () => {
             const validationErrors = validateQuestion(formData);
                       setError(validationErrors);
                       if (Object.keys(validationErrors).length > 0) return;
-            const response=await apiPost('/question/createquestion',formData);
-            
-            console.log(response);
-            if(response.errorMessage!==null){
-                setError(response);
-            }else if(response.successMessage!==null){
-                setError(response);
-                setFormData({
-                    ...formData,
-                    [e.target.name]: ""
-                })
+            if(id!==undefined){
+                const response=await apiPut('/question/updatequestion',{...formData,questionId:id});
+                console.log(response);
+                
+                 if(response.errorMessage!==null){
+                     setError(response);
+                }else if(response.successMessage!==null){
+                    setError(response);
+                    setFormData({
+                        ...formData,
+                        [e.target.name]: ""
+                    })
+                 }
+            }else{
+
+                const response=await apiPost('/question/createquestion',formData);
+                
+                console.log(response);
+                if(response.errorMessage!==null){
+                    setError(response);
+                }else if(response.successMessage!==null){
+                    setError(response);
+                    setFormData({
+                        ...formData,
+                        [e.target.name]: ""
+                    })
+                }
             }
         }
   return (
@@ -144,11 +176,13 @@ const CreateQuestionPage = () => {
                         </Dropdown>
                        
                     </QuestionFieldContainer>
-                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
-                    <SubmitButton type='submit'>Add</SubmitButton>
+                {error.message && <SuccessMessage>{error.message}</SuccessMessage>}
+                    <SubmitButton >{id!==undefined?'Edit':'Add'}</SubmitButton>
                 </Form>
-
             </QuestionFormContainer>
+                <CommonContainer>
+                        <NavButton to={`/question/${topicId}`} state={{topicId:topicId}}>Back to Question</NavButton>
+                </CommonContainer>
         </QuestionContainer>
        
     </Layout>

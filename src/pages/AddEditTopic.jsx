@@ -5,7 +5,7 @@ import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInp
 import { CommonContainer } from '../styles/common.style'
 import { NavButton } from '../styles/header.style'
 import { useParams } from 'react-router-dom'
-import { apiPost, apiPut } from '../ApiServices/apiServices'
+import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices'
 
 const AddTopic = () => {
     const {id}=useParams();
@@ -23,17 +23,11 @@ const AddTopic = () => {
             console.log(id);
             
             const fetchData = async () => {
-            const response= await fetch("https://localhost:8443/sphinx/api/topic/gettopic/"+id,{
-             method:"GET",
-             headers:{
-                 "Content-Type":"application/json"
-             }
-            });
-            const value=await response.json();
-                 console.log(value);    
+            const response= await apiGet('/topic/gettopic/'+id)
+            console.log(response);    
                  setFormData({
                     ...formData,
-                    topicName:value.topicList.topicName
+                    topicName:response.topicList.topicName
                  })
                  
             }

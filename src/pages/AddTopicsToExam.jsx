@@ -129,7 +129,7 @@ const handleSubmit=async(e)=>{
               <TableHeading>Topic</TableHeading>
               <TableHeading>Percentage</TableHeading>
               <TableHeading>Pass Percentage</TableHeading>
-              
+              <TableHeading>Action</TableHeading>
             </TableRow>
       
       { rows.map((row, index) => (

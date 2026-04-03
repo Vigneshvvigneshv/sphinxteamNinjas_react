@@ -5,7 +5,7 @@ import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInp
 import { NavButton } from '../styles/header.style';
 import { validateEmpty, validateExam } from '../validation/ValidationUtil';
 import { useParams } from 'react-router-dom';
-import { apiGet } from '../ApiServices/apiServices';
+import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 
 const AddExam = () => {
     const {id}=useParams();
@@ -27,7 +27,7 @@ const AddExam = () => {
         
         if(id!==undefined){
             const fetchData = async () => {
-            const response= await apiGet('/exam/getexam'+id);
+            const response= await apiGet('/exam/getexam/'+id);
        
             console.log(response);
 
@@ -65,42 +65,29 @@ const AddExam = () => {
                   if (Object.keys(validationErrors).length > 0) return;
         if(id===undefined){
 
-            const response=await fetch("https://localhost:8443/sphinx/api/exam/createexam",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify(formData)
-            });
-            const data=await response.json();
-            console.log(data);
-            if(data.errorMessage!==null){
-                setError(data);
-            }else if(data.successMessage!==null){
+            const response=await apiPost('/exam/createexam',formData)
+            
+            console.log(response);
+            if(response.errorMessage!==null){
+                setError(response);
+            }else if(response.successMessage!==null){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
-                setError(data);
+                setError(response);
             }
         }else{
-             const response=await fetch("https://localhost:8443/sphinx/api/exam/updateexam",{
-                method:"PUT",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify({...formData,"examId":id})
-            });
-            const data=await response.json();
-            console.log(data);
-            if(data.errorMessage!==null){
-                setError(data);
-            }else if(data.successMessage!==null){
+             const response=await apiPut('/exam/updateexam',{...formData,"examId":id});
+            console.log(response);
+            if(response.errorMessage!==null){
+                setError(response);
+            }else if(response.successMessage!==null){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
-                setError(data);
+                setError(response);
             }
         }
 

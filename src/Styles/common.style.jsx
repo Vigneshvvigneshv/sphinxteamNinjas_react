@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const AppName=styled.h1`
      color: rgb(132, 96, 46);
+     margin:0;
 `;
 
 export const Title=styled.h2`
@@ -43,7 +44,7 @@ export const LoginContainer=styled.div`
     display:flex;
     align-items:center;
     flex-direction:column;
-    gap:20px;
+    gap:5px;
     justify-content:space-evenly;
 `;
 
