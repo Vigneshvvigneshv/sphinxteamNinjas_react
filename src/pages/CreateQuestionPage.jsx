@@ -11,6 +11,8 @@ import { apiPost } from '../ApiServices/apiServices';
 
 const CreateQuestionPage = () => {
     const {id}=useParams();
+    console.log('Create question page',id);
+    
     const location=useLocation();
     const topicId=location.state?.topicId;
     const [error,setError]=useState("");
@@ -38,20 +40,10 @@ const CreateQuestionPage = () => {
                 
                 if(id!==undefined){
                     const fetchData = async () => {
-                    const response= await apiGet('/question/getquestionbyid'+id);
+                    const response= await apiGet('/question/getquestionbyid?questionId='+id);
                
                     console.log(response);
         
-                         
-                         setFormData({
-                            ...formData,
-                            examName: response.examList.examName,
-                            description:response.examList.description,
-                            noOfQuestions:response.examList.noOfQuestions,
-                            duration:response.examList.duration,
-                            passPercentage:response.examList.passPercentage
-                         })
-                         
                     }
                      fetchData()    
                 }

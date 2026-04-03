@@ -12,7 +12,7 @@ const ExamTable = ({data}) => {
     const handleSubmit=async()=>{
            const response=await apiDelete('/exam/deleteexam',{'examId':data.examId});
            console.log(response);
-           navigate(0);
+          //  navigate(0);
     }
     
    

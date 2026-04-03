@@ -21,7 +21,7 @@ const App = () => {
       <Route path="/admin-dashboard" element={<AdminDashBoard />} />
       <Route path="/user-dashboard" element={<UserDashBoard />} />
       <Route path="/topic" element={<TopicPage />} />
-      <Route path='/createquestion' element={<CreateQuestionPage/>}/>
+      <Route path='/createquestion/:id' element={<CreateQuestionPage/>}/>
       <Route path='/addtopic/' element={<AddTopic/>}/>
       <Route path='/addtopic/:id' element={<AddTopic/>}/>
       <Route path='/question/:id' element={<QuestionPage/>}/>

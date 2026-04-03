@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const AppName=styled.h1`
+     color: rgb(132, 96, 46);
+`;
+
 export const Title=styled.h2`
     color:white;
 `;
@@ -38,7 +42,9 @@ export const LoginContainer=styled.div`
     height:100vh;
     display:flex;
     align-items:center;
-    justify-content:center;
+    flex-direction:column;
+    gap:20px;
+    justify-content:space-evenly;
 `;
 
 export const Button=styled.button`

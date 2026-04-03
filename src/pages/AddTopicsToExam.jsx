@@ -26,8 +26,11 @@ const AddTopicsToExam = () => {
   
     console.log(rows);
     console.log(error);
+    console.log('Add topic to exam',data);
+    
     
     let percentage;
+   
     
     if(rows.length>0){
       percentage=rows.reduce((acc,ele)=>{
@@ -39,6 +42,7 @@ const AddTopicsToExam = () => {
           const updatedRows = [...rows];
           updatedRows[index][field] = value;
           setRows(updatedRows);
+          setError({})
         };
 
           
@@ -51,6 +55,10 @@ const addRow = () => {
       ...rows,
       {topicId: "", percentage: "", topicPassPercentage: "" }
     ]);
+    setError({
+      ...error,
+      'errorMessage':''
+    })
   }else{
     setError({
       ...error,

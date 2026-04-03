@@ -30,11 +30,11 @@ const ExamTopicPage = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>{data.examName} - Available Topics</CommonHeading>
-        <NavButton to={`/editexamtopic/${data.examId}`} state={{examName:data.examName,examId:data.examId}}>{(data.status=== 'SUCCESS' && data.topicList.length>0)?'Edit topic':'Add topic'}</NavButton>
+        <NavButton to={`/editexamtopic/${data.examId}`} state={{examName:data.examName,examId:data.examId}}>{(data.responseMessage=== 'SUCCESS' && data.topicList.length>0)?'Edit topic':'Add topic'}</NavButton>
         </CommonHeader>
         
         <CommonSection>
-            { (data.status=== 'SUCCESS' && data.topicList.length>0)?
+            { (data.responseMessage=== 'SUCCESS' && data.topicList.length>0)?
                data.topicList.map((e)=>{ return <ExamTopicTable data={e} examId={data.examId} key={e.topicId}></ExamTopicTable>}):<Empty>No topic available</Empty>
             }
             

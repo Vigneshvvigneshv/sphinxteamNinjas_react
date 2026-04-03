@@ -1,8 +1,11 @@
 import React from 'react'
+import Layout from '../component/Layout'
 
 const UserDashBoard = () => {
   return (
-        <h1>Welcome to the userDashBoard</h1>
+    <Layout>
+      <h1>Welcome to the UserDashBoard</h1>
+    </Layout>
   )
 }
 

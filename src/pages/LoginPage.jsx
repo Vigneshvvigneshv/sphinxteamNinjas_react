@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
-import { Loader, LoginContainer } from '../styles/common.style';
+import { AppName, CommonHeading, Loader, LoginContainer } from '../styles/common.style';
 import { apiPost } from '../ApiServices/apiServices';
 
 const LoginPage = () => {
@@ -59,7 +59,8 @@ const LoginPage = () => {
 
   return (
     
-        <LoginContainer>   
+        <LoginContainer>  
+        <AppName>Sphinx Exam Management</AppName> 
           <FormContainer>
         <FormHeading>Login page</FormHeading>
             <Form onSubmit={handleSubmit}>

@@ -12,7 +12,6 @@ const QuestionPage = () => {
  const[data,setData]=useState("");
   const {id}=useParams();
   useEffect(()=>{
-  
     const fetchData = async () => {
     const response= await apiGet('/question/getquestionsbytopic?topicId='+id)
     
@@ -35,7 +34,7 @@ const QuestionPage = () => {
         </CommonHeader>
         
         <CommonSection>
-            { (data.status=== 'SUCCESS')?
+            { (data.responseMessage=== 'SUCCESS')?
                data.questionList.map((e)=>{ return <QuestionTable data={e} key={e.questionId}></QuestionTable>}):<Empty>No question table</Empty>
             }
             

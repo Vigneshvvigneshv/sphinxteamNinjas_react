@@ -7,6 +7,7 @@ import { apiDelete } from '../ApiServices/apiServices';
 
 const ExamTopicTable = ({data,examId}) => {
   const navigate=useNavigate();
+  console.log('ExamTopicTable',data,examId);
   
     const handleSubmit=async()=>{
            const response=await apiDelete('/examtopic/deletetopicinexamtopic',{examId:examId,topicId:data.topicId});
