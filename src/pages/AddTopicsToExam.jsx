@@ -31,6 +31,7 @@ const AddTopicsToExam = () => {
     
     
     let percentage;
+   console.log('Percentage',percentage);
    
     
     if(rows.length>0){
@@ -67,6 +68,19 @@ const addRow = () => {
     })
   }
 };
+
+const removeRow=(id)=>{
+  console.log('length',rows.length);
+  
+  if(rows.length>1){
+
+    const afterRemoved= rows.filter((e)=>{
+         return e.topicId!==id;
+     })
+     console.log('removed row',afterRemoved);
+     setRows(afterRemoved);
+  }
+}
   useEffect(()=>{
  
       const fetchData = async () => {
@@ -134,7 +148,7 @@ const handleSubmit=async(e)=>{
               <TableHeading>Action</TableHeading>
             </TableRow>
       
-      { rows.map((row, index) => (
+      {(data.responseMessage==='success' && rows.length>0) ?rows.map((row, index) => (
       <TableRow key={index}>
         <Dropdown
           value={row.topicId}
@@ -178,11 +192,15 @@ const handleSubmit=async(e)=>{
             placeholder="Enter the pass percentage"
           />
         </RowContainer>
+
            {error.topicPassPercentage && <ErrorMessage>{error.passPercentage}</ErrorMessage>}
           </Outer>
+          <RowContainer>
+            <Button onClick={()=>{removeRow(row.topicId)}}>Remove</Button>
+          </RowContainer>
     </TableRow>
     
-    ))}
+    )) :<Empty>No topic available</Empty>}
       {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
     <ButtonContainer >
           <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>

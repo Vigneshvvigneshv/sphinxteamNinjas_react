@@ -9,14 +9,14 @@ import { apiPost } from '../ApiServices/apiServices';
 
 const SignUp = () => {
      const[error,setError]=useState({});
-     const[role,setRole]=useState('SPHINX_USER');
+     const[roleTypeId,setRoleTypeId]=useState('SPHINX_USER');
      const[formData, setFormData] = useState({
             userName: "",
             firstName:"",
             lastName:"",
             email:"",
             password: "",
-            role: role,
+            role: roleTypeId,
       });
     
        const handleChange = (e) => {
@@ -101,7 +101,7 @@ const SignUp = () => {
                         {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
                 </FieldContainer>
                 <FieldContainer>
-                  <Dropdown value={role} onChange={(e)=> setRole(e.target.value)}>
+                  <Dropdown value={roleTypeId} onChange={(e)=> setRoleTypeId(e.target.value)}>
                     <option value='SPHINX_USER'>User</option>
                     <option value='SPHINX_ADMIN'>Admin</option>
                   </Dropdown>

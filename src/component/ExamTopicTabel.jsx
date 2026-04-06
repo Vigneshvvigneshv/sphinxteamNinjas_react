@@ -27,8 +27,9 @@ const ExamTopicTable = ({data,examId}) => {
                <Content>Percentage - {data.percentage}</Content>
             </Container>
              <Container>
-               <Content>Pass Percentage - {data.percentage}</Content>
+               <Content>Pass Percentage - {data.topicPassPercentage}</Content>
             </Container>
+            
         </TableRow>
        
      </CommonTable>

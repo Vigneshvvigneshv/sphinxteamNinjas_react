@@ -109,7 +109,7 @@ const AddExam = () => {
                         onChange={handleChange}
                         />
                          {error.examName && <ErrorMessage>{error.examName}</ErrorMessage>}
-                         {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+                       
                     </FieldContainer>
                      <FieldContainer>
                         <FormLabel>Description</FormLabel>
@@ -119,7 +119,6 @@ const AddExam = () => {
                         onChange={handleChange}
                         />
                          {error.description && <ErrorMessage>{error.description}</ErrorMessage>}
-                         {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     </FieldContainer>
                     <FieldContainer>
                         <FormLabel>Number of question</FormLabel>
@@ -129,7 +128,6 @@ const AddExam = () => {
                         onChange={handleChange}
                         />
                          {error.noOfQuestions && <ErrorMessage>{error.noOfQuestions}</ErrorMessage>}
-                         {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     </FieldContainer>
                     <FieldContainer>
                         <FormLabel>Duration</FormLabel>
@@ -139,7 +137,6 @@ const AddExam = () => {
                         onChange={handleChange}
                         />
                          {error.duration && <ErrorMessage>{error.duration}</ErrorMessage>}
-                         {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     </FieldContainer>
                     <FieldContainer>
                         <FormLabel>Pass percentage</FormLabel>
@@ -149,13 +146,14 @@ const AddExam = () => {
                         onChange={handleChange}
                         />
                          {error.passPercentage && <ErrorMessage>{error.passPercentage}</ErrorMessage>}
-                         {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     </FieldContainer>
                     
+                     {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     <SubmitButton type='submit'> {id!==undefined?'Edit':'Add'}</SubmitButton>
+
             </Form>
             </FormContainer>
-            <NavButton to={'/admin-dashboard'}>Back to home</NavButton>
+            <NavButton to={'/admin-dashboard'} state={{error:error.successMessage}}>Back to home</NavButton>
         </CommonContainer>
     </Layout>
   )

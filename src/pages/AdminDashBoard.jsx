@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { NavButton } from '../styles/header.style'
-import { Container } from '../styles/common.style'
 import { CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common.style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
@@ -9,7 +8,9 @@ import { apiGet } from '../ApiServices/apiServices'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
- 
+  const partyId=data.partyId;
+  console.log('Party Id',partyId);
+  
   useEffect(()=>{
     const fetchData = async () => {
     const response= await apiGet('/exam/getallexam');

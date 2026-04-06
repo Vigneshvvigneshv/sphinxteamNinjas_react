@@ -11,6 +11,7 @@ import QuestionPage from './pages/QuestionPage'
 import AddExam from './pages/AddEditExam'
 import AddTopicsToExam from './pages/AddTopicsToExam'
 import ExamTopicPage from './pages/ExamTopicPage'
+import UserPage from './pages/UserPage'
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
       <Route path='/getexam/:id' element={<AddExam/>}/>
       <Route path='/getexamtopic/:id' element={<ExamTopicPage/>}/>
       <Route path='/editexamtopic/:id' element={<AddTopicsToExam/>}/>
+      <Route path='/userlist' element={<UserPage/>}/>
     </Routes>
     </>
   )

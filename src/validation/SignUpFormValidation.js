@@ -30,9 +30,10 @@ export const validate = (formData) => {
 
   if (formData.email.trim() === "") {
     newErrors.email = "Email is required";
-  } else if (!EMAIL_REGEX.test(formData.email.trim())) {
-    newErrors.email = "Enter a valid email";
-  }
+  } 
+  // else if (!EMAIL_REGEX.test(formData.email.trim())) {
+  //   newErrors.email = "Enter a valid email";
+  // }
 
   if (formData.password.trim() === "") {
     newErrors.password = "Password is required";
