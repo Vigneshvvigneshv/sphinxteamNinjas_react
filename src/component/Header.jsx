@@ -9,6 +9,7 @@ const Header = () => {
         </HeaderLogo>
         <Container>
         <HeaderButton to="/adduser">Add user</HeaderButton>
+        <HeaderButton to="/userlist">Users</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
         <HeaderButton to={'/'}>Logout</HeaderButton>

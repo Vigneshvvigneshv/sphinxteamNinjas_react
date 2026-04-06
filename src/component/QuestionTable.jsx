@@ -6,7 +6,7 @@ import { apiDelete } from '../ApiServices/apiServices';
 
 const QuestionTable = ({data}) => {
     
-    
+   
    const navigate=useNavigate();
     const handleSubmit=async()=>{
         console.log('handle submit called');
@@ -24,7 +24,7 @@ const QuestionTable = ({data}) => {
             <Content>{data.questionTypeId}</Content>
             <ButtonContainer>
               <NavButton to={'/getanswers'}>Answers</NavButton>
-              <NavButton to={`/createquestion/${data.questionId}`}>Edit question</NavButton>
+              <NavButton to={`/createquestion/${data.questionId}`} state={{topicId:data.topicId}}>Edit question</NavButton>
               <Button onClick={()=>{handleSubmit();}}>Delete question</Button>
             </ButtonContainer>
         </TableRow>

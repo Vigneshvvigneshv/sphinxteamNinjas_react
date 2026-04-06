@@ -9,12 +9,12 @@ const ExamTopicTable = ({data,examId}) => {
   const navigate=useNavigate();
   console.log('ExamTopicTable',data,examId);
   
-    const handleSubmit=async()=>{
-           const response=await apiDelete('/examtopic/deletetopicinexamtopic',{examId:examId,topicId:data.topicId});
-           console.log(response);
-           navigate(0);
+    // const handleSubmit=async()=>{
+    //        const response=await apiDelete('/examtopic/deletetopicinexamtopic',{examId:examId,topicId:data.topicId});
+    //        console.log(response);
+    //        navigate(0);
            
-    }
+    // }
     
    
   return (

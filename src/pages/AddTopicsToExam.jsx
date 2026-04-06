@@ -3,13 +3,14 @@ import Layout from '../component/Layout';
 import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Container, Content, Dropdown, Outer, Required, RowContainer, TableHeading, TableRow } from '../styles/common.style';
 import { NavButton } from '../styles/header.style';
 import Empty from '../component/Empty';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
 import Modal from '../component/Modal';
 import { validateAddTopicExam } from '../validation/ValidationUtil';
 import { apiGet, apiPost } from '../ApiServices/apiServices';
 
 const AddTopicsToExam = () => {
+  const navigate=useNavigate();
   const{id}=useParams();
   console.log(id);
   
@@ -111,6 +112,7 @@ const handleSubmit=async(e)=>{
                setError(response);
             }else if(response.successMessage!==null){
                setError(response);
+               navigate(`/getexamtopic/${exam.examId}`);
             }
       }
         }
