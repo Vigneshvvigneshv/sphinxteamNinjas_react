@@ -14,6 +14,7 @@ import ExamTopicPage from './pages/ExamTopicPage'
 import UserPage from './pages/UserPage'
 import QuestionBulkUpload from './pages/QuestionBulkUpload'
 import { useSelector } from 'react-redux'
+import AssignExamPage from './pages/AssignExamPage'
 
 const App = () => {
   const { user } = useSelector((state)=>state.userReducer);
@@ -36,7 +37,7 @@ const App = () => {
       <Route path="/adduser" element={<ProtectedRoute><SignUp/></ProtectedRoute>}></Route>
       <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
       <Route path="/user-dashboard" element={<ProtectedRoute><UserDashBoard/></ProtectedRoute>} />
-
+      <Route path="/assignexam/:id" element={<ProtectedRoute><AssignExamPage/></ProtectedRoute>} />
       <Route path="/topic" element={<ProtectedRoute><TopicPage/></ProtectedRoute>} />
       <Route path='/createquestion/:id' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
       <Route path='/createquestion' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>

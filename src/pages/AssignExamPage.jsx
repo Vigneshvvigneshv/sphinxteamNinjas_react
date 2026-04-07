@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
-import { Button, CommonContainer, CommonHeader, CommonHeading, Dropdown, TableHeading, TableRow } from '../styles/common.style'
+import { Button, CommonContainer, CommonHeader, CommonHeading, CommonSection, Dropdown, TableHeading, TableRow } from '../styles/common.style'
 import { ErrorMessage, Form, FormInput, FormLabel } from '../styles/form.style';
 import Empty from '../component/Empty';
 import { NavButton } from '../styles/header.style';
@@ -17,6 +17,8 @@ const AssignExamPage = () => {
           const fetchData = async () => {
           const response= await apiGet('/user/getalluser');
           setData(response);
+          console.log('Assing Exam Page',response);
+          
         }
           fetchData()
       },[]);
@@ -39,12 +41,12 @@ const AssignExamPage = () => {
      <Layout>
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>{exam.examName}</CommonHeading>
-          <NavButton onClick={addRow}> Add topics</NavButton>
+          <CommonHeading>Assing</CommonHeading>
+          <NavButton > Add topics</NavButton>
         </CommonHeader>
         <CommonSection>
          
-          <Form>
+          {/* <Form>
             <TableRow>
               <TableHeading>User</TableHeading>
               <TableHeading>Allowded attempts</TableHeading>
@@ -110,7 +112,7 @@ const AssignExamPage = () => {
           <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>
           <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
     </ButtonContainer>
-     </Form>
+     </Form> */}
         </CommonSection>
       </CommonContainer>
     </Layout>

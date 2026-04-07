@@ -21,7 +21,7 @@ const ExamTable = ({data,id}) => {
         <TableRow>
             <Content>{data.examName}</Content>
             <ButtonContainer>
-              <NavButton to={`/getexamtopic/${data.examId}`} >Assign exam</NavButton>
+              <NavButton to={`/assignexam/${data.examId}`} >Assign exam</NavButton>
               <NavButton to={`/getexamtopic/${data.examId}`} >Topics</NavButton>
               <NavButton to={`/getexam/${data.examId}`}>Edit</NavButton>
               <Button onClick={deleteExam}>Delete</Button>
