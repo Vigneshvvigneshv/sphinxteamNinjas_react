@@ -12,6 +12,7 @@ import AddExam from './pages/AddEditExam'
 import AddTopicsToExam from './pages/AddTopicsToExam'
 import ExamTopicPage from './pages/ExamTopicPage'
 import UserPage from './pages/UserPage'
+import QuestionBulkUpload from './pages/QuestionBulkUpload'
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
       <Route path='/addtopic/' element={<AddTopic/>}/>
       <Route path='/addtopic/:id' element={<AddTopic/>}/>
       <Route path='/question/:id' element={<QuestionPage/>}/>
+      <Route path='/uploadfile' element={<QuestionBulkUpload/>}/>
       <Route path='/question/addquestion' element={<CreateQuestionPage/>}/>
       <Route path='/addexam' element={<AddExam/>}/>
       <Route path='/getexam/:id' element={<AddExam/>}/>

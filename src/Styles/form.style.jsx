@@ -53,6 +53,19 @@ export const FormInput=styled.input`
     box-shadow: 0 0 5px rgba(205, 161, 100, 0.5);
   }
 `
+
+export const FileInput=styled.input`
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+
+  &:focus {
+    border-color: rgb(205 161 100);
+    box-shadow: 0 0 5px rgba(205, 161, 100, 0.5);
+  }
+`;
 export const FormText=styled.textarea`
   padding: 10px;
   border-radius: 6px;

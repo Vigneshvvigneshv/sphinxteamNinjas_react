@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout';
-import { CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common.style';
+import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common.style';
 import { NavButton } from '../styles/header.style';
 import Table from '../component/Table';
 import Empty from '../component/Empty';
@@ -21,7 +21,7 @@ const QuestionPage = () => {
     fetchData();
   },[])
  
-  console.log(data);
+  console.log('Question Page',data);
    
  
   return (
@@ -30,12 +30,15 @@ const QuestionPage = () => {
         <CommonHeader>
           <Content>{data.topicName}</Content>
           <Content>Question type</Content>
-          <NavButton to="/createquestion" state={{topicId:data.topicId}}>Add question</NavButton>
+          <ButtonContainer>
+          <NavButton to={'/uploadfile'}>Upload File</NavButton>
+          <NavButton to="/createquestion" state={{topicId:data.topicId,topicName:data.topicName}}>Add question</NavButton>
+          </ButtonContainer>
         </CommonHeader>
         
         <CommonSection>
-            { (data.responseMessage=== 'SUCCESS')?
-               data.questionList.map((e)=>{ return <QuestionTable data={e} key={e.questionId}></QuestionTable>}):<Empty>No question table</Empty>
+            { (data.responseMessage=== 'SUCCESS' && data.questionList.length>0)?
+               data.questionList.map((e)=>{ return <QuestionTable data={e} name={data.topicName} key={e.questionId}></QuestionTable>}):<Empty>No question available</Empty>
             }
             
         </CommonSection>

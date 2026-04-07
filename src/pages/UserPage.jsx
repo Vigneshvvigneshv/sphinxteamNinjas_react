@@ -18,8 +18,8 @@ const UserPage = () => {
     <Layout>
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>Topics</CommonHeading>
-          <NavButton to="/addtopic">Add topics</NavButton>
+          <CommonHeading>Available Users</CommonHeading>
+    
         </CommonHeader>
         
         <CommonSection>

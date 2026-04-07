@@ -9,6 +9,7 @@ import { QuestionContainer, QuestionFieldContainer, QuestionFormContainer, Quest
 import { validateQuestion } from '../validation/ValidationUtil';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 import { NavButton } from '../styles/header.style';
+import TrueOrFalse from '../component/TrueOrFalse';
 
 const CreateQuestionPage = () => {
     const {id}=useParams();
@@ -16,6 +17,7 @@ const CreateQuestionPage = () => {
     
     const location=useLocation();
     const topicId=location.state?.topicId;
+    const topicName=location.state?.topicName;
     console.log('create question page topic id',topicId);
     
     const [error,setError]=useState("");
@@ -115,6 +117,7 @@ const CreateQuestionPage = () => {
     <Layout>
         <QuestionContainer>
         <QuestionHeaderContainer className='flex-style'>
+            <CommonHeading>{topicName} - </CommonHeading>
             <CommonHeading>Question type</CommonHeading>    
              <Dropdown value={questionType} onChange={(e)=>{setQuestionType(e.target.value);setError("")}}>
                 <option value='SINGLE_CHOICE'>Single choice</option>
@@ -139,6 +142,7 @@ const CreateQuestionPage = () => {
                     </QuestionFieldContainer>
                     {questionType==='SINGLE_CHOICE'&& <SingleChoice change={handleChange} error={error} data={formData}/>}
                     {questionType==='MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData}/>}
+                    {questionType==='TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData,optionA:"TRUE",optionB:"FALSE"}}/>}
                      <QuestionFieldContainer>
                         <FormLabel>Answer</FormLabel>
                         <FormInput name='answer' placeholder='Enter the answer option'
@@ -176,7 +180,8 @@ const CreateQuestionPage = () => {
                         </Dropdown>
                        
                     </QuestionFieldContainer>
-                {error.message && <SuccessMessage>{error.message}</SuccessMessage>}
+                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+                {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
                     <SubmitButton >{id!==undefined?'Edit':'Add'}</SubmitButton>
                 </Form>
             </QuestionFormContainer>
