@@ -4,13 +4,17 @@ import { validate } from '../validation/LoginFormValidation';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
 import { AppName, CommonHeading, Loader, LoginContainer } from '../styles/common.style';
 import { apiPost } from '../ApiServices/apiServices';
-
+import { useDispatch } from 'react-redux'
+import { userAction } from '../store/userSlice';
 const LoginPage = () => {
   
   const[error,setError]=useState("");
   const navigate = useNavigate();
   
-  
+   const dispatch=useDispatch();
+  //  const { user } = useSelector((state)=>state.userReducer);
+
+
     const[formData, setFormData] = useState({
         userName: "",
         password: "",
@@ -41,7 +45,10 @@ const LoginPage = () => {
           setError(response)
       }else if(response.successMessage!==undefined){
 
+         dispatch(userAction.addToUserLogin({partyId:response.partyId}));
+
         if (response.role === "SPHINX_ADMIN") {
+
             console.log(response.role); 
             navigate("/admin-dashboard" , {state:{partyId:response.partyId}});
         } else if(response.role==="SPHINX_USER") {

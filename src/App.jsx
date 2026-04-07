@@ -13,13 +13,17 @@ import AddTopicsToExam from './pages/AddTopicsToExam'
 import ExamTopicPage from './pages/ExamTopicPage'
 import UserPage from './pages/UserPage'
 import QuestionBulkUpload from './pages/QuestionBulkUpload'
+import { useSelector } from 'react-redux'
 
 const App = () => {
+  const { user } = useSelector((state)=>state.userReducer);
+  console.log("user ",user);
 
   const ProtectedRoute = ({children}) =>{
-    // logic
-    const isAuthenticated = true; 
-    if(isAuthenticated){
+    console.log("inside if protected")
+    
+    if(user.length>0){
+      console.log("inside if ",user)
       return children;
     }else{
       return <LoginPage />
