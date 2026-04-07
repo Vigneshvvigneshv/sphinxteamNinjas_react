@@ -6,18 +6,20 @@ import { NavButton } from '../styles/header.style';
 import { validateEmpty, validateExam } from '../validation/ValidationUtil';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
+import { useSelector } from 'react-redux';
 
 const AddExam = () => {
     const {id}=useParams();
     const navigate=useNavigate();
     const [error,setError]=useState("");
-
+    const {user}=useSelector((state)=>state.userReducer)
     const[formData, setFormData] = useState({
         examName: "",
         description:"",
         noOfQuestions:"",
         duration:"",
-        passPercentage:""
+        passPercentage:"",
+        partyId:user[0]
     });
     useEffect(()=>{
         console.log(id);
