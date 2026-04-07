@@ -4,15 +4,16 @@ import { Button, ButtonContainer, CommonContainer, CommonTable, Content, TableRo
 import { NavButton } from '../styles/header.style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
+import { useSelector } from 'react-redux';
 
-const ExamTable = ({data,id}) => {
+const ExamTable = ({data}) => {
   const navigate=useNavigate();
-  
+  const{ user }=useSelector((state)=>state.userReducer);
   
     const deleteExam=async()=>{
-           const response=await apiDelete('/exam/deleteexam',{'examId':data.examId,partyId:id});
+           const response=await apiDelete('/exam/deleteexam',{'examId':data.examId,'partyId':user[0]});
            console.log(response);
-           navigate(0);
+          //  navigate(0);
     }
     
    

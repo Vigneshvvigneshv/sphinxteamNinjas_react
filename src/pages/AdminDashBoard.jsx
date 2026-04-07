@@ -12,8 +12,6 @@ const AdminDashBoard = () => {
   const[data,setData]=useState("");
   const location=useLocation();
   const message=location.state?.msg;
-  const partyId=location.state?.partyId;
-  console.log('Party Id',partyId);
   
   useEffect(()=>{
     const fetchData = async () => {
@@ -35,7 +33,7 @@ const AdminDashBoard = () => {
         <CommonSection>
           {message && <SuccessMessage>{message}</SuccessMessage>}
             { (data.responseMessage=== 'success')?
-               data.examList.map((e)=>{ return <ExamTable data={e} id={partyId} key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
+               data.examList.map((e)=>{ return <ExamTable data={e}  key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
             }
             
         </CommonSection>

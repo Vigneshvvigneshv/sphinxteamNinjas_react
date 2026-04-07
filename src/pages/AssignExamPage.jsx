@@ -7,12 +7,14 @@ import { NavButton } from '../styles/header.style';
 import { apiGet } from '../ApiServices/apiServices';
 
 const AssignExamPage = () => {
-    const[data,setData]=useState(null);
-    const[error,setError]=useState(null);
+    const[data,setData]=useState();
+    const[error,setError]=useState();
     const [rows, setRows] = useState([
       { partyId:"", allowedAttempts: "" ,timeOutDays:""}
       ]);
 
+      console.log('Assign exam page data',data);
+      
     useEffect(()=>{
      
           const fetchData = async () => {
@@ -63,13 +65,13 @@ const AssignExamPage = () => {
         >
           <option value='select'>Select the topic</option>
           {data.responseMessage === "success" &&
-            data.List.map((e) => (
+            data.userList.map((e) => (
               <option key={e.firstName} value={e.partyId}>
                 {e.firstName}
               </option>
             ))}
         </Dropdown>
-            {error.partyId && <ErrorMessage>{error.partyId}</ErrorMessage>}
+             {error.partyId && <ErrorMessage>{error.partyId}</ErrorMessage>} 
 
           <Outer>
         <RowContainer>
@@ -93,9 +95,7 @@ const AssignExamPage = () => {
           <FormInput
             type="text"
             value={row.topicPassPercentage}
-            onChange={(e) =>
-              handleChange(index, "topicPassPercentage", e.target.value)
-            }
+           
             placeholder="Enter the pass percentage"
           />
         </RowContainer>
@@ -103,7 +103,7 @@ const AssignExamPage = () => {
            {error.topicPassPercentage && <ErrorMessage>{error.passPercentage}</ErrorMessage>}
           </Outer>
           <RowContainer>
-            <Button onClick={()=>{removeRow(row.topicId)}}>Remove</Button>
+            <Button>Remove</Button>
           </RowContainer>
     </TableRow>
     
@@ -111,9 +111,10 @@ const AssignExamPage = () => {
       {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
     <ButtonContainer >
           <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>
-          <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
+          <SubmitButton>Submit</SubmitButton>
     </ButtonContainer>
      </Form> */}
+     
         </CommonSection>
       </CommonContainer>
     </Layout>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import SignUp from './pages/SignUp'
 import AdminDashBoard from './pages/AdminDashBoard'
 import UserDashBoard from './pages/UserDashBoard'
@@ -15,6 +15,7 @@ import UserPage from './pages/UserPage'
 import QuestionBulkUpload from './pages/QuestionBulkUpload'
 import { useSelector } from 'react-redux'
 import AssignExamPage from './pages/AssignExamPage'
+import ErrorPage from './pages/ErrorPage'
 
 const App = () => {
   const { user } = useSelector((state)=>state.userReducer);
@@ -27,12 +28,13 @@ const App = () => {
       console.log("inside if ",user)
       return children;
     }else{
-      return <LoginPage />
+      return <Navigate to={'/error'}/>
     }
   }
   return (
     <>
     <Routes>
+      <Route path="/error" element={<ErrorPage/>}></Route>
       <Route path="/" element={<LoginPage/>}></Route>
       <Route path="/adduser" element={<ProtectedRoute><SignUp/></ProtectedRoute>}></Route>
       <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
