@@ -11,7 +11,6 @@ const AddExam = () => {
     const {id}=useParams();
     const navigate=useNavigate();
     const [error,setError]=useState("");
-    console.log(error);
 
     const[formData, setFormData] = useState({
         examName: "",
@@ -20,8 +19,6 @@ const AddExam = () => {
         duration:"",
         passPercentage:""
     });
-    console.log(formData);
-    
     useEffect(()=>{
         console.log(id);
         
@@ -76,7 +73,7 @@ const AddExam = () => {
                     topicName:""
                 });
                 setError(response);
-                navigate('/admin-dashboard')
+                navigate('/admin-dashboard' ,{state:{msg:response.successMessage}})
             }
         }else{
              const response=await apiPut('/exam/updateexam',{...formData,"examId":id});

@@ -154,7 +154,6 @@ export const Backdrop=styled.div`
 export const Dropdown=styled.select`
     padding:9px 12px;
     border-radius:8px;
-   
     text-align:center;
 
 `;
