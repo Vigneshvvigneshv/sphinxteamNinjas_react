@@ -12,8 +12,10 @@ const userSlice=createSlice({
            state.user.push(action.payload.partyId);
             localStorage.setItem('user',JSON.stringify(state.user));
         },
-        removeFromUserLogin(state){
-            state.user.pop();
+        removeFromUserLogin(state,action){
+            console.log("state.user:", state.user);
+            console.log("removing:", action.payload);
+            state.user=state.user.filter((partyId)=>partyId!==action.payload.partyId);
             localStorage.setItem('user',JSON.stringify(state.user));
         },
     },

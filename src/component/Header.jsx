@@ -8,8 +8,7 @@ const Header = () => {
   const dispatch=useDispatch();
 
   const removeUser=()=>{
-
-     dispatch(userAction.removeFromUserLogin());
+     dispatch(userAction.removeFromUserLogin({partyId:user[0]}));
   }
   
   return (
@@ -23,7 +22,7 @@ const Header = () => {
         <HeaderButton to="/userlist">Users</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
-        <HeaderButton to={'/'} onClick={()=>removeUser}>Logout</HeaderButton>
+        <HeaderButton to={'/'} onClick={removeUser}>Logout</HeaderButton>
         </Container>
       </HeaderContainer>
   )
