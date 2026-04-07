@@ -27,3 +27,20 @@ export const QuestionContainer=styled.div`
     flex-direction:column;
     gap:20px;
 `;
+
+export const AnswerHeader=styled.div`
+    display:flex;
+    gap:20px;
+    justify-content:space-between;
+    align-items:center;
+`
+
+export const Answer=styled.h4`
+  font-family:sans-serif;
+ 
+
+`;
+
+export const Option=styled.h5`
+   font-family:sans-serif;
+`
