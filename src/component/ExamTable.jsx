@@ -5,14 +5,14 @@ import { NavButton } from '../styles/header.style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
 
-const ExamTable = ({data}) => {
+const ExamTable = ({data,id}) => {
   const navigate=useNavigate();
   
   
-    const handleSubmit=async()=>{
-           const response=await apiDelete('/exam/deleteexam',{'examId':data.examId});
+    const deleteExam=async()=>{
+           const response=await apiDelete('/exam/deleteexam',{'examId':data.examId,partyId:id});
            console.log(response);
-          //  navigate(0);
+           navigate(0);
     }
     
    
@@ -21,9 +21,10 @@ const ExamTable = ({data}) => {
         <TableRow>
             <Content>{data.examName}</Content>
             <ButtonContainer>
+              <NavButton to={`/getexamtopic/${data.examId}`} >Assign exam</NavButton>
               <NavButton to={`/getexamtopic/${data.examId}`} >Topics</NavButton>
               <NavButton to={`/getexam/${data.examId}`}>Edit</NavButton>
-              <Button onClick={handleSubmit}>Delete</Button>
+              <Button onClick={deleteExam}>Delete</Button>
             </ButtonContainer>
         </TableRow>
        

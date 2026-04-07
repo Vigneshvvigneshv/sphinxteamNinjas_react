@@ -5,10 +5,14 @@ import { CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
 import { apiGet } from '../ApiServices/apiServices'
+import { useLocation } from 'react-router-dom'
+import { SuccessMessage } from '../styles/form.style'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
-  const partyId=data.partyId;
+  const location=useLocation();
+  const message=location.state?.msg;
+  const partyId=location.state?.partyId;
   console.log('Party Id',partyId);
   
   useEffect(()=>{
@@ -29,8 +33,9 @@ const AdminDashBoard = () => {
         </CommonHeader>
         
         <CommonSection>
+          {message && <SuccessMessage>{message}</SuccessMessage>}
             { (data.responseMessage=== 'success')?
-               data.examList.map((e)=>{ return <ExamTable data={e} key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
+               data.examList.map((e)=>{ return <ExamTable data={e} id={partyId} key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
             }
             
         </CommonSection>

@@ -4,12 +4,12 @@ import { CommonContainer } from '../styles/common.style';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton, SuccessMessage } from '../styles/form.style';
 import { NavButton } from '../styles/header.style';
 import { validateEmpty, validateExam } from '../validation/ValidationUtil';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 
 const AddExam = () => {
     const {id}=useParams();
-
+    const navigate=useNavigate();
     const [error,setError]=useState("");
     console.log(error);
 
@@ -68,14 +68,15 @@ const AddExam = () => {
             const response=await apiPost('/exam/createexam',formData)
             
             console.log(response);
-            if(response.errorMessage!==null){
+            if(response.errorMessage!==undefined){
                 setError(response);
-            }else if(response.successMessage!==null){
+            }else if(response.successMessage!==undefined){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
                 setError(response);
+                navigate('/admin-dashboard')
             }
         }else{
              const response=await apiPut('/exam/updateexam',{...formData,"examId":id});
@@ -88,6 +89,7 @@ const AddExam = () => {
                     topicName:""
                 });
                 setError(response);
+                navigate('/admin-dashboard' ,{state:{msg:response.successMessage}})
             }
         }
 
@@ -148,8 +150,7 @@ const AddExam = () => {
                          {error.passPercentage && <ErrorMessage>{error.passPercentage}</ErrorMessage>}
                     </FieldContainer>
                     
-                     {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
-                    <SubmitButton type='submit'> {id!==undefined?'Edit':'Add'}</SubmitButton>
+                     <SubmitButton > {id!==undefined?'Edit':'Add'}</SubmitButton>
 
             </Form>
             </FormContainer>

@@ -6,16 +6,14 @@ import { useEffect } from 'react';
 import { apiDelete } from '../ApiServices/apiServices';
 
 const Table = ({data}) => {
-     
-    
-   
+
   return (
      <CommonTable>
         <TableRow>
             <Content>{data.topicName}</Content>
             <ButtonContainer>
               <NavButton to={`/question/${data.topicId}`} >Questions</NavButton>
-              <NavButton to={`/addtopic/${data.topicId}`}>Edit topic</NavButton>
+              <NavButton to={`/addtopic/${data.topicId}`}>Edit</NavButton>
             </ButtonContainer>
         </TableRow>
      </CommonTable>
