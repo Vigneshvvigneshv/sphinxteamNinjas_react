@@ -15,26 +15,37 @@ import UserPage from './pages/UserPage'
 import QuestionBulkUpload from './pages/QuestionBulkUpload'
 
 const App = () => {
+
+  const ProtectedRoute = ({children}) =>{
+    // logic
+    const isAuthenticated = true; 
+    if(isAuthenticated){
+      return children;
+    }else{
+      return <LoginPage />
+    }
+  }
   return (
     <>
     <Routes>
-      <Route path="/" element={<LoginPage></LoginPage>}></Route>
-      <Route path="/adduser" element={<SignUp></SignUp>}></Route>
-      <Route path="/admin-dashboard" element={<AdminDashBoard />} />
-      <Route path="/user-dashboard" element={<UserDashBoard />} />
-      <Route path="/topic" element={<TopicPage />} />
-      <Route path='/createquestion/:id' element={<CreateQuestionPage/>}/>
-      <Route path='/createquestion/' element={<CreateQuestionPage/>}/>
-      <Route path='/addtopic/' element={<AddTopic/>}/>
-      <Route path='/addtopic/:id' element={<AddTopic/>}/>
-      <Route path='/question/:id' element={<QuestionPage/>}/>
-      <Route path='/uploadfile' element={<QuestionBulkUpload/>}/>
-      <Route path='/question/addquestion' element={<CreateQuestionPage/>}/>
-      <Route path='/addexam' element={<AddExam/>}/>
-      <Route path='/getexam/:id' element={<AddExam/>}/>
-      <Route path='/getexamtopic/:id' element={<ExamTopicPage/>}/>
-      <Route path='/editexamtopic/:id' element={<AddTopicsToExam/>}/>
-      <Route path='/userlist' element={<UserPage/>}/>
+      <Route path="/" element={<LoginPage/>}></Route>
+      <Route path="/adduser" element={<ProtectedRoute><SignUp/></ProtectedRoute>}></Route>
+      <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
+      <Route path="/user-dashboard" element={<ProtectedRoute><UserDashBoard/></ProtectedRoute>} />
+
+      <Route path="/topic" element={<ProtectedRoute><TopicPage/></ProtectedRoute>} />
+      <Route path='/createquestion/:id' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
+      <Route path='/createquestion' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
+      <Route path='/addtopic' element={<ProtectedRoute><AddTopic/></ProtectedRoute>}/>
+      <Route path='/addtopic/:id' element={<ProtectedRoute><AddTopic/></ProtectedRoute>}/>
+      <Route path='/question/:id' element={<ProtectedRoute><QuestionPage/></ProtectedRoute>}/>
+      <Route path='/uploadfile' element={<ProtectedRoute><QuestionBulkUpload/></ProtectedRoute>}/>
+      <Route path='/question/addquestion' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
+      <Route path='/addexam' element={<ProtectedRoute><AddExam/></ProtectedRoute>}/>
+      <Route path='/getexam/:id' element={<ProtectedRoute><AddExam/></ProtectedRoute>}/>
+      <Route path='/getexamtopic/:id' element={<ProtectedRoute><ExamTopicPage/></ProtectedRoute>}/>
+      <Route path='/editexamtopic/:id' element={<ProtectedRoute><AddTopicsToExam/></ProtectedRoute>}/>
+      <Route path='/userlist' element={<ProtectedRoute><UserPage/></ProtectedRoute>}/>
     </Routes>
     </>
   )
