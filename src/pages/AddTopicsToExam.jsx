@@ -121,12 +121,15 @@ const handleSubmit=async(e)=>{
       }else{
 
         const response=await apiPost('/generatequestions/generatequestion',{examId:exam.examId,topics:rows})
-            console.log(response);
-            if(response.errorMessage!==null){
+           
+            
+            if(response.errorMessage!==undefined){
                setError(response);
-            }else if(response.successMessage!==null){
+            }else if(response.successMessage!==undefined){
                setError(response);
-               navigate(`/getexamtopic/${exam.examId}`);
+               navigate(`/getexamtopic/${exam.examId}`,{
+                state:{msg:response.responseMessage}
+               });
             }
       }
         }
