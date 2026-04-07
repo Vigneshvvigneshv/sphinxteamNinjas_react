@@ -101,7 +101,9 @@ export const ErrorMessage=styled.p`
     margin:0;
 `
 export const SuccessMessage=styled.p`
-    font-size:12px;
+    font-size:14px;
     color:green;
     margin:0;
+    text-align:center;
+
 `

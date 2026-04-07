@@ -31,7 +31,6 @@ const QuestionPage = () => {
           <Content>{data.topicName}</Content>
           <Content>Question type</Content>
           <ButtonContainer>
-          <NavButton to={'/uploadfile'}>Upload File</NavButton>
           <NavButton to="/createquestion" state={{topicId:data.topicId,topicName:data.topicName}}>Add question</NavButton>
           </ButtonContainer>
         </CommonHeader>

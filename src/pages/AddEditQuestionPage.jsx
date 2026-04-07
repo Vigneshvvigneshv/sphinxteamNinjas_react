@@ -88,9 +88,9 @@ const CreateQuestionPage = () => {
                 const response=await apiPut('/question/updatequestion',{...formData,questionId:id});
                 console.log(response);
                 
-                 if(response.errorMessage!==null){
+                 if(response.errorMessage!==undefined){
                      setError(response);
-                }else if(response.successMessage!==null){
+                }else if(response.successMessage!==undefined){
                     setError(response);
                     setFormData({
                         ...formData,

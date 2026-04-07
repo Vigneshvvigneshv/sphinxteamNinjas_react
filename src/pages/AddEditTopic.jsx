@@ -4,13 +4,13 @@ import { validateEmpty } from '../validation/ValidationUtil'
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton, SuccessMessage } from '../styles/form.style'
 import { CommonContainer } from '../styles/common.style'
 import { NavButton } from '../styles/header.style'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices'
 
 const AddTopic = () => {
     const {id}=useParams();
     const [error,setError]=useState("");
-
+    const navigate=useNavigate();
     const[formData, setFormData] = useState({
            topicName: ""
      });
@@ -56,27 +56,29 @@ const AddTopic = () => {
             const response=await apiPost('/topic/createtopic',formData);
     
             console.log(response);
-            if(response.errorMessage!==null){
+            if(response.errorMessage!==undefined){
                 setError(response);
-            }else if(response.successMessage!==null){
+            }else if(response.successMessage!==undefined){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
                 setError(response);
+                navigate('/topic', {state:{msg:response.successMessage}})
             }
         }else{
              const response=await apiPut('/topic/updatetopic',{...formData,topicId:id})
             
             console.log(response);
-            if(response.errorMessage!==null){
+            if(response.errorMessage!==undefined){
                 setError(response);
-            }else if(response.successMessage!==null){
+            }else if(response.successMessage!==undefined){
                 setFormData({
                     ...formData,
                     topicName:""
                 });
                 setError(response);
+                navigate('/topic', {state:{msg:response.successMessage}})
             }
         }
     }
@@ -85,7 +87,7 @@ const AddTopic = () => {
         <CommonContainer>
 
             <FormContainer>
-            <FormHeading>{ id===undefined?'Add exam topic':'Edit exam topic'}</FormHeading>
+            <FormHeading>{ id===undefined?'Add topic':'Edit topic'}</FormHeading>
             <Form onSubmit={handleSubmit}>
                     <FieldContainer>
                         <FormLabel>Topic</FormLabel>
@@ -95,9 +97,8 @@ const AddTopic = () => {
                         value={formData.topicName}
                         />
                         {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                         {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     </FieldContainer>
-                    <SubmitButton type='submit'>{id===undefined?'Add':'Edit'}</SubmitButton>
+                    <SubmitButton >{id===undefined?'Add':'Edit'}</SubmitButton>
             </Form>
             </FormContainer>
             <NavButton to={'/topic'}>Back to topic</NavButton>

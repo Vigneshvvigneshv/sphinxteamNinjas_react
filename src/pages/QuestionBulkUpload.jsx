@@ -3,20 +3,18 @@ import * as XLSX from "xlsx";
 import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from "../styles/common.style";
 import Layout from "../component/Layout";
 import { NavButton } from "../styles/header.style";
-import { FileInput, FormContainer } from "../styles/form.style";
+import { ErrorMessage, FileInput, Form, FormContainer, SuccessMessage } from "../styles/form.style";
+import { apiFilePost, apiPost } from "../ApiServices/apiServices";
 
 const QuestionBulkUpload = () => {
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const[data,setData]=useState(null);
+  const[show,setShow]=useState(false);
 
-  const API_URL = "https://localhost:8443/sphinx/api/question/upload";
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-
-    if (selectedFile) {
+  const handleChange=(e)=>{
+      const selectedFile = e.target.files[0];
+      if (selectedFile) {
       const fileName = selectedFile.name.toLowerCase();
 
       if (!fileName.endsWith(".xlsx") && !fileName.endsWith(".xls")) {
@@ -26,54 +24,32 @@ const QuestionBulkUpload = () => {
       }
 
       setFile(selectedFile);
-      setError(null);
-      setResult(null);
+      
     }
-  };
+  }
 
   const handleUpload = async () => {
     if (!file) {
       setError("Please select a file first");
       return;
     }
-
-    setLoading(true);
-    setError(null);
-    setResult(null);
-
     const formData = new FormData();
     formData.append("file", file);
 
-    try {
+  
       console.log("Uploading file:", file);
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData,
-        credentials: "include", // remove if not using cookies/session
-      });
+      const response = await apiFilePost('/question/upload',formData);
 
-      let data;
+      
+      console.log("Response:", response);
 
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("Invalid JSON response from server");
-      }
-
-      console.log("Response:", data);
-
-      if (response.ok) {
-        setResult(data);
+      if (response.successMessage!==undefined) {
+        setData(response);
       } else {
-        setError(data.message || "Upload failed");
+        setError(response.errorMessage);
       }
-    } catch (err) {
-      console.error(err);
-      setError("Network error: " + err.message);
-    } finally {
-      setLoading(false);
-    }
+    
   };
 
   const downloadTemplate = () => {
@@ -85,7 +61,6 @@ const QuestionBulkUpload = () => {
         "optionB",
         "optionC",
         "optionD",
-        "optionE",
         "answer",
         "numAnswers",
         "questionTypeId",
@@ -94,19 +69,18 @@ const QuestionBulkUpload = () => {
         "negativeMarkValue",
       ],
       [
-        "T001",
-        "What does SQL stand for?",
-        "Structed query Language",
-        "Structured Query Language",
-        "SQL",
-        "None of the above",
-        "",
-        "B",
+        "1000",
+        "What is Java?",
+        "Programming Language",
+        "Scripting Language",
+        "Markup Language",
+        "Bike",
+        "A",
         "1",
         "SINGLE_CHOICE",
-        "2",
         "1",
         "2",
+        "1",
       ],
     ];
 
@@ -140,75 +114,32 @@ const QuestionBulkUpload = () => {
         <CommonHeader>
           <CommonHeading>Upload Questions from Excel</CommonHeading>
         </CommonHeader>
-        
-        <CommonSection>
         <FormContainer>
-            
          <ButtonContainer>
 
             <FileInput
             type="file"
             accept=".xlsx,.xls"
-            onChange={handleFileChange}
-            disabled={loading}
+            onChange={handleChange}
+
             />
 
-          <Button onClick={handleUpload} disabled={!file || loading}>
-            {loading ? "Uploading..." : "Upload"}
+          <Button onClick={handleUpload}>
+            Upload
           </Button>
           </ButtonContainer>
+          {error && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
+          {data && <SuccessMessage>{data.responseMessage}</SuccessMessage>}
         </FormContainer>
               
 
           <Button
             onClick={downloadTemplate}
-            type="button"
-            style={{ marginLeft: "10px" }}
           >
             Download Template
           </Button>
-        </CommonSection>
       </CommonContainer>
-    
 
-    
-
-        
-      {error && (
-        <div style={{ color: "red", marginTop: "10px" }}>
-          <strong>Error:</strong> {error}
-        </div>
-      )}
-
-      {result && (
-        <div style={{ marginTop: "20px", color: "green" }}>
-          <h3>Upload Result</h3>
-          <p>
-            Status: <strong>{result.status || "Success"}</strong>
-          </p>
-          <p>Message: {result.message || result.successMessage}</p>
-          <p>
-            Successfully uploaded: <strong>{result.successCount || 0}</strong>{" "}
-            questions
-          </p>
-
-          {result.errors && result.errors.length > 0 && (
-            <div style={{ color: "red" }}>
-              <h4>Errors ({result.errorCount || result.errors.length}):</h4>
-              <ul>
-                {result.errors.map((err, index) => (
-                  <li key={index}>
-                    Row {err.row}: {err.error}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-
-     
-   
     </Layout>
   );
 };

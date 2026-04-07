@@ -80,9 +80,9 @@ const AddExam = () => {
         }else{
              const response=await apiPut('/exam/updateexam',{...formData,"examId":id});
             console.log(response);
-            if(response.errorMessage!==null){
+            if(response.errorMessage!==undefined){
                 setError(response);
-            }else if(response.successMessage!==null){
+            }else if(response.successMessage!==undefined){
                 setFormData({
                     ...formData,
                     topicName:""

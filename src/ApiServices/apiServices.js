@@ -21,6 +21,7 @@ export async function apiPost(endpoint, data) {
   }
 }
 
+
 export async function apiGet(endpoint) {
   try {
     const response = await fetch(URL + endpoint, {
@@ -74,4 +75,18 @@ export async function apiPut(endpoint, data) {
   }
 }
 
+export async function apiFilePost(endpoint, formData) {
+  console.log("Request Data => ", formData);
 
+  try {
+    const response = await fetch(URL + endpoint, {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    return err;
+  }
+}

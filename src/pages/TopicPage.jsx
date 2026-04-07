@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { NavButton } from '../styles/header.style'
-import { CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable , TableRow } from '../styles/common.style'
+import { ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable , TableRow } from '../styles/common.style'
 import Table from '../component/Table'
 import Empty from '../component/Empty'
 import { apiGet } from '../ApiServices/apiServices'
+import { useLocation } from 'react-router-dom'
+import { SuccessMessage } from '../styles/form.style'
 
 const TopicPage = () => {
   const[data,setData]=useState("");
- 
+  const location=useLocation();
+  const message=location.state?.msg;
   useEffect(()=>{
     const fetchData =async () => {
     const response= await apiGet('/topic/getalltopic')
@@ -23,10 +26,14 @@ const TopicPage = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>Topics</CommonHeading>
-          <NavButton to="/addtopic">Add topics</NavButton>
+          <ButtonContainer>
+            <NavButton to='/uploadfile'>Upload File</NavButton> 
+            <NavButton to="/addtopic">Add topics</NavButton>
+          </ButtonContainer>
         </CommonHeader>
         
         <CommonSection>
+          {message && <SuccessMessage>{message}</SuccessMessage>}
             { (data.responseMessage=== 'success')?
                data.topicList.map((e)=>{ return <Table data={e} key={e.topicId} ></Table>}):<Empty>No topic available</Empty>
             }
