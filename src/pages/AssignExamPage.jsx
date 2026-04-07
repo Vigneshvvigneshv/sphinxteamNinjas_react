@@ -4,6 +4,7 @@ import { Button, CommonContainer, CommonHeader, CommonHeading, CommonSection, Dr
 import { ErrorMessage, Form, FormInput, FormLabel } from '../styles/form.style';
 import Empty from '../component/Empty';
 import { NavButton } from '../styles/header.style';
+import { apiGet } from '../ApiServices/apiServices';
 
 const AssignExamPage = () => {
     const[data,setData]=useState(null);
@@ -62,7 +63,7 @@ const AssignExamPage = () => {
         >
           <option value='select'>Select the topic</option>
           {data.responseMessage === "success" &&
-            data.topicList.map((e) => (
+            data.List.map((e) => (
               <option key={e.firstName} value={e.partyId}>
                 {e.firstName}
               </option>
