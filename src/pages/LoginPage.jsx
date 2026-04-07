@@ -9,8 +9,7 @@ const LoginPage = () => {
   
   const[error,setError]=useState("");
   const navigate = useNavigate();
-  const[loading,setLoading]=useState(false);
-  console.log(loading);
+  
   
     const[formData, setFormData] = useState({
         userName: "",
@@ -36,25 +35,20 @@ const LoginPage = () => {
     const validationErrors = validate(formData);
           setError(validationErrors);
           if (Object.keys(validationErrors).length > 0) return;
-          try{
-            
-            setLoading(!loading);
-            const response=await apiPost('/user/login',formData);
-      if(response.errorMessage!==null){
+
+    const response=await apiPost('/user/login',formData);
+      if(response.errorMessage!==undefined){
           setError(response)
+      }else if(response.successMessage!==undefined){
+
+        if (response.role === "SPHINX_ADMIN") {
+            console.log(response.role); 
+            navigate("/admin-dashboard" , {state:{partyId:response.partyId}});
+        } else if(response.role==="SPHINX_USER") {
+            navigate("/user-dashboard", {state:{partyId:response.partyId}});
+        }
       }
-      if (response.role === "SPHINX_ADMIN") {
-          console.log(response.role); 
-          navigate("/admin-dashboard");
-      } else if(response.role==="SPHINX_USER") {
-          navigate("/user-dashboard");
-      }
-    }catch(err){
-      setLoading(!loading);
-      console.log(err);
-    }finally{
-      setLoading(false);
-    }
+   
   };
 
 
@@ -87,7 +81,7 @@ const LoginPage = () => {
             
             <SubmitButton type='submit'>Login</SubmitButton>
             </Form>
-            {loading && <Loader/>}
+           
           </FormContainer> 
         </LoginContainer>
   )

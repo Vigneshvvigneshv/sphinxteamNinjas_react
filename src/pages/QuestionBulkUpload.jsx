@@ -10,7 +10,6 @@ const QuestionBulkUpload = () => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const[data,setData]=useState(null);
-  const[show,setShow]=useState(false);
 
   const handleChange=(e)=>{
       const selectedFile = e.target.files[0];
@@ -46,6 +45,7 @@ const QuestionBulkUpload = () => {
 
       if (response.successMessage!==undefined) {
         setData(response);
+        
       } else {
         setError(response.errorMessage);
       }
@@ -129,7 +129,7 @@ const QuestionBulkUpload = () => {
           </Button>
           </ButtonContainer>
           {error && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-          {data && <SuccessMessage>{data.responseMessage}</SuccessMessage>}
+          {data && <SuccessMessage>{data.successMessage}</SuccessMessage>}
         </FormContainer>
               
 
