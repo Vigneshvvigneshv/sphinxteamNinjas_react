@@ -28,13 +28,13 @@ const App = () => {
       console.log("inside if ",user)
       return children;
     }else{
-      return <Navigate to={'/error'}/>
+      return <ErrorPage></ErrorPage>
     }
   }
   return (
     <>
     <Routes>
-      <Route path="/error" element={<ErrorPage/>}></Route>
+      <Route path="/*" element={<ErrorPage/>}></Route>
       <Route path="/" element={<LoginPage/>}></Route>
       <Route path="/adduser" element={<ProtectedRoute><SignUp/></ProtectedRoute>}></Route>
       <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />

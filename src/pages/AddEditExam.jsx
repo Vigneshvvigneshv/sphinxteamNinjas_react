@@ -7,11 +7,18 @@ import { validateEmpty, validateExam } from '../validation/ValidationUtil';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 import { useSelector } from 'react-redux';
+import Modal from '../component/Modal';
 
 const AddExam = () => {
     const {id}=useParams();
     const navigate=useNavigate();
     const [error,setError]=useState("");
+    const[show,setShow]=useState(false);
+
+    const changeShow=()=>{
+        setShow(!show);
+    }
+    
     const {user}=useSelector((state)=>state.userReducer)
     const[formData, setFormData] = useState({
         examName: "",
@@ -75,7 +82,7 @@ const AddExam = () => {
                     topicName:""
                 });
                 setError(response);
-                navigate('/admin-dashboard' ,{state:{msg:response.successMessage}})
+                changeShow()
             }
         }else{
              const response=await apiPut('/exam/updateexam',{...formData,"examId":id});
@@ -88,7 +95,7 @@ const AddExam = () => {
                     topicName:""
                 });
                 setError(response);
-                navigate('/admin-dashboard' ,{state:{msg:response.successMessage}})
+               changeShow()
             }
         }
 
@@ -149,10 +156,11 @@ const AddExam = () => {
                          {error.passPercentage && <ErrorMessage>{error.passPercentage}</ErrorMessage>}
                     </FieldContainer>
                     
-                     <SubmitButton > {id!==undefined?'Edit':'Add'}</SubmitButton>
+                     <SubmitButton> {id!==undefined?'Edit':'Add'}</SubmitButton>
 
             </Form>
             </FormContainer>
+             {show && <Modal url='/admin-dashboard' >{error.successMessage}</Modal>}
             <NavButton to={'/admin-dashboard'} state={{error:error.successMessage}}>Back to home</NavButton>
         </CommonContainer>
     </Layout>

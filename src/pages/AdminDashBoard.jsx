@@ -7,11 +7,14 @@ import Empty from '../component/Empty'
 import { apiGet } from '../ApiServices/apiServices'
 import { useLocation } from 'react-router-dom'
 import { SuccessMessage } from '../styles/form.style'
+import Modal from '../component/Modal'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
+  
   const location=useLocation();
   const message=location.state?.msg;
+ 
   
   useEffect(()=>{
     const fetchData = async () => {
@@ -33,9 +36,9 @@ const AdminDashBoard = () => {
         <CommonSection>
           {message && <SuccessMessage>{message}</SuccessMessage>}
             { (data.responseMessage=== 'success')?
-               data.examList.map((e)=>{ return <ExamTable data={e}  key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
+               data.examList.map((e)=>{ return <ExamTable data={e} key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
             }
-            
+        
         </CommonSection>
       </CommonContainer>
     </Layout>

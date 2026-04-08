@@ -26,6 +26,7 @@ const ExamTable = ({data}) => {
               <NavButton to={`/getexamtopic/${data.examId}`} >Topics</NavButton>
               <NavButton to={`/getexam/${data.examId}`}>Edit</NavButton>
               <Button onClick={deleteExam}>Delete</Button>
+              
             </ButtonContainer>
         </TableRow>
        
