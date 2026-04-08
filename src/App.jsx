@@ -18,15 +18,32 @@ import AssignExamPage from './pages/AssignExamPage'
 import ErrorPage from './pages/ErrorPage'
 
 const App = () => {
-  const { user } = useSelector((state)=>state.userReducer);
+  const { user,role } = useSelector((state)=>state.userReducer);
   console.log("user ",user);
+
 
   const ProtectedRoute = ({children}) =>{
     console.log("inside if protected")
     
     if(user.length>0){
       console.log("inside if ",user)
-      
+
+      return children;
+    }else{
+      return <ErrorPage></ErrorPage>
+    }
+  }
+
+  const AdminAuthentication=({children})=>{
+    if(role[0]==="SPHINX_ADMIN"){
+        return children;
+    }else{
+      return <ErrorPage></ErrorPage>
+    }
+  }
+
+  const UserAuthentication=({children})=>{
+    if(role[0]==="SPHINX_USER"){
       return children;
     }else{
       return <ErrorPage></ErrorPage>
@@ -37,18 +54,18 @@ const App = () => {
     <Routes>
       <Route path="/*" element={<ErrorPage/>}></Route>
       <Route path="/" element={<LoginPage/>}></Route>
-      <Route path="/adduser" element={<ProtectedRoute><SignUp/></ProtectedRoute>}></Route>
-      <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashBoard /></ProtectedRoute>} />
+      <Route path="/adduser" element={<ProtectedRoute><AdminAuthentication><SignUp/></AdminAuthentication></ProtectedRoute>}></Route>
+      <Route path="/admin-dashboard" element={<ProtectedRoute><AdminAuthentication><AdminDashBoard /></AdminAuthentication></ProtectedRoute>} />
       <Route path="/user-dashboard" element={<ProtectedRoute><UserDashBoard/></ProtectedRoute>} />
-      <Route path="/assignexam/:id" element={<ProtectedRoute><AssignExamPage/></ProtectedRoute>} />
-      <Route path="/topic" element={<ProtectedRoute><TopicPage/></ProtectedRoute>} />
-      <Route path='/createquestion/:id' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
-      <Route path='/createquestion' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
-      <Route path='/addtopic' element={<ProtectedRoute><AddTopic/></ProtectedRoute>}/>
-      <Route path='/addtopic/:id' element={<ProtectedRoute><AddTopic/></ProtectedRoute>}/>
-      <Route path='/question/:id' element={<ProtectedRoute><QuestionPage/></ProtectedRoute>}/>
-      <Route path='/uploadfile' element={<ProtectedRoute><QuestionBulkUpload/></ProtectedRoute>}/>
-      <Route path='/question/addquestion' element={<ProtectedRoute><CreateQuestionPage/></ProtectedRoute>}/>
+      <Route path="/assignexam/:id" element={<ProtectedRoute><AdminAuthentication><AssignExamPage/></AdminAuthentication></ProtectedRoute>} />
+      <Route path="/topic" element={<ProtectedRoute><AdminAuthentication><TopicPage/></AdminAuthentication></ProtectedRoute>} />
+      <Route path='/createquestion/:id' element={<ProtectedRoute><AdminAuthentication><CreateQuestionPage/></AdminAuthentication></ProtectedRoute>}/>
+      <Route path='/createquestion' element={<ProtectedRoute><AdminAuthentication><CreateQuestionPage/></AdminAuthentication></ProtectedRoute>}/>
+      <Route path='/addtopic' element={<ProtectedRoute><AdminAuthentication><AddTopic/></AdminAuthentication></ProtectedRoute>}/>
+      <Route path='/addtopic/:id' element={<ProtectedRoute><AdminAuthentication><AddTopic/></AdminAuthentication></ProtectedRoute>}/>
+      <Route path='/question/:id' element={<ProtectedRoute><AdminAuthentication><QuestionPage/></AdminAuthentication></ProtectedRoute>}/>
+      <Route path='/uploadfile' element={<ProtectedRoute><AdminAuthentication><QuestionBulkUpload/></AdminAuthentication></ProtectedRoute>}/>
+      <Route path='/question/addquestion' element={<ProtectedRoute><AdminAuthentication><CreateQuestionPage/></AdminAuthentication></ProtectedRoute>}/>
       <Route path='/addexam' element={<ProtectedRoute><AddExam/></ProtectedRoute>}/>
       <Route path='/getexam/:id' element={<ProtectedRoute><AddExam/></ProtectedRoute>}/>
       <Route path='/getexamtopic/:id' element={<ProtectedRoute><ExamTopicPage/></ProtectedRoute>}/>

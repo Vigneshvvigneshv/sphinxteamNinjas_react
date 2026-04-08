@@ -178,3 +178,11 @@ export const AnswerOption=styled.div`
     flex-direction:column;
     gap:10px;
 `
+
+export const PasswordEye=styled.p`
+    font-weight:900;
+    font-size: 15px;
+    position: absolute;
+    top: 35px;
+    left: 300px;
+`

@@ -45,7 +45,7 @@ const LoginPage = () => {
           setError(response)
       }else if(response.successMessage!==undefined){
 
-         dispatch(userAction.addToUserLogin({partyId:response.partyId}));
+         dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role}));
 
         if (response.role === "SPHINX_ADMIN") {
 

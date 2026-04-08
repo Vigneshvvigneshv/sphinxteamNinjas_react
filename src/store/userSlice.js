@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
-    user:JSON.parse(localStorage.getItem('user'))||[]
+    user:JSON.parse(localStorage.getItem('user'))||[],
+    role:JSON.parse(localStorage.getItem('role'))||[]
 }
 
 const userSlice=createSlice({
@@ -9,14 +10,22 @@ const userSlice=createSlice({
     initialState,
     reducers:{
          addToUserLogin(state,action){
-           state.user.push(action.payload.partyId);
-            localStorage.setItem('user',JSON.stringify(state.user));
+            //first remove the existing user;
+                state.user=[];
+                localStorage.setItem('user',JSON.stringify(state.user));
+                state.role=[];
+                localStorage.setItem('role',JSON.stringify(state.role));
+
+                state.user.push(action.payload.partyId);
+                state.role.push(action.payload.role);
+                localStorage.setItem('user',JSON.stringify(state.user));
+                localStorage.setItem('role',JSON.stringify(state.role));
         },
         removeFromUserLogin(state,action){
-            console.log("state.user:", state.user);
-            console.log("removing:", action.payload);
             state.user=state.user.filter((partyId)=>partyId!==action.payload.partyId);
+            state.role=state.role.filter((role)=>role!==action.payload.role);
             localStorage.setItem('user',JSON.stringify(state.user));
+            localStorage.setItem('role',JSON.stringify(state.role));
         },
     },
 });
