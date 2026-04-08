@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { validate } from '../Validation/SignUpFormValidation';
 import Layout from '../component/Layout';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
-import { CommonContainer, Dropdown } from '../styles/common.style';
+import { CommonContainer, Dropdown, PasswordEye } from '../styles/common.style';
 import { apiPost } from '../ApiServices/apiServices';
 
 
@@ -16,7 +16,7 @@ const SignUp = () => {
             lastName:"",
             email:"",
             password: "",
-            role: roleTypeId,
+            roleTypeId: roleTypeId,
       });
     
        const handleChange = (e) => {
@@ -40,7 +40,7 @@ const SignUp = () => {
       setError(validationErrors);
       if (Object.keys(validationErrors).length > 0) return;
 
-        const response = await apiPost('user/signup',formData);
+        const response = await apiPost('/user/signup',formData);
         console.log(response);
       };
   return (
@@ -97,9 +97,11 @@ const SignUp = () => {
                         name="password"
                         placeholder='Enter your password'
                         value={formData.password}
-                        onChange={handleChange}></FormInput>
+                        onChange={handleChange}></FormInput><PasswordEye class="fa-solid fa-eye"></PasswordEye>
                         {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
                 </FieldContainer>
+
+
                 <FieldContainer>
                   <Dropdown value={roleTypeId} onChange={(e)=> setRoleTypeId(e.target.value)}>
                     <option value='SPHINX_USER'>User</option>
