@@ -145,16 +145,7 @@ export const EmptyContent=styled.p`
     flex:1;
 `;
 
-export const Backdrop=styled.div`
-    background-color:rgba(95, 89, 89, 0.86);
-    z-index:1000;
-    position:absolute;
-    top:0;
-    left:0;
-    bottom:0;
-    right:0;
 
-`;
 
 export const Dropdown=styled.select`
     padding:9px 12px;

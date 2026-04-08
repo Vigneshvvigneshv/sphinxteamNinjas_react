@@ -17,6 +17,8 @@ const AddTopicsToExam = () => {
   const[data,setData]=useState("");
   const[error,setError]=useState("");
 
+  const [show,setShow]=useState(false);
+
   const location=useLocation();
   const [exam] = useState(location.state);
   console.log(exam);
@@ -24,6 +26,10 @@ const AddTopicsToExam = () => {
   const [rows, setRows] = useState([
   { topicId:"",  percentage: "", topicPassPercentage: "" }
   ]);
+
+    const changeShow=()=>{
+      setShow(!show);
+    }
   
     console.log(rows);
     console.log(error);
@@ -127,9 +133,10 @@ const handleSubmit=async(e)=>{
                setError(response);
             }else if(response.successMessage!==undefined){
                setError(response);
-               navigate(`/getexamtopic/${exam.examId}`,{
-                state:{msg:response.responseMessage}
-               });
+              //  navigate(`/getexamtopic/${exam.examId}`,{
+              //   state:{msg:response.responseMessage}
+              //  });
+              changeShow();
             }
       }
         }
@@ -209,6 +216,7 @@ const handleSubmit=async(e)=>{
           <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>
           <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
     </ButtonContainer>
+    {show && <Modal>{error.responseMessage}</Modal>}
      </Form>
         </CommonSection>
       </CommonContainer>

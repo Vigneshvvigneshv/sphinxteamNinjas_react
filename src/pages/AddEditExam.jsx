@@ -11,7 +11,6 @@ import Modal from '../component/Modal';
 
 const AddExam = () => {
     const {id}=useParams();
-    const navigate=useNavigate();
     const [error,setError]=useState("");
     const[show,setShow]=useState(false);
 
@@ -160,7 +159,7 @@ const AddExam = () => {
 
             </Form>
             </FormContainer>
-             {show && <Modal url='/admin-dashboard' >{error.successMessage}</Modal>}
+             {show && <Modal>{error.successMessage}</Modal>}
             <NavButton to={'/admin-dashboard'} state={{error:error.successMessage}}>Back to home</NavButton>
         </CommonContainer>
     </Layout>

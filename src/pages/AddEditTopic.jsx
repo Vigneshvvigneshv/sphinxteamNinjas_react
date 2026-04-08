@@ -6,11 +6,16 @@ import { CommonContainer } from '../styles/common.style'
 import { NavButton } from '../styles/header.style'
 import { useNavigate, useParams } from 'react-router-dom'
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices'
+import Modal from '../component/Modal'
 
 const AddTopic = () => {
     const {id}=useParams();
     const [error,setError]=useState("");
-    const navigate=useNavigate();
+    const[show,setShow]=useState(false);
+
+    const changeShow=()=>{
+        setShow(!show);
+    }
     const[formData, setFormData] = useState({
            topicName: ""
      });
@@ -64,7 +69,8 @@ const AddTopic = () => {
                     topicName:""
                 });
                 setError(response);
-                navigate('/topic', {state:{msg:response.successMessage}})
+                // navigate('/topic', {state:{msg:response.successMessage}})
+                changeShow();
             }
         }else{
              const response=await apiPut('/topic/updatetopic',{...formData,topicId:id})
@@ -78,7 +84,8 @@ const AddTopic = () => {
                     topicName:""
                 });
                 setError(response);
-                navigate('/topic', {state:{msg:response.successMessage}})
+                // navigate('/topic', {state:{msg:response.successMessage}})
+                changeShow();
             }
         }
     }
@@ -99,6 +106,7 @@ const AddTopic = () => {
                         {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
                     </FieldContainer>
                     <SubmitButton >{id===undefined?'Add':'Edit'}</SubmitButton>
+                    {show && <Modal>{error.successMessage}</Modal>}
             </Form>
             </FormContainer>
             <NavButton to={'/topic'}>Back to topic</NavButton>

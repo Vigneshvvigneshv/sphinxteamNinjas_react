@@ -14,7 +14,7 @@ const Header = () => {
   return (
       <HeaderContainer>
         <HeaderLogo>
-          <Title>Sphinx Admin</Title>
+          <Title>{user[0]==='super_admin'?'Sphinx Admin':'Sphinx User'}</Title>
         </HeaderLogo>
         <Container>
         <HeaderButton to="/adduser">Add user</HeaderButton>

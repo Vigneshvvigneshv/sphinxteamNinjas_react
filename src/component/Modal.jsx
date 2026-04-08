@@ -1,8 +1,8 @@
 import React from 'react'
-import { Backdrop, Button, CommonContainer, Container, Content, LoginContainer } from '../styles/common.style'
+import {  Button, ButtonContainer, CommonContainer, Container, Content, LoginContainer } from '../styles/common.style'
 import { NavButton } from '../styles/header.style'
 import { useNavigate } from 'react-router-dom'
-import { FormContainer } from '../styles/form.style'
+import { Backdrop, Message, ModalContainer } from '../styles/modal.style'
 
 const Modal = ({children}) => {
   const navigate=useNavigate();
@@ -11,12 +11,14 @@ const Modal = ({children}) => {
   return (
     
     <Backdrop>
-      <FormContainer>
-      <Content>
+      <ModalContainer>
+      <Message>
         {children}
-      </Content>
-      <NavButton onClick={()=>{ navigate(-1)} }>Ok</NavButton>
-      </FormContainer>
+      </Message>
+      <ButtonContainer>
+       <NavButton onClick={()=>{ navigate(-1)} }>Ok</NavButton>
+      </ButtonContainer>
+      </ModalContainer>
     </Backdrop>
     
   )
