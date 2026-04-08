@@ -5,12 +5,16 @@ import Layout from "../component/Layout";
 import { NavButton } from "../styles/header.style";
 import { ErrorMessage, FileInput, Form, FormContainer, SuccessMessage } from "../styles/form.style";
 import { apiFilePost, apiPost } from "../ApiServices/apiServices";
+import Modal from "../component/Modal";
 
 const QuestionBulkUpload = () => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const[data,setData]=useState(null);
-
+  const[show,setShow]=useState(false);
+  const changeShow=()=>{
+    setShow(!show);
+  }
   const handleChange=(e)=>{
       const selectedFile = e.target.files[0];
       if (selectedFile) {
@@ -129,7 +133,7 @@ const QuestionBulkUpload = () => {
           </Button>
           </ButtonContainer>
           {error && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-          {data && <SuccessMessage>{data.successMessage}</SuccessMessage>}
+          {show && <Modal>{data.successMessage}</Modal>}
         </FormContainer>
               
 

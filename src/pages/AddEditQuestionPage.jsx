@@ -10,6 +10,7 @@ import { validateQuestion } from '../validation/ValidationUtil';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 import { NavButton } from '../styles/header.style';
 import TrueOrFalse from '../component/TrueOrFalse';
+import Modal from '../component/Modal';
 
 const CreateQuestionPage = () => {
     const {id}=useParams();
@@ -23,6 +24,12 @@ const CreateQuestionPage = () => {
     const [error,setError]=useState("");
     const[questionType,setQuestionType]=useState('SINGLE_CHOICE');
     const[difficultyLevel,setDifficultyLevel]=useState('1');
+    const[show,setShow]=useState(false);
+    console.log('Create question Page',show);
+    
+        const changeShow=()=>{
+            setShow(!show);
+        }
 
         console.log(error);
          const[formData, setFormData] = useState({
@@ -90,27 +97,30 @@ const CreateQuestionPage = () => {
                 
                  if(response.errorMessage!==undefined){
                      setError(response);
-                }else if(response.successMessage!==undefined){
-                    setError(response);
+                }else if(response.responseMessage!==undefined){
                     setFormData({
                         ...formData,
                         [e.target.name]: ""
                     })
+                    setError(response);
+                    changeShow();
                  }
             }else{
 
                 const response=await apiPost('/question/createquestion',formData);
                 
                 console.log(response);
-                if(response.errorMessage!==null){
+                if(response.errorMessage!==undefined){
                     setError(response);
-                }else if(response.successMessage!==null){
-                    setError(response);
+                }else if(response.responseMessage===undefined){
                     setFormData({
                         ...formData,
                         [e.target.name]: ""
                     })
+                    setError(response);
+                    changeShow();
                 }
+                
             }
         }
   return (
@@ -180,9 +190,11 @@ const CreateQuestionPage = () => {
                         </Dropdown>
                        
                     </QuestionFieldContainer>
-                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+               
                 {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
+                 {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
                     <SubmitButton >{id!==undefined?'Edit':'Add'}</SubmitButton>
+                    {show && <Modal>{error.message}</Modal>}
                 </Form>
             </QuestionFormContainer>
                 <CommonContainer>
