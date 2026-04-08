@@ -26,6 +26,7 @@ const App = () => {
     
     if(user.length>0){
       console.log("inside if ",user)
+      
       return children;
     }else{
       return <Navigate to={'/error'}/>
