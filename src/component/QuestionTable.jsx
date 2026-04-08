@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Button, ButtonContainer, CommonTable, Content, TableRow } from '../styles/common.style';
+import { AnswerContainer, AnswerOption, Button, ButtonContainer, CommonHeader, CommonTable, Container, Content, TableRow } from '../styles/common.style';
 import { NavButton } from '../styles/header.style';
 import { apiDelete, apiGet } from '../ApiServices/apiServices';
+import { FormContainer } from '../styles/form.style';
+import { Answer, AnswerHeader, Option } from '../styles/question.style';
+
+
 
 const QuestionTable = ({data,name}) => {
     const[answer,setAnswer]=useState();
@@ -13,7 +17,12 @@ const QuestionTable = ({data,name}) => {
         console.log('handle submit called');
         const response=await apiDelete('/question/deletequestion',{"questionId":data.questionId});
         console.log(response);
+
         navigate(0)
+    }
+
+    const showAnswer=()=>{
+        setAnswer(data)
     }
    //  const getAnswer=async(id)=>{
    //    const response=await apiGet('/')
@@ -25,11 +34,28 @@ const QuestionTable = ({data,name}) => {
             <Content>{data.questionDetail}</Content>
             <Content>{data.questionTypeId}</Content>
             <ButtonContainer>
-              <Button>Answers</Button>
+              <Button onClick={showAnswer}>Answers</Button>
               <NavButton to={`/createquestion/${data.questionId}`} state={{topicId:data.topicId,topicName:name}}>Edit</NavButton>
               <Button onClick={()=>{handleSubmit();}}>Delete</Button>
             </ButtonContainer>
         </TableRow>
+        { answer && <AnswerContainer>
+            <AnswerHeader>
+                <Content>Answer</Content>
+                <Button onClick={()=>{setAnswer('')}}>Hide</Button>
+            </AnswerHeader>
+            <AnswerOption>
+               {data.optionA && <Option>Option A - {data.optionA}</Option>}
+               {data.optionB && <Option>Option B - {data.optionB}</Option> }
+               {data.optionC && <Option>Option C - {data.optionC}</Option> }
+               {data.optionD && <Option>Option A - {data.optionD}</Option> }
+            </AnswerOption>
+                <Answer>Answer: option - {data.answer}</Answer>
+            </AnswerContainer>
+            }
+
+        
+
      </CommonTable>
   )
   

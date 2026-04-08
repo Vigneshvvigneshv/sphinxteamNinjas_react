@@ -162,3 +162,19 @@ export const Dropdown=styled.select`
     text-align:center;
 
 `;
+export const AnswerContainer=styled.div`
+  width: 100%;
+  padding:10px 30px;
+  margin-top:2px;
+  border-radius: 12px;
+  background: #f0eaea;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+`;
+
+export const AnswerOption=styled.div`
+    width:100%;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+`
