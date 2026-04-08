@@ -7,12 +7,19 @@ import { apiDelete } from '../ApiServices/apiServices';
 import { useSelector } from 'react-redux';
 
 const ExamTable = ({data}) => {
-  const navigate=useNavigate();
   const{ user }=useSelector((state)=>state.userReducer);
+  const[show,setShow]=useState(false);
+  const[response,setResponse]=useState();
+  console.log('Exam Table',response);
   
+    const changeShow=()=>{
+      setShow(!show);
+    }
     const deleteExam=async()=>{
            const response=await apiDelete('/exam/deleteexam',{'examId':data.examId,'partyId':user[0]});
            console.log(response);
+           setResponse(response);
+           changeShow();
           //  navigate(0);
     }
     
@@ -26,8 +33,8 @@ const ExamTable = ({data}) => {
               <NavButton to={`/getexamtopic/${data.examId}`} >Topics</NavButton>
               <NavButton to={`/getexam/${data.examId}`}>Edit</NavButton>
               <Button onClick={deleteExam}>Delete</Button>
-              
             </ButtonContainer>
+        {show && <Modal>{response.successMessage}</Modal>}
         </TableRow>
        
      </CommonTable>

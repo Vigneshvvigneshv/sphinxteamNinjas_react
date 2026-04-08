@@ -14,8 +14,12 @@ const AdminDashBoard = () => {
   
   const location=useLocation();
   const message=location.state?.msg;
+  const[show,setShow]=useState(false);
+
+  const changeShow=()=>{
+    setShow(!show);
+  }
  
-  
   useEffect(()=>{
     const fetchData = async () => {
     const response= await apiGet('/exam/getallexam');
@@ -35,7 +39,7 @@ const AdminDashBoard = () => {
         
         <CommonSection>
           {message && <SuccessMessage>{message}</SuccessMessage>}
-            { (data.responseMessage=== 'success')?
+            { (data.responseMessage=== 'success') && (data.examList.length>0)?
                data.examList.map((e)=>{ return <ExamTable data={e} key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
             }
         
