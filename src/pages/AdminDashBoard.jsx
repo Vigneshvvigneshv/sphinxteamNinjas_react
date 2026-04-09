@@ -20,12 +20,12 @@ const AdminDashBoard = () => {
   const changeShow=()=>{
     setShow(!show);
   }
- 
+  
   useEffect(()=>{
     const fetchData = async () => {
       const response= await apiGet('/exam/getallexam');
       setData(response);
-      toast.success("Fetch Data Sucess!", {position: "top-center"});
+    
     }
     fetchData()
   },[]);
