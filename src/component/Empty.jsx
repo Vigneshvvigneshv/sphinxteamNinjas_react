@@ -1,11 +1,11 @@
 import React from 'react'
-import { Container , EmptyContent } from '../styles/common.style'
+import { CommonContainer, EmptyContent } from '../styles/common_style'
 
-const Empty = ({children}) => {
+const Empty = ({ children }) => {
   return (
-    <Container>
+    <CommonContainer style={{ padding: '2.5rem 0' }}>
       <EmptyContent>{children}</EmptyContent>
-    </Container>
+    </CommonContainer>
   )
 }
 

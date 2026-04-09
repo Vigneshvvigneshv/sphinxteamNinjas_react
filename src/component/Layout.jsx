@@ -1,18 +1,16 @@
 import React from 'react'
-import styled from 'styled-components'
 import Header from './Header';
 import Footer from './Footer';
-import {  MainContainer } from '../styles/layout.style';
+import { MainContainer } from '../styles/layout_style';
+import { Toaster } from 'sonner';
 
-
-
-
-const Layout = ({children}) => {
+const Layout = ({ children }) => {
   return (
     <>
-      <Header></Header>
+      <Header />
+      <Toaster /> 
       <MainContainer>{children}</MainContainer>
-      <Footer></Footer>
+      <Footer />
     </>
   )
 }

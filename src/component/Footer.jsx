@@ -1,10 +1,18 @@
 import React from 'react'
-import { FooterContainer, FooterText } from '../styles/footer.style'
+import { FooterContainer, FooterText, FooterDivider, FooterLinks, FooterLink } from '../styles/footer_style'
 
 const Footer = () => {
   return (
     <FooterContainer>
-        <FooterText>© 2026 Sphinx online exam</FooterText>
+      <FooterLinks>
+        <FooterLink href="#">Privacy</FooterLink>
+        <FooterLink href="#">Terms</FooterLink>
+        <FooterLink href="#">Support</FooterLink>
+      </FooterLinks>
+      <FooterDivider />
+      <FooterText>
+        <strong>Sphinx</strong> — Online Assessment Platform ·  © {new Date().getFullYear()} All rights reserved
+      </FooterText>
     </FooterContainer>
   )
 }

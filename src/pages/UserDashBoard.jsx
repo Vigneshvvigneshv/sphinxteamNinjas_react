@@ -1,10 +1,13 @@
 import React from 'react'
 import Layout from '../component/Layout'
+import { CommonContainer, CommonHeading } from '../styles/common_style'
 
 const UserDashBoard = () => {
   return (
     <Layout>
-      <h1>Welcome to the UserDashBoard</h1>
+      <CommonContainer>
+        <CommonHeading>Welcome to the User Dashboard</CommonHeading>
+      </CommonContainer>
     </Layout>
   )
 }

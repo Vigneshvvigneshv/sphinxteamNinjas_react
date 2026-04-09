@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
-import { NavButton } from '../styles/header.style'
-import { CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common.style'
+import { NavButton } from '../styles/header_style'
+import { CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common_style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
 import { apiGet } from '../ApiServices/apiServices'
 import { useLocation } from 'react-router-dom'
-import { SuccessMessage } from '../styles/form.style'
+import { SuccessMessage } from '../styles/form_style'
 import Modal from '../component/Modal'
+import { toast } from 'sonner'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
@@ -22,16 +23,19 @@ const AdminDashBoard = () => {
  
   useEffect(()=>{
     const fetchData = async () => {
-    const response= await apiGet('/exam/getallexam');
-   
-    setData(response);
-  }
+      const response= await apiGet('/exam/getallexam');
+      setData(response);
+      toast.success("Fetch Data Sucess!", {position: "top-center"});
+    }
     fetchData()
   },[]);
+
   console.log(data);
+  
+
   return (
     <Layout> 
-       <CommonContainer>
+      <CommonContainer>
         <CommonHeader>
           <CommonHeading>Available Exams</CommonHeading>
           <NavButton to="/addexam">Add exam</NavButton>
@@ -39,10 +43,10 @@ const AdminDashBoard = () => {
         
         <CommonSection>
           {message && <SuccessMessage>{message}</SuccessMessage>}
-            { (data.responseMessage=== 'success') && (data.examList.length>0)?
-               data.examList.map((e)=>{ return <ExamTable data={e} key={e.examId} ></ExamTable>}):<Empty>No exam available</Empty>
-            }
-        
+          {(data.responseMessage === 'success') && (data.examList.length > 0)
+            ? data.examList.map((e) => <ExamTable data={e} key={e.examId} />)
+            : <Empty>No exam available</Empty>
+          }
         </CommonSection>
       </CommonContainer>
     </Layout>
