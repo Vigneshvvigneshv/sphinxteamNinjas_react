@@ -59,7 +59,7 @@ export const FieldContainer = styled.div`
 export const FormLabel = styled.label`
   font-size: 13px;
   font-weight: 500;
-  margin-bottom: 6px;
+  
   color: ${({ $t }) => $t?.textSecondary ?? "#3A3A3A"};
   &::after {
     content: "*";
@@ -71,7 +71,7 @@ export const FormLabel = styled.label`
 `;
 
 export const FormInput = styled.input`
-  padding: 11px 13px;
+  padding: 8px 13px;
   border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
   border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
   background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
@@ -172,3 +172,11 @@ export const SuccessMessage = styled.p`
   background: ${({ $t }) => $t?.successBg ?? "#F0F7F0"};
   border: 1px solid ${({ $t }) => $t?.successBorder ?? "rgba(46,125,50,0.12)"};
 `;
+
+export const CheckBox=styled.input`
+  
+`
+
+export const LabelContainer=styled.div`
+  
+`

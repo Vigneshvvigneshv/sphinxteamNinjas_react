@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import {
   ErrorMessage, FieldContainer, Form, FormContainer, FormHeading,
-  FormInput, FormLabel, FormText, SubmitButton, SuccessMessage
+  FormInput, FormLabel, FormText, LabelContainer, SubmitButton, SuccessMessage
 } from '../styles/form_style';
 import {
   ButtonContainer, CommonContainer, CommonHeading,
@@ -128,7 +128,7 @@ const CreateQuestionPage = () => {
     <Layout>
       <QuestionContainer>
         <QuestionHeaderContainer>
-          <CommonHeading>{topicName} —</CommonHeading>
+          <CommonHeading>{topicName} -</CommonHeading>
           <CommonHeading>Question type</CommonHeading>
           <Dropdown
             value={questionType}
@@ -145,7 +145,9 @@ const CreateQuestionPage = () => {
         <QuestionFormContainer>
           <Form onSubmit={handleSubmit}>
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Question text</FormLabel>
+              </LabelContainer>
               <FormText
                 name='questionDetail'
                 placeholder='Enter the question'
@@ -161,7 +163,9 @@ const CreateQuestionPage = () => {
             {questionType === 'TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData, optionA: "TRUE", optionB: "FALSE"}} />}
 
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Answer</FormLabel>
+              </LabelContainer>
               <FormInput
                 name='answer'
                 placeholder='Enter the answer option'
@@ -173,7 +177,9 @@ const CreateQuestionPage = () => {
             </QuestionFieldContainer>
 
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Mark</FormLabel>
+              </LabelContainer>
               <FormInput
                 name='answerValue'
                 placeholder='Enter the mark'
@@ -185,7 +191,9 @@ const CreateQuestionPage = () => {
             </QuestionFieldContainer>
 
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Negative mark</FormLabel>
+              </LabelContainer>
               <FormInput
                 name='negativeMarkValue'
                 placeholder='Enter the negative mark'
@@ -197,7 +205,9 @@ const CreateQuestionPage = () => {
             </QuestionFieldContainer>
 
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Difficulty level</FormLabel>
+              </LabelContainer>
               <Dropdown value={difficultyLevel} onChange={(e) => setDifficultyLevel(e.target.value)}>
                 <option value='1'>Easy</option>
                 <option value='2'>Medium</option>

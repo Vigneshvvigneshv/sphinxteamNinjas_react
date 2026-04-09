@@ -37,6 +37,10 @@ export const ProgressLabel = styled.p`
 
 export const QuestionHeaderContainer = styled.div`
   padding: 18px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
   border-radius: ${({ $t }) => $t?.radiusCard ?? "14px"};
   background: ${({ $t }) => $t?.surface ?? "#fff"};
   border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
@@ -77,11 +81,12 @@ export const QuestionFormContainer = styled.div`
 export const QuestionFieldContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 15px;
+  justify-content:space-between;
+  width:50%;
+  padding: 9px 12px;
   border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
   border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
+  // background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s, box-shadow 0.15s, transform 0.15s;
   margin-bottom: 8px;
