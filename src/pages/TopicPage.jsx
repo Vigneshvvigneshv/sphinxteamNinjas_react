@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { NavButton } from '../styles/header_style'
-import { ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, TableRow } from '../styles/common_style'
+import { AddButton, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, TableRow } from '../styles/common_style'
 import Table from '../component/Table'
 import Empty from '../component/Empty'
 import { apiGet } from '../ApiServices/apiServices'
 import { useLocation } from 'react-router-dom'
 import { SuccessMessage } from '../styles/form_style'
+import { FaBeer, FaPlus } from 'react-icons/fa';
 
 const TopicPage = () => {
   const [data, setData] = useState("");
@@ -30,7 +31,7 @@ const TopicPage = () => {
           <CommonHeading>Topics</CommonHeading>
           <ButtonContainer>
             <NavButton to='/uploadfile'>Upload File</NavButton>
-            <NavButton to="/addtopic">Add topics</NavButton>
+            <AddButton to="/addtopic"><FaPlus/></AddButton>
           </ButtonContainer>
         </CommonHeader>
 
