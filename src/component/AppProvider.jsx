@@ -1,14 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
+import { sphinxTheme } from '../theme/sphinxTheme'
 
 const AppProvider = ({children}) => {
-    const theme=useSelector((state)=>state.themeReducer)
   return (
     <>
-   { console.log(theme)};
-    
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={sphinxTheme}>
             {children}
         </ThemeProvider>
     </>
