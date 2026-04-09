@@ -30,7 +30,7 @@ const ExamTable = ({ data }) => {
         <ButtonContainer>
           <Button to={`/assignexam/${data.examId}`}>Assign exam</Button>
           <Button to={`/getexamtopic/${data.examId}`}>Topics</Button>
-          <Button to={`/getexam/${data.examId}`}>Edit</Button>
+          <NavButton to={`/getexam/${data.examId}`}>Edit</NavButton>
           <Button onClick={deleteExam}>Delete</Button>
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}

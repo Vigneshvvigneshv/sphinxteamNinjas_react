@@ -101,11 +101,11 @@ const AddTopic = () => {
               {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
             </FieldContainer>
             <SubmitButton>{id === undefined ? 'Add' : 'Edit'}</SubmitButton>
-            {show && <Modal>{error.successMessage}</Modal>}
           </Form>
         </FormContainer>
         <NavButton to={'/topic'}>Back to topic</NavButton>
       </CommonContainer>
+            {show && <Modal>{error.successMessage}</Modal>}
     </Layout>
   )
 }

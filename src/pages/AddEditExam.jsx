@@ -164,9 +164,9 @@ const AddExam = () => {
           </Form>
         </FormContainer>
 
-        {show && <Modal>{error.successMessage}</Modal>}
         <NavButton to={'/admin-dashboard'} state={{error: error.successMessage}}>Back to home</NavButton>
       </CommonContainer>
+      {show && <Modal>{error.successMessage}</Modal>}
     </Layout>
   )
 }
