@@ -6,6 +6,7 @@ import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
 import { useSelector } from 'react-redux';
 
+
 const ExamTable = ({ data }) => {
   const { user } = useSelector((state) => state.userReducer);
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ const ExamTable = ({ data }) => {
     navigate(0);
   }
 
+
   return (
+    
     <CommonTable>
       <TableRow>
         <Content>{data.examName}</Content>
@@ -33,6 +36,7 @@ const ExamTable = ({ data }) => {
         {show && <Modal>{response.successMessage}</Modal>}
       </TableRow>
     </CommonTable>
+    
   )
 }
 

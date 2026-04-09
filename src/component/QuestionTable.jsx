@@ -16,6 +16,7 @@ const QuestionTable = ({ data, name }) => {
 
   const handleSubmit = async () => {
     console.log('handle submit called');
+    
     const response = await apiDelete('/question/deletequestion', { "questionId": data.questionId });
     console.log(response);
     navigate(0)
