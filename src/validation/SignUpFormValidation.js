@@ -34,6 +34,7 @@ export const validate = (formData) => {
   // else if (!EMAIL_REGEX.test(formData.email.trim())) {
   //   newErrors.email = "Enter a valid email";
   // }
+if(formData.roleTypeId==='SPHINX_ADMIN'){
 
   if (formData.password.trim() === "") {
     newErrors.password = "Password is required";
@@ -41,6 +42,7 @@ export const validate = (formData) => {
     newErrors.password =
       "Password must be strong (8+ chars, upper, lower, number, special)";
   }
+}
 
   return newErrors;
 };

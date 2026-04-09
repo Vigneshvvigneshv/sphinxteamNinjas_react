@@ -2,13 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
-import { AppName, CommonHeading, Loader, LoginContainer } from '../styles/common.style';
+import { AppName, CommonHeading, Loader, LoginContainer, PasswordEye } from '../styles/common.style';
 import { apiPost } from '../ApiServices/apiServices';
 import { useDispatch } from 'react-redux'
 import { userAction } from '../store/userSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const LoginPage = () => {
   
   const[error,setError]=useState("");
+  const [showPassword,setShowPassword]=useState(true);
   const navigate = useNavigate();
   
    const dispatch=useDispatch();
@@ -20,7 +22,9 @@ const LoginPage = () => {
         password: "",
   });
 
- 
+  const changeShow=()=>{
+    setShowPassword(!showPassword);
+  }
 
    const handleChange = (e) => {
     setFormData({
@@ -81,9 +85,10 @@ const LoginPage = () => {
 
             <FieldContainer>
                 <FormLabel htmlFor='password'>Password</FormLabel>
-                <FormInput type="password" name='password' placeholder='Enter your password' value={formData.password}
+                <FormInput type={showPassword? "password":'text'} name='password' placeholder='Enter your password' value={formData.password}
                     onChange={handleChange} ></FormInput>
                       {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
+                     {formData.password!==""?<PasswordEye onClick={changeShow}>{showPassword?<FaEyeSlash/>:<FaEye/>}</PasswordEye>:""} 
             </FieldContainer>
             
             <SubmitButton type='submit'>Login</SubmitButton>

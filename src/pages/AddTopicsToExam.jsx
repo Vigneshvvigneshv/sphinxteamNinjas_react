@@ -214,7 +214,7 @@ const handleSubmit=async(e)=>{
       {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
     <ButtonContainer >
           <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>
-          <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
+          <SubmitButton onClick={handleSubmit}>Generate Question</SubmitButton>
     </ButtonContainer>
     {show && <Modal>{error.responseMessage}</Modal>}
      </Form>

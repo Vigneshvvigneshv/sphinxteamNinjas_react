@@ -112,7 +112,7 @@ const CreateQuestionPage = () => {
                 console.log(response);
                 if(response.errorMessage!==undefined){
                     setError(response);
-                }else if(response.responseMessage===undefined){
+                }else if(response.successMessage!==undefined){
                     setFormData({
                         ...formData,
                         [e.target.name]: ""

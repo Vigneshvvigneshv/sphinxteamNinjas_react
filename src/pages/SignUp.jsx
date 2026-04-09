@@ -4,12 +4,24 @@ import Layout from '../component/Layout';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton } from '../styles/form.style';
 import { CommonContainer, Dropdown, PasswordEye } from '../styles/common.style';
 import { apiPost } from '../ApiServices/apiServices';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Modal from '../component/Modal';
 
 
 
 const SignUp = () => {
      const[error,setError]=useState({});
      const[roleTypeId,setRoleTypeId]=useState('SPHINX_USER');
+     const [showPassword,setShowPassword]=useState(true);
+     const[show,setShow]=useState(false);
+     console.log('Singup',error);
+     
+     const showPop=()=>{
+        setShow(!show);
+     }
+     const changeShow=()=>{
+      setShowPassword(!showPassword);
+     }
      const[formData, setFormData] = useState({
             userName: "",
             firstName:"",
@@ -42,6 +54,8 @@ const SignUp = () => {
 
         const response = await apiPost('/user/signup',formData);
         console.log(response);
+        setError(response);
+        showPop();
       };
   return (
     <Layout>
@@ -90,16 +104,18 @@ const SignUp = () => {
                         onChange={handleChange}></FormInput>
                         {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
                 </FieldContainer>
-
+              {roleTypeId==='SPHINX_ADMIN'? 
                 <FieldContainer>
                 <FormLabel htmlFor='password'>Password </FormLabel>
-                <FormInput type='password'
+                <FormInput type={showPassword? "password":'text'}
                         name="password"
                         placeholder='Enter your password'
                         value={formData.password}
-                        onChange={handleChange}></FormInput><PasswordEye class="fa-solid fa-eye"></PasswordEye>
+                        onChange={handleChange}></FormInput>
+                       {formData.password!==""?<PasswordEye onClick={changeShow}>{showPassword?<FaEyeSlash/>:<FaEye/>}</PasswordEye>:""} 
                         {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
                 </FieldContainer>
+                :""}
 
 
                 <FieldContainer>
@@ -108,6 +124,7 @@ const SignUp = () => {
                     <option value='SPHINX_ADMIN'>Admin</option>
                   </Dropdown>
                 </FieldContainer>
+                {show && <Modal>{error.successMessage}</Modal>}
                 <SubmitButton>Submit</SubmitButton>
             </Form>
             

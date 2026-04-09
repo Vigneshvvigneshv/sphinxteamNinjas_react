@@ -8,19 +8,20 @@ import { useSelector } from 'react-redux';
 
 const ExamTable = ({data}) => {
   const{ user }=useSelector((state)=>state.userReducer);
+  const navigate=useNavigate();
   const[show,setShow]=useState(false);
   const[response,setResponse]=useState();
   console.log('Exam Table',response);
   
-    const changeShow=()=>{
-      setShow(!show);
-    }
+    // const changeShow=()=>{
+    //   setShow(!show);
+    // }
     const deleteExam=async()=>{
            const response=await apiDelete('/exam/deleteexam',{'examId':data.examId,'partyId':user[0]});
            console.log(response);
            setResponse(response);
-           changeShow();
-          //  navigate(0);
+          //  changeShow();
+           navigate(0);
     }
     
    
