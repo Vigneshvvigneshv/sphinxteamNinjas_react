@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { useTheme } from "./theme";
+import { NavLink } from "react-router-dom";
 
 export { useTheme };
 
@@ -251,4 +252,29 @@ export const PasswordEye = styled.span`
   user-select: none;
   transition: color 0.2s;
   &:hover { color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"}; }
+`;
+
+//add button
+
+export const AddButton=styled(NavLink)`
+display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
+  background: ${({ $t }) => $t?.buttonBg ?? "linear-gradient(135deg,#3A3A3A,#0D0D0D)"};
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  &:hover  {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  }
 `;
