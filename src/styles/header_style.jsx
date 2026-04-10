@@ -37,7 +37,7 @@ export const HeaderLogoIcon = styled.div`
 export const HeaderAppName = styled.h1`
   font-size: 19px;
   font-weight: 700;
-  color: ${({theme})=>theme.colors.error};
+  color: ${({theme})=>theme.colors.cream};
   margin: 0;
   letter-spacing: 0.05em;
   font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};

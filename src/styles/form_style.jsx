@@ -23,7 +23,11 @@ export const FormEyebrow = styled.p`
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: ${({ $t }) => $t?.textMuted ?? "#6B6B6B"};
+  color: ${({theme}) => theme.colors.gold};
+  background: ${({theme}) => theme.colors.gold_bg};
+  padding:2px 4px;
+  width:fit-content;
+  border-radius:20px;
   margin: 0 0 6px;
 `;
 

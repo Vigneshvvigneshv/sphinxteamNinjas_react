@@ -12,6 +12,10 @@ export const sphinxTheme={
         success:"#52a905",
         error:"#e61d31",
         surface:"#FFF",
+        gold:"#ffca0a",
+        gold_bg:"rgba(239, 209, 101, 0.53)"
     },
     radius:"8px",
+    buttonBg:"linear-gradient(135deg,#3A3A3A 0%,#0D0D0D 100%)",
+
 }
