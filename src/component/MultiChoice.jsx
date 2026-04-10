@@ -89,7 +89,7 @@ const MultiChoice = ({ change, error, data }) => {
           name='numAnswers'
           placeholder='Enter the number of answers'
           type='text'
-          value={data.answer.length()}
+          value={data.answer.length}
           onChange={change}
         />
         {error.numAnswers && <ErrorMessage>{error.numAnswers}</ErrorMessage>}

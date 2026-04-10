@@ -10,7 +10,7 @@ const SingleChoice = ({ change, error, data }) => {
       <CheckBox type="radio" 
                name="answer"
                value="A" 
-                checked={data.answer?.includes(A)}
+                checked={data.answer?.includes("A")}
                onChange={change}></CheckBox>
         <FormLabel>Option A</FormLabel>
         </LabelContainer>

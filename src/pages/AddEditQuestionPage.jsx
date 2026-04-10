@@ -55,7 +55,7 @@ const CreateQuestionPage = () => {
     numAnswers: 1,
     questionTypeId: questionType,
     difficultyLevel: difficultyLevel,
-    answerValue: "",
+    answerValue: 1,
     negativeMarkValue: ""
   });
 
@@ -109,7 +109,8 @@ const CreateQuestionPage = () => {
       ...prev,
       [name]: value,
       questionTypeId: questionType,
-      difficultyLevel: difficultyLevel
+      difficultyLevel: difficultyLevel,
+      
     }));
   }
 

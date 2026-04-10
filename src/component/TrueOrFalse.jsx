@@ -1,5 +1,5 @@
 import React from 'react'
-import { ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
+import { CheckBox, ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
 import { QuestionFieldContainer } from '../styles/question_style'
 
 const TrueOrFalse = ({ change, error, data }) => {
