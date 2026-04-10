@@ -45,7 +45,7 @@ export const FormSubtitle = styled.p`
 
 export const Form = styled.form`
   display: flex;
-  flex-direction: column;
+  flex-direction:column;
   gap: 4px;
 `;
 
@@ -59,7 +59,7 @@ export const FieldContainer = styled.div`
 export const FormLabel = styled.label`
   font-size: 13px;
   font-weight: 500;
-  
+  width:100%;
   color: ${({ $t }) => $t?.textSecondary ?? "#3A3A3A"};
   &::after {
     content: "*";
@@ -113,6 +113,7 @@ export const FileInput = styled.input`
 
 export const FormText = styled.textarea`
   padding: 11px 13px;
+  width:100%;
   border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
   border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
   background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};

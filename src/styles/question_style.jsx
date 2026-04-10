@@ -72,6 +72,8 @@ export const QuestionText = styled.h3`
 
 export const QuestionFormContainer = styled.div`
   padding: 24px;
+  display:flex;
+  flex-direction:column;
   border-radius: ${({ $t }) => $t?.radiusCard ?? "14px"};
   background: ${({ $t }) => $t?.surface ?? "#fff"};
   border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
@@ -81,8 +83,8 @@ export const QuestionFormContainer = styled.div`
 export const QuestionFieldContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content:space-between;
-  width:50%;
+  gap:10px;
+  width:100%;
   padding: 9px 12px;
   border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
   border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
@@ -183,3 +185,18 @@ export const NavBtn = styled.button`
     }
   }
 `;
+
+
+export const LeftSideContainer=styled.div`
+  width:70%;
+  
+`
+
+export const RightSideContainer=styled.div`
+  flex:1;
+ 
+`
+export const QuestionUpperContainer=styled.div`
+  display:flex;
+  gap:10px;
+`
