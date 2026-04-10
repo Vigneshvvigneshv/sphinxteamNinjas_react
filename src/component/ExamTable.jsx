@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { AddButton, Button, ButtonContainer, CommonTable, Content, TableRow } from '../styles/common_style';
+import { AddButton, Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, TableRow } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
@@ -32,8 +32,8 @@ const ExamTable = ({ data }) => {
         <ButtonContainer>
           <Button to={`/assignexam/${data.examId}`}><FaUser/>Assign</Button>
           <Button to={`/getexamtopic/${data.examId}`}>Topics</Button>
-          <AddButton to={`/getexam/${data.examId}`}><FaEdit/>Edit</AddButton>
-          <Button onClick={deleteExam}><FaTrash/>Delete</Button>
+          <EditButton to={`/getexam/${data.examId}`}><FaEdit/>Edit</EditButton>
+          <DeleteButton onClick={deleteExam}><FaTrash/>Delete</DeleteButton>
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}
       </TableRow>
