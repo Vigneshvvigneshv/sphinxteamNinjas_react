@@ -7,9 +7,10 @@ const SingleChoice = ({ change, error, data }) => {
     <>
       <QuestionFieldContainer>
         <LabelContainer>
-      <CheckBox type="checkbox" 
+      <CheckBox type="radio" 
                name="answer"
                value="A" 
+                checked={data.answer?.includes("A")}
                onChange={change}></CheckBox>
         <FormLabel>Option A</FormLabel>
         </LabelContainer>
@@ -25,8 +26,11 @@ const SingleChoice = ({ change, error, data }) => {
 
       <QuestionFieldContainer>
         <LabelContainer>
-       <CheckBox type="checkbox" 
-               name="answer" value="B" onChange={change}></CheckBox>  
+       <CheckBox type="radio" 
+               name="answer" 
+               value="B" 
+               checked={data.answer?.includes("B")}
+               onChange={change}></CheckBox>  
         <FormLabel>Option B</FormLabel>
         </LabelContainer>
         <FormInput
@@ -41,8 +45,11 @@ const SingleChoice = ({ change, error, data }) => {
 
       <QuestionFieldContainer>
         <LabelContainer>
-        <CheckBox type="checkbox" 
-               name="answer" value="C" onChange={change}></CheckBox>
+        <CheckBox type="radio" 
+               name="answer" 
+               value="C" 
+               checked={data.answer?.includes("C")}
+               onChange={change}></CheckBox>
         <FormLabel>Option C</FormLabel>
         </LabelContainer>
         <FormInput
@@ -57,8 +64,11 @@ const SingleChoice = ({ change, error, data }) => {
 
       <QuestionFieldContainer>
         <LabelContainer>
-        <CheckBox type="checkbox" 
-               name="answer" value="D" onChange={change}></CheckBox>
+        <CheckBox type="radio" 
+               name="answer"
+                value="D" 
+                checked={data.answer?.includes("D")}
+                onChange={change}></CheckBox>
         <FormLabel>Option D</FormLabel>
         </LabelContainer>
         <FormInput

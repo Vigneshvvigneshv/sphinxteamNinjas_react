@@ -1,12 +1,19 @@
 import React from 'react'
-import { ErrorMessage, FormInput, FormLabel } from '../styles/form_style'
+import { CheckBox, ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
 import { QuestionFieldContainer } from '../styles/question_style'
 
 const MultiChoice = ({ change, error, data }) => {
   return (
     <>
       <QuestionFieldContainer>
+          <LabelContainer>
+            <CheckBox type="checkbox"
+                          name="answer"
+                          value="A" 
+                          checked={data.answer?.includes("A")}
+                          onChange={change}></CheckBox>
         <FormLabel>Option A</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionA'
           placeholder='Enter option A'
@@ -18,7 +25,14 @@ const MultiChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
+          <CheckBox type="checkbox" 
+                          name="answer"
+                          value="B" 
+                          checked={data.answer?.includes("B")}
+                          onChange={change}></CheckBox>
         <FormLabel>Option B</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionB'
           placeholder='Enter option B'
@@ -30,7 +44,14 @@ const MultiChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
+          <CheckBox type="checkbox" 
+                          name="answer"
+                          value="C" 
+                          checked={data.answer?.includes("C")}
+                          onChange={change}></CheckBox>
         <FormLabel>Option C</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionC'
           placeholder='Enter option C'
@@ -42,7 +63,14 @@ const MultiChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
+          <CheckBox type="checkbox" 
+                          name="answer"
+                          value="D" 
+                          checked={data.answer?.includes("D")}
+                          onChange={change}></CheckBox>
         <FormLabel>Option D</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionD'
           placeholder='Enter option D'
@@ -54,12 +82,14 @@ const MultiChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
         <FormLabel>Number of answers</FormLabel>
+        </LabelContainer>
         <FormInput
           name='numAnswers'
           placeholder='Enter the number of answers'
           type='text'
-          value={data.numAnswers}
+          value={data.answer.length}
           onChange={change}
         />
         {error.numAnswers && <ErrorMessage>{error.numAnswers}</ErrorMessage>}
