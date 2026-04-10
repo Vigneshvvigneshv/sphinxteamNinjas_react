@@ -91,6 +91,7 @@ const CreateQuestionPage = () => {
       [e.target.name]: e.target.value,
       questionTypeId: questionType,
       difficultyLevel: difficultyLevel
+
     });
     setError({
       ...error,
@@ -177,7 +178,7 @@ const CreateQuestionPage = () => {
               <FormInput
                 name='answer'
                 placeholder='Enter the answer option'
-                type='text'
+                type='text' disabled={true} 
                 value={formData.answer}
                 onChange={handleChange}
               />

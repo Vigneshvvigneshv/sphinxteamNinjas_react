@@ -8,9 +8,9 @@ const SingleChoice = ({ change, error, data }) => {
       <QuestionFieldContainer>
         <LabelContainer>
       <CheckBox type="checkbox" 
-               name="correctOptions" 
+               name="answer"
                value="A" 
-               onChange={""}></CheckBox>  
+               onChange={change}></CheckBox>  
         <FormLabel>Option A</FormLabel>
         </LabelContainer>
         <FormInput
@@ -26,7 +26,7 @@ const SingleChoice = ({ change, error, data }) => {
       <QuestionFieldContainer>
         <LabelContainer>
        <CheckBox type="checkbox" 
-               name="correctOptions" value="B" onChange={""}></CheckBox>  
+               name="answer" value="B" onChange={change}></CheckBox>  
         <FormLabel>Option B</FormLabel>
         </LabelContainer>
         <FormInput
@@ -42,7 +42,7 @@ const SingleChoice = ({ change, error, data }) => {
       <QuestionFieldContainer>
         <LabelContainer>
         <CheckBox type="checkbox" 
-               name="correctOptions" value="C" onChange={""}></CheckBox>
+               name="answer" value="C" onChange={change}></CheckBox>
         <FormLabel>Option C</FormLabel>
         </LabelContainer>
         <FormInput
@@ -58,7 +58,7 @@ const SingleChoice = ({ change, error, data }) => {
       <QuestionFieldContainer>
         <LabelContainer>
         <CheckBox type="checkbox" 
-               name="correctOptions" value="D" onChange={""}></CheckBox>
+               name="answer" value="D" onChange={change}></CheckBox>
         <FormLabel>Option D</FormLabel>
         </LabelContainer>
         <FormInput
