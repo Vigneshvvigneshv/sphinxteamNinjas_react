@@ -15,9 +15,9 @@ export const Backdrop = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: ${({ $t }) => $t?.overlay ?? "rgba(0,0,0,0.65)"};
+  background: ${({theme})=>theme.colors.overlay};
   backdrop-filter: blur(3px);
-  z-index: ${({ $t }) => $t?.zOverlay ?? 1000};
+  z-index: ${({theme})=>theme.zindex};
   animation: ${fadeIn} 0.2s ease;
 `;
 
@@ -29,10 +29,10 @@ export const ModalContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 12px;
-  border-radius: ${({ $t }) => $t?.radiusCard ?? "14px"};
-  background: ${({ $t }) => $t?.surface ?? "#fff"};
-  border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  box-shadow: ${({ $t }) => $t?.shadowModal ?? "0 24px 48px rgba(0,0,0,0.18)"};
+  border-radius: ${({theme})=>theme.radius};
+  background: ${({theme})=>theme.colors.surface};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.shadowModal};
   animation: ${slideUp} 0.25s ease;
   text-align: center;
 `;
@@ -41,8 +41,8 @@ export const ModalIconWrap = styled.div`
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: ${({ $t }) => $t?.goldPale ?? "#F7F7F7"};
-  border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
+  background: ${({theme})=>theme.colors.cream};
+  border: 1px solid ${({theme})=>theme.colors.border};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,14 +53,14 @@ export const ModalIconWrap = styled.div`
 export const ModalTitle = styled.h3`
   font-size: 18px;
   font-weight: 700;
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  color: ${({theme})=>theme.colors.textPrimary};
   margin: 0;
-  font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};
+  font-family: ${({theme})=>theme.fontSerif};
 `;
 
 export const Message = styled.p`
   font-size: 13px;
-  color: ${({ $t }) => $t?.textMuted ?? "#6B6B6B"};
+  color: ${({theme})=>theme.colors.subtitle};
   line-height: 1.6;
   margin: 0;
 `;
@@ -75,9 +75,9 @@ export const ModalButtons = styled.div`
 
 export const ModalPrimaryBtn = styled.button`
   padding: 10px 22px;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
+  border-radius:${({theme})=>theme.radius};
   border: none;
-  background: ${({ $t }) => $t?.buttonBg ?? "linear-gradient(135deg,#3A3A3A,#0D0D0D)"};
+  background: ${({theme})=>theme.buttonBg};
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -90,18 +90,18 @@ export const ModalPrimaryBtn = styled.button`
 
 export const ModalGhostBtn = styled.button`
   padding: 10px 22px;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  border: 1px solid ${({ $t }) => $t?.borderHover ?? "rgba(0,0,0,0.22)"};
+  border-radius: ${({theme})=>theme.radius};
+  border: 1px solid ${({theme})=>theme.colors.borderHover};
   background: none;
-  color: ${({ $t }) => $t?.textMuted ?? "#6B6B6B"};
+  color: ${({theme})=>theme.colors.subtitle};
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   &:hover {
-    background: ${({ $t }) => $t?.goldPale ?? "#F7F7F7"};
-    color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
-    border-color: ${({ $t }) => $t?.borderStrong ?? "rgba(0,0,0,0.40)"};
+    background: ${({theme})=>theme.colors.cream};
+    color: ${({theme})=>theme.colors.textPrimary};
+    border-color: ${({theme})=>theme.colors.borderStrong};
   }
 `;

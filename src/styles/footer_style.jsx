@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const FooterContainer = styled.div`
-  background: ${({ $t }) => $t?.headerBg ?? "linear-gradient(135deg,#141414,#000000)"};
+  background: ${({theme})=>theme.colors.headerBackground};
   padding: 18px 24px;
   position: relative;
   overflow: hidden;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid ${({theme})=>theme.colors.border};
 `;
 
 export const FooterText = styled.p`
@@ -16,7 +16,7 @@ export const FooterText = styled.p`
   position: relative;
   z-index: 1;
   strong {
-    color: ${({ $t }) => $t?.textLight ?? "#E8E8E8"};
+    color: ${({theme})=>theme.colors.cream};
     font-weight: 600;
   }
 `;

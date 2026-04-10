@@ -106,7 +106,7 @@ const CreateQuestionPage = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     if (id !== undefined) {
-      const response = await apiPut('/question/updatequestion', {...formData, questionId: id});
+      const response = await apiPut('/question/update-question', {...formData, questionId: id});
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);
@@ -116,7 +116,7 @@ const CreateQuestionPage = () => {
         changeShow();
       }
     } else {
-      const response = await apiPost('/question/createquestion', formData);
+      const response = await apiPost('/question/create-question', formData);
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);

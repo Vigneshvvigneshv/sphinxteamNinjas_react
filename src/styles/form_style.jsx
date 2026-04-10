@@ -5,17 +5,17 @@ export const FormLayout = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ $t }) => $t?.formBg ?? "#FFFFFF"};
+  background: ${({theme})=>theme.colors.surface};
   padding: 40px 20px;
 `;
 
 export const FormContainer = styled.div`
   width: 420px;
   padding: 40px 36px;
-  border-radius: ${({ $t }) => $t?.radiusCard ?? "14px"};
-  background: ${({ $t }) => $t?.surface ?? "#fff"};
-  border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  box-shadow: ${({ $t }) => $t?.shadowLg};
+  border-radius: ${({theme})=>theme.radius};
+  background: ${({theme})=>theme.colors.surface};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.colors.boxShadow};
 `;
 
 export const FormEyebrow = styled.p`
@@ -23,8 +23,7 @@ export const FormEyebrow = styled.p`
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: ${({theme}) => theme.colors.gold};
-  background: ${({theme}) => theme.colors.gold_bg};
+  color:${({theme})=>theme.colors.textSecondary};
   padding:2px 4px;
   width:fit-content;
   border-radius:20px;
@@ -34,15 +33,15 @@ export const FormEyebrow = styled.p`
 export const FormHeading = styled.h2`
   font-size: 24px;
   font-weight: 700;
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  color: ${({theme})=>theme.colors.textPrimary};
   margin: 0 0 8px;
-  font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};
+  font-family: ${({theme})=>theme.fontSerif};
   letter-spacing: -0.01em;
 `;
 
 export const FormSubtitle = styled.p`
   font-size: 13px;
-  color: ${({ $t }) => $t?.textMuted ?? "#6B6B6B"};
+  color: ${({theme})=>theme.colors.subtitle}};
   margin: 0 0 28px;
   line-height: 1.6;
 `;
@@ -64,11 +63,11 @@ export const FormLabel = styled.label`
   font-size: 13px;
   font-weight: 500;
   width:100%;
-  color: ${({ $t }) => $t?.textSecondary ?? "#3A3A3A"};
+  color: ${({theme})=>theme.colors.textSecondary};
   &::after {
     content: "*";
     font-size: 13px;
-    color: ${({ $t }) => $t?.danger ?? "#C62828"};
+    color: ${({theme})=>theme.colors.error}
     display: inline;
     margin-left: 3px;
   }
@@ -76,52 +75,52 @@ export const FormLabel = styled.label`
 
 export const FormInput = styled.input`
   padding: 8px 13px;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  border-radius: ${({theme})=>theme.radius};
+  border: 1.5px solid ${({theme})=>theme.colors.border};
+  background: ${({theme})=>theme.colors.cream};
+  color:${({theme})=>theme.colors.textPrimary};
   font-size: 14px;
   font-family: inherit;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-  &::placeholder { color: ${({ $t }) => $t?.textHint ?? "#A0A0A0"}; }
-  &:hover { border-color: ${({ $t }) => $t?.borderGold ?? "rgba(0,0,0,0.14)"}; }
+  &::placeholder { color: ${({theme})=>theme.colors.textHint}; }
+  &:hover { border-color: ${({theme})=>theme.colors.borderHover}; }
   &:focus {
     border-color: ${({ $t }) => $t?.gold ?? "#2A2A2A"};
-    box-shadow: 0 0 0 3px ${({ $t }) => $t?.goldFocus ?? "rgba(0,0,0,0.07)"};
-    background: ${({ $t }) => $t?.surface ?? "#fff"};
+    box-shadow: 0 0 0 3px ${({theme})=>theme.colors.boxShadow};
+    background: ${({theme})=>theme.colors.surface};
   }
   &:disabled { opacity: 0.45; cursor: not-allowed; }
 `;
 
 export const FileInput = styled.input`
   padding: 11px 13px;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  border: 1.5px dashed ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  border-radius: ${({theme})=>{theme.radius}};;
+  border: 1.5px dashed ${({theme})=>{theme.colors.border}};;
+  background: ${({theme})=>{theme.colors.cream}};;
+  color: ${({theme})=>{theme.colors.textPrimary}};
   font-size: 13px;
   font-family: inherit;
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
   &:hover {
-    border-color: ${({ $t }) => $t?.gold ?? "#2A2A2A"};
+    border-color:${({theme})=>{theme.colors.textPrimary}};;
     background: #F4F4F4;
   }
   &:focus {
-    border-color: ${({ $t }) => $t?.gold ?? "#2A2A2A"};
-    box-shadow: 0 0 0 3px ${({ $t }) => $t?.goldFocus};
+    border-color: ${({theme})=>{theme.colors.textPrimary}};;
+    box-shadow: 0 0 0 3px ${({theme})=>{theme.colors.boxShadow}};;
   }
 `;
 
 export const FormText = styled.textarea`
   padding: 11px 13px;
   width:100%;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  border-radius: ${({theme})=>{theme.radius}};;
+  border: 1.5px solid ${({theme})=>{theme.colors.border}};
+  background: ${({theme})=>{theme.colors.cream}};
+  color:${({theme})=>{theme.colors.textPrimary}};
   font-size: 14px;
   font-family: inherit;
   outline: none;
@@ -130,9 +129,9 @@ export const FormText = styled.textarea`
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   &::placeholder { color: ${({ $t }) => $t?.textHint ?? "#A0A0A0"}; }
   &:focus {
-    border-color: ${({ $t }) => $t?.gold ?? "#2A2A2A"};
-    box-shadow: 0 0 0 3px ${({ $t }) => $t?.goldFocus};
-    background: ${({ $t }) => $t?.surface ?? "#fff"};
+    border-color: ${({theme})=>{theme.colors.textPrimary}};
+    box-shadow: 0 0 0 3px ${({theme})=>theme.colors.boxShadow};
+    background:${({theme})=>{theme.colors.surface}};
   }
 `;
 
@@ -153,7 +152,7 @@ export const SubmitButton = styled.button`
   &:hover  {
     opacity: 0.85;
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+    box-shadow: 0 6px 18px ${({theme})=>theme.colors.boxShadow};
   }
   &:active { transform: translateY(0); opacity: 1; box-shadow: none; }
   &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -161,21 +160,21 @@ export const SubmitButton = styled.button`
 
 export const ErrorMessage = styled.p`
   font-size: 12px;
-  color: ${({ $t }) => $t?.danger ?? "#C62828"};
+  color:${({theme})=>theme.colors.error};
   margin: 5px 0 0;
   line-height: 1.4;
 `;
 
 export const SuccessMessage = styled.p`
   font-size: 13px;
-  color: ${({ $t }) => $t?.success ?? "#2E7D32"};
+  color: ${({theme})=>theme.colors.success};
   font-weight: 500;
   margin: 10px 0 0;
   text-align: center;
   padding: 11px 14px;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  background: ${({ $t }) => $t?.successBg ?? "#F0F7F0"};
-  border: 1px solid ${({ $t }) => $t?.successBorder ?? "rgba(46,125,50,0.12)"};
+  border-radius:${({theme})=>theme.colors.radius};
+  background:${({theme})=>theme.colors.surface};
+  border: 1px solid ${({theme})=>theme.colors.successBorder};
 `;
 
 export const CheckBox=styled.input`

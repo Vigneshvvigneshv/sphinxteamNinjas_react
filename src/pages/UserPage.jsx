@@ -7,7 +7,7 @@ const UserPage = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await apiGet('/user/getalluser')
+      const response = await apiGet('/user/getall-user')
       setData(response)
       console.log('user page ', response);
     }

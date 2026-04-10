@@ -48,7 +48,7 @@ const LoginPage = () => {
     const response=await apiPost('/user/login',formData);
     if(response.errorMessage!==undefined){
         setError(response);
-        toast.error(`${error.errorMessage}`,{position:'top-center'})
+        toast.error(`${response.errorMessage}`,{position:'top-center'})
     }else if(response.successMessage!==undefined){
       toast.success("Login Sucessfully!", {position: "top-center"});
        dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role}));
