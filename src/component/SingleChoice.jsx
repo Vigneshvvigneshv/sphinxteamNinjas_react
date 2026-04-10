@@ -10,7 +10,7 @@ const SingleChoice = ({ change, error, data }) => {
       <CheckBox type="checkbox" 
                name="answer"
                value="A" 
-               onChange={change}></CheckBox>  
+               onChange={change}></CheckBox>
         <FormLabel>Option A</FormLabel>
         </LabelContainer>
         <FormInput
