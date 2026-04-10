@@ -267,7 +267,7 @@ display: inline-flex;
   padding: 10px 20px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background: ${({theme})=>theme.buttonBg}
+  background: ${({theme})=>theme.addButtonBg};
   color: #fff;
   font-size: 14px;
   font-weight: 600;
