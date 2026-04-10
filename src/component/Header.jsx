@@ -17,15 +17,16 @@ const Header = () => {
         <HeaderLogoIcon><FaKey style={{"color":"white"}}></FaKey></HeaderLogoIcon>
         <HeaderAppName>Sphinx</HeaderAppName>
       </HeaderLogo>
+      {user.length!==0 &&
       <HeaderNav>
-        <HeaderButton to="/adduser">Add user</HeaderButton>
+        <HeaderButton to="/adduser">Add user / admin</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
         <NavButton to={'/'} onClick={removeUser}>Logout</NavButton>
      
       </HeaderNav>
-     
+}
     </HeaderContainer>
   )
 }
