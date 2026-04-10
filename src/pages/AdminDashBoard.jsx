@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { NavButton } from '../styles/header_style'
-import { CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common_style'
+import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common_style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
 import { apiGet } from '../ApiServices/apiServices'
@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom'
 import { SuccessMessage } from '../styles/form_style'
 import Modal from '../component/Modal'
 import { toast } from 'sonner'
+import { FaPlus } from 'react-icons/fa'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
@@ -38,7 +39,7 @@ const AdminDashBoard = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>Available Exams</CommonHeading>
-          <NavButton to="/addexam">Add exam</NavButton>
+          <AddButton to="/addexam"><FaPlus/>Add</AddButton>
         </CommonHeader>
         
         <CommonSection>

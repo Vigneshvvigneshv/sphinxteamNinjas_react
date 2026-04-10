@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Button, ButtonContainer, CommonTable, Content, TableRow } from '../styles/common_style';
+import { AddButton, Button, ButtonContainer, CommonTable, Content, TableRow } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
 import { useSelector } from 'react-redux';
+import { FaEdit, FaTrash, FaUser } from 'react-icons/fa';
+import { FaDeleteLeft } from 'react-icons/fa6';
 
 
 const ExamTable = ({ data }) => {
@@ -28,10 +30,10 @@ const ExamTable = ({ data }) => {
       <TableRow>
         <Content>{data.examName}</Content>
         <ButtonContainer>
-          <Button to={`/assignexam/${data.examId}`}>Assign exam</Button>
+          <Button to={`/assignexam/${data.examId}`}><FaUser/>Assign</Button>
           <Button to={`/getexamtopic/${data.examId}`}>Topics</Button>
-          <NavButton to={`/getexam/${data.examId}`}>Edit</NavButton>
-          <Button onClick={deleteExam}>Delete</Button>
+          <AddButton to={`/getexam/${data.examId}`}><FaEdit/>Edit</AddButton>
+          <Button onClick={deleteExam}><FaTrash/>Delete</Button>
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}
       </TableRow>

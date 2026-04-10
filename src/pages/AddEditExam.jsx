@@ -95,7 +95,6 @@ const AddExam = () => {
     <Layout>
       <CommonContainer>
         <FormContainer>
-          <FormEyebrow>{id === undefined ? 'New exam' : 'Edit exam'}</FormEyebrow>
           <FormHeading>{id === undefined ? 'Add Exam' : 'Edit Exam'}</FormHeading>
           <FormSubtitle>Fill in the details below to {id === undefined ? 'create a new' : 'update the'} exam</FormSubtitle>
           <Form onSubmit={handleSubmit}>
@@ -160,7 +159,7 @@ const AddExam = () => {
             </FieldContainer>
 
             {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-            <SubmitButton>{id !== undefined ? 'Edit' : 'Add'}</SubmitButton>
+            <SubmitButton>{id !== undefined ? 'Save' : 'Add'}</SubmitButton>
           </Form>
         </FormContainer>
 
