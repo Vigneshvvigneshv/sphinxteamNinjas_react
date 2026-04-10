@@ -1,6 +1,7 @@
 import { HeaderButton, HeaderContainer, HeaderLogo, HeaderLogoIcon, HeaderAppName, HeaderNav, NavButton } from '../styles/header_style'
 import { useDispatch, useSelector } from 'react-redux'
 import { userAction } from '../store/userSlice';
+import { FaKey } from "react-icons/fa";
 
 const Header = () => {
   const { user, role } = useSelector((state) => state.userReducer);
@@ -13,7 +14,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       <HeaderLogo>
-        <HeaderLogoIcon>🦁</HeaderLogoIcon>
+        <HeaderLogoIcon><FaKey style={{"color":"white"}}></FaKey></HeaderLogoIcon>
         <HeaderAppName>Sphinx</HeaderAppName>
       </HeaderLogo>
       <HeaderNav>
