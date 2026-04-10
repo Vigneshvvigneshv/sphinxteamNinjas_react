@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import {
   ErrorMessage, FieldContainer, Form, FormContainer, FormHeading,
-  FormInput, FormLabel, FormText, SubmitButton, SuccessMessage
+  FormInput, FormLabel, FormText, LabelContainer, SubmitButton, SuccessMessage
 } from '../styles/form_style';
 import {
   ButtonContainer, CommonContainer, CommonHeading,
@@ -13,7 +13,10 @@ import SingleChoice from '../component/SingleChoice';
 import MultiChoice from '../component/MultiChoice';
 import {
   QuestionContainer, QuestionFieldContainer, QuestionFormContainer,
-  QuestionHeaderContainer, QuestionTypeBadge, ProgressLabel
+  QuestionHeaderContainer, QuestionTypeBadge, ProgressLabel,
+  LeftSideContainer,
+  RightSideContainer,
+  QuestionUpperContainer
 } from '../styles/question_style';
 import { validateQuestion } from '../validation/ValidationUtil';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
@@ -88,6 +91,7 @@ const CreateQuestionPage = () => {
       [e.target.name]: e.target.value,
       questionTypeId: questionType,
       difficultyLevel: difficultyLevel
+
     });
     setError({
       ...error,
@@ -127,8 +131,9 @@ const CreateQuestionPage = () => {
   return (
     <Layout>
       <QuestionContainer>
+        
         <QuestionHeaderContainer>
-          <CommonHeading>{topicName} —</CommonHeading>
+          <CommonHeading>{topicName} -</CommonHeading>
           <CommonHeading>Question type</CommonHeading>
           <Dropdown
             value={questionType}
@@ -141,14 +146,18 @@ const CreateQuestionPage = () => {
             <option value='DETAILED_ANSWER'>Detailed answer</option>
           </Dropdown>
         </QuestionHeaderContainer>
-
+  
         <QuestionFormContainer>
           <Form onSubmit={handleSubmit}>
+              <QuestionUpperContainer>
+            <LeftSideContainer>
             <QuestionFieldContainer>
-              <FormLabel>Question text</FormLabel>
+              <LabelContainer>
+              <FormLabel>Question</FormLabel>
+              </LabelContainer>
               <FormText
                 name='questionDetail'
-                placeholder='Enter the question'
+                placeholder='Enter the question here'
                 type='text'
                 value={formData.questionDetail}
                 onChange={handleChange}
@@ -159,13 +168,17 @@ const CreateQuestionPage = () => {
             {questionType === 'SINGLE_CHOICE' && <SingleChoice change={handleChange} error={error} data={formData} />}
             {questionType === 'MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData} />}
             {questionType === 'TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData, optionA: "TRUE", optionB: "FALSE"}} />}
+          </LeftSideContainer>
 
+          <RightSideContainer>
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Answer</FormLabel>
+              </LabelContainer>
               <FormInput
                 name='answer'
                 placeholder='Enter the answer option'
-                type='text'
+                type='text' disabled={true} 
                 value={formData.answer}
                 onChange={handleChange}
               />
@@ -173,7 +186,9 @@ const CreateQuestionPage = () => {
             </QuestionFieldContainer>
 
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Mark</FormLabel>
+              </LabelContainer>
               <FormInput
                 name='answerValue'
                 placeholder='Enter the mark'
@@ -183,9 +198,17 @@ const CreateQuestionPage = () => {
               />
               {error.answerValue && <ErrorMessage>{error.answerValue}</ErrorMessage>}
             </QuestionFieldContainer>
-
-            <QuestionFieldContainer>
+            
+            
+            {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
+            {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+            </RightSideContainer>
+    </QuestionUpperContainer>
+    {/* negative mark */}
+             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Negative mark</FormLabel>
+              </LabelContainer>
               <FormInput
                 name='negativeMarkValue'
                 placeholder='Enter the negative mark'
@@ -195,18 +218,20 @@ const CreateQuestionPage = () => {
               />
               {error.negativeMarkValue && <ErrorMessage>{error.negativeMarkValue}</ErrorMessage>}
             </QuestionFieldContainer>
-
+            {/* difficulty level */}
             <QuestionFieldContainer>
+              <LabelContainer>
               <FormLabel>Difficulty level</FormLabel>
+              </LabelContainer>
               <Dropdown value={difficultyLevel} onChange={(e) => setDifficultyLevel(e.target.value)}>
                 <option value='1'>Easy</option>
                 <option value='2'>Medium</option>
                 <option value='3'>Hard</option>
               </Dropdown>
-            </QuestionFieldContainer>
 
-            {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-            {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+
+            </QuestionFieldContainer>
+            
             <SubmitButton>{id !== undefined ? 'Edit' : 'Add'}</SubmitButton>
             {show && <Modal>{error.message}</Modal>}
           </Form>
@@ -215,6 +240,7 @@ const CreateQuestionPage = () => {
         <CommonContainer>
           <NavButton to={`/question/${topicId}`} state={{topicId: topicId}}>Back to Question</NavButton>
         </CommonContainer>
+        
       </QuestionContainer>
     </Layout>
   )

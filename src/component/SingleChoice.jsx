@@ -1,12 +1,18 @@
 import React from 'react'
-import { ErrorMessage, FormInput, FormLabel } from '../styles/form_style'
+import { CheckBox, ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
 import { QuestionFieldContainer } from '../styles/question_style'
 
 const SingleChoice = ({ change, error, data }) => {
   return (
     <>
       <QuestionFieldContainer>
+        <LabelContainer>
+      <CheckBox type="checkbox" 
+               name="answer"
+               value="A" 
+               onChange={change}></CheckBox>  
         <FormLabel>Option A</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionA'
           placeholder='Enter option A'
@@ -18,7 +24,11 @@ const SingleChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
+       <CheckBox type="checkbox" 
+               name="answer" value="B" onChange={change}></CheckBox>  
         <FormLabel>Option B</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionB'
           placeholder='Enter option B'
@@ -30,7 +40,11 @@ const SingleChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
+        <CheckBox type="checkbox" 
+               name="answer" value="C" onChange={change}></CheckBox>
         <FormLabel>Option C</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionC'
           placeholder='Enter option C'
@@ -42,7 +56,11 @@ const SingleChoice = ({ change, error, data }) => {
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
+        <LabelContainer>
+        <CheckBox type="checkbox" 
+               name="answer" value="D" onChange={change}></CheckBox>
         <FormLabel>Option D</FormLabel>
+        </LabelContainer>
         <FormInput
           name='optionD'
           placeholder='Enter option D'
