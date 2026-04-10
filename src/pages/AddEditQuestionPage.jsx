@@ -55,7 +55,7 @@ const CreateQuestionPage = () => {
     numAnswers: 1,
     questionTypeId: questionType,
     difficultyLevel: difficultyLevel,
-    answerValue: "",
+    answerValue: 1,
     negativeMarkValue: ""
   });
 
@@ -85,19 +85,40 @@ const CreateQuestionPage = () => {
     }
   }, [])
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+
+ const handleChange = (e) => {
+  const { name, value,checked } = e.target;
+
+  if (name === "answer" && questionType === "MULTI_CHOICE") {
+    setFormData((prev) => {
+      let updatedAnswers = [...prev.answer];
+
+      if (checked) {
+        updatedAnswers.push(value);
+      } else {
+        updatedAnswers = updatedAnswers.filter((ans) => ans !== value);
+      }
+
+      return {
+        ...prev,
+        answer: updatedAnswers
+      };
+    });
+  } else {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
       questionTypeId: questionType,
-      difficultyLevel: difficultyLevel
+      difficultyLevel: difficultyLevel,
       
-    });
-    setError({
-      ...error,
-      [e.target.name]: ""
-    });
+    }));
   }
+
+  setError((prev) => ({
+    ...prev,
+    [name]: ""
+  }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
