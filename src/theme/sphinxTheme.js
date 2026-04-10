@@ -11,6 +11,7 @@ export const sphinxTheme={
         boxShadow:"rgba(0,0,0,0.07)",
         success:"#52a905",
         error:"#e61d31",
+        surface:"#FFF",
     },
     radius:"8px",
 }

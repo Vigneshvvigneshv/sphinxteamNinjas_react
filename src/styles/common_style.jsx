@@ -25,7 +25,7 @@ export const AppName = styled.h1`
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: ${({ $t }) => $t?.textLight ?? "#E8E8E8"};
+  color: ${({color})=>color.error};
   margin: 0;
   font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};
 `;
@@ -160,7 +160,7 @@ export const TableRow = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  background: ${({ $t }) => $t?.surface ?? "#fff"};
+  background: ${(theme) => theme.color.surface};
   padding: 14px 18px;
   border-radius: ${({ $t }) => $t?.radiusLg ?? "12px"};
   border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
