@@ -103,7 +103,7 @@ const AddExam = () => {
               <FormLabel>Exam name</FormLabel>
               <FormInput
                 name='examName'
-                placeholder='Enter the exam name'
+                placeholder='Enter the name'
                 type='text'
                 value={formData.examName}
                 onChange={handleChange}

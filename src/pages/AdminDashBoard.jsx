@@ -23,7 +23,7 @@ const AdminDashBoard = () => {
   
   useEffect(()=>{
     const fetchData = async () => {
-      const response= await apiGet('/exam/getallexam');
+      const response= await apiGet('/exam/getall-exam');
       setData(response);
     
     }
