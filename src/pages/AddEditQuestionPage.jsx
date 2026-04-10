@@ -91,7 +91,7 @@ const CreateQuestionPage = () => {
       [e.target.name]: e.target.value,
       questionTypeId: questionType,
       difficultyLevel: difficultyLevel
-
+      
     });
     setError({
       ...error,
