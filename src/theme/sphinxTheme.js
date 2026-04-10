@@ -26,6 +26,8 @@ export const sphinxTheme={
     zindex:"1000",
     buttonBg:"linear-gradient(135deg,#3A3A3A 0%,#0D0D0D 100%)",
     addButtonBg:"linear-gradient(135deg,#52a905 0%,#3c7c04 100%)",
+    editButtonBg:"linear-gradient(135deg,#516ce2 0%,#3554df 100%)",
+        deleteButtonBg:"linear-gradient(135deg,#ec4051 0%,#e61d31 100%)",
     shadowSm:      "0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)",
     shadowMd:      "0 4px 14px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.05)",
     shadowLg:      "0 12px 28px rgba(0,0,0,0.10), 0 4px 10px rgba(0,0,0,0.07)",
