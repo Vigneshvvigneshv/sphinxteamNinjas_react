@@ -1,31 +1,32 @@
 import React from 'react'
-import { ErrorMessage, FormInput, FormLabel } from '../styles/form_style'
+import { ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
 import { QuestionFieldContainer } from '../styles/question_style'
 
 const TrueOrFalse = ({ change, error, data }) => {
   return (
     <>
       <QuestionFieldContainer>
-        <FormLabel>Option A</FormLabel>
-        <FormInput
-          name='optionA'
-          placeholder='Enter option A'
-          type='text'
-          value={data.optionA}
-          onChange={change}
-        />
+        <LabelContainer>
+           <CheckBox type="radio" 
+                         name="answer"
+                          value="True" 
+                          checked={data.answer?.includes("True")}
+                          onChange={change}></CheckBox>
+        <FormLabel>True</FormLabel>
+        </LabelContainer>
         {error.optionA && <ErrorMessage>{error.optionA}</ErrorMessage>}
       </QuestionFieldContainer>
 
       <QuestionFieldContainer>
-        <FormLabel>Option B</FormLabel>
-        <FormInput
-          name='optionB'
-          placeholder='Enter option B'
-          type='text'
-          value={data.optionB}
-          onChange={change}
-        />
+        <LabelContainer>
+           <CheckBox type="radio"
+                        name="answer"
+                        value="False" 
+                        checked={data.answer?.includes("False")}
+                        onChange={change}></CheckBox>
+        <FormLabel>False</FormLabel>
+        </LabelContainer>
+       
         {error.optionB && <ErrorMessage>{error.optionB}</ErrorMessage>}
       </QuestionFieldContainer>
     </>
