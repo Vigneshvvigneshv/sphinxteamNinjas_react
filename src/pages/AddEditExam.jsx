@@ -69,7 +69,7 @@ const AddExam = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     if (id === undefined) {
-      const response = await apiPost('/exam/createexam', formData)
+      const response = await apiPost('/exam/create-exam', formData)
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);
@@ -79,7 +79,7 @@ const AddExam = () => {
         changeShow()
       }
     } else {
-      const response = await apiPut('/exam/updateexam', {...formData, "examId": id});
+      const response = await apiPut('/exam/update-exam', {...formData, "examId": id});
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);

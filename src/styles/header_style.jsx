@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const HeaderContainer = styled.div`
-  background: ${({ $t }) => $t?.headerBg ?? "linear-gradient(135deg,#141414,#000000)"};
+  background: ${({theme})=>theme.colors.headerBackground};
   padding: 0 24px;
   height: 58px;
   display: flex;
@@ -40,7 +40,7 @@ export const HeaderAppName = styled.h1`
   color: ${({theme})=>theme.colors.cream};
   margin: 0;
   letter-spacing: 0.05em;
-  font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};
+  font-family: ${({theme})=>theme.fontSerif};
 `;
 
 export const HeaderNav = styled.nav`
@@ -64,7 +64,7 @@ export const HeaderButton = styled(NavLink)`
   }
   &.active {
     background: rgba(255,255,255,0.13);
-    color: ${({ $t }) => $t?.textLight ?? "#E8E8E8"};
+    color: ${({theme})=>theme.colors.surface};
   }
 `;
 
@@ -79,7 +79,7 @@ export const NavButton = styled(NavLink)`
   border-radius: 8px;
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.16);
-  color: ${({ $t }) => $t?.textLight ?? "#E8E8E8"};
+  color: ${({theme})=>theme.colors.surface};
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;

@@ -59,7 +59,7 @@ const AddTopic = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     if (id === undefined) {
-      const response = await apiPost('/topic/createtopic', formData);
+      const response = await apiPost('/topic/create-topic', formData);
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);
@@ -69,7 +69,7 @@ const AddTopic = () => {
         changeShow();
       }
     } else {
-      const response = await apiPut('/topic/updatetopic', {...formData, topicId: id})
+      const response = await apiPut('/topic/update-topic', {...formData, topicId: id})
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);

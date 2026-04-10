@@ -75,7 +75,7 @@ const AddTopicsToExam = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/topic/getalltopic');
+      const response = await apiGet('/topic/getall-topic');
       setData(response);
     }
     fetchData()

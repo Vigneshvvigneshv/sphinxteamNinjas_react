@@ -27,21 +27,21 @@ export const AppName = styled.h1`
   letter-spacing: 0.05em;
   color: ${({color})=>color.error};
   margin: 0;
-  font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};
+  font-family: ${({theme})=>theme.fontSerif};
 `;
 
 export const Title = styled.h2`
   font-size: 22px;
   font-weight: 600;
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  color: ${({theme})=>theme.colors.textPrimary};
   margin: 0 0 6px;
-  font-family: ${({ $t }) => $t?.fontSerif ?? "Georgia, serif"};
+  font-family:  ${({theme})=>theme.fontSerif};
 `;
 
 export const CommonHeading = styled.h3`
   font-size: 16px;
   font-weight: 600;
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  color: ${({theme})=>theme.colors.textPrimary};
   margin: 0;
 `;
 
@@ -50,7 +50,7 @@ export const Loader = styled.span`
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 2.5px solid ${({ $t }) => $t?.goldLight ?? "#3D3D3D"};
+  border: 2.5px solid  ${({theme})=>theme.colors.border};
   border-top-color: transparent;
   animation: ${spin} 0.75s linear infinite;
   vertical-align: middle;
@@ -58,7 +58,7 @@ export const Loader = styled.span`
 
 export const Required = styled.span`
   font-size: 13px;
-  color: ${({ $t }) => $t?.danger ?? "#C62828"};
+  color:${({theme})=>theme.colors.error};
   display: inline;
   margin-left: 2px;
   font-weight: 600;
@@ -75,7 +75,7 @@ export const LoginContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   justify-content: center;
-  background: ${({ $t }) => $t?.loginBg ?? "linear-gradient(160deg,#FFFFFF,#EFEFEF)"};
+  background: ${({theme})=>theme.colors.surface};
   padding: 40px 20px;
 `;
 
@@ -87,9 +87,9 @@ export const Button = styled.button`
   margin-top: 10px;
   padding: 10px 20px;
   border: none;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  background: ${({ $t }) => $t?.buttonBg ?? "linear-gradient(135deg,#3A3A3A,#0D0D0D)"};
-  color: #fff;
+  border-radius: ${({theme})=>theme.radius};
+  background:${({theme})=>theme.buttonBg};
+  color: ${({theme})=>theme.colors.surface};
   font-size: 14px;
   font-weight: 600;
   font-family: inherit;
@@ -98,7 +98,7 @@ export const Button = styled.button`
   &:hover  {
     opacity: 0.85;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
   }
   &:active { transform: translateY(0); opacity: 1; box-shadow: none; }
   &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -124,7 +124,7 @@ export const CommonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: ${({ $t }) => $t?.radiusCard ?? "14px"};
+  border-radius: ${({theme})=>theme.radius};
   flex-direction: column;
   gap: 12px;
   animation: ${fadeIn} 0.3s ease both;
@@ -135,16 +135,16 @@ export const CommonHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background: ${({ $t }) => $t?.surface ?? "#fff"};
+  background: ${({theme})=>theme.colors.surface};
   padding: 12px 18px;
-  border-radius: ${({ $t }) => $t?.radiusLg ?? "12px"};
-  border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  box-shadow: ${({ $t }) => $t?.shadowSm};
+  border-radius:${({theme})=>theme.radius};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.shadowSm};
 `;
 
 export const CommonSection = styled.section`
   margin-top: 16px;
-  border-radius: ${({ $t }) => $t?.radiusLg ?? "12px"};
+  border-radius: ${({theme})=>theme.radius};
   width: 100%;
   animation: ${fadeIn} 0.25s ease both;
 `;
@@ -160,16 +160,16 @@ export const TableRow = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  background: ${(theme) => theme.color.surface};
+  background: ${({theme}) => theme.colors.surface};
   padding: 14px 18px;
-  border-radius: ${({ $t }) => $t?.radiusLg ?? "12px"};
-  border: 1px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  box-shadow: ${({ $t }) => $t?.shadowSm};
+  border-radius: ${({theme})=>theme.radius};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.shadowSm};
   gap: 10px;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
   &:hover {
-    border-color: ${({ $t }) => $t?.borderHover ?? "rgba(0,0,0,0.22)"};
-    box-shadow: ${({ $t }) => $t?.shadowMd};
+    border-color: ${({theme})=>theme.colors.borderHover};
+    box-shadow: ${({theme})=>theme.colors.shadowMd};
     transform: translateY(-1px);
   }
 `;
@@ -177,7 +177,7 @@ export const TableRow = styled.div`
 export const TableHeading = styled.h3`
   font-size: 15px;
   font-weight: 600;
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  color: ${({theme})=>theme.colors.textPrimary};
   margin: 0;
 `;
 
@@ -185,7 +185,7 @@ export const Content = styled.p`
   width: 180px;
   font-weight: 500;
   font-size: 13px;
-  color: ${({ $t }) => $t?.textSecondary ?? "#3A3A3A"};
+  color:${({theme})=>theme.colors.textSecondary};
   margin: 0;
 `;
 
@@ -201,26 +201,26 @@ export const EmptyContent = styled.p`
   font-weight: 500;
   font-size: 15px;
   text-align: center;
-  color: ${({ $t }) => $t?.textMuted ?? "#6B6B6B"};
+  color: ${({theme})=>theme.colors.subtitle};
   flex: 1;
   padding: 2.5rem 0;
 `;
 
 export const Dropdown = styled.select`
   padding: 9px 12px;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  border: 1.5px solid ${({ $t }) => $t?.border ?? "rgba(0,0,0,0.09)"};
-  background: ${({ $t }) => $t?.cream ?? "#FAFAFA"};
-  color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"};
+  border-radius: ${({theme})=>theme.radius};
+  border: 1.5px solid ${({theme})=>theme.colors.border};
+  background: ${({theme})=>theme.colors.cream};
+  color:${({theme})=>theme.colors.textPrimary};
   font-size: 13px;
   font-family: inherit;
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
-  &:hover { border-color: ${({ $t }) => $t?.borderHover}; }
+  &:hover { border-color: ${({theme})=>theme.colors.borderHover}; }
   &:focus {
-    border-color: ${({ $t }) => $t?.gold};
-    box-shadow: 0 0 0 3px ${({ $t }) => $t?.goldFocus};
+    border-color: ${({theme})=>theme.colors.border};
+    box-shadow: 0 0 0 3px ${({theme})=>theme.colors.boxShadow};
   }
 `;
 
@@ -228,10 +228,10 @@ export const AnswerContainer = styled.div`
   width: 100%;
   padding: 14px 20px;
   margin-top: 2px;
-  border-radius: ${({ $t }) => $t?.radiusLg ?? "12px"};
-  background: ${({ $t }) => $t?.goldPale ?? "#F7F7F7"};
-  border: 1px solid ${({ $t }) => $t?.border};
-  box-shadow: ${({ $t }) => $t?.shadowSm};
+  border-radius: ${({theme})=>theme.radius};
+  background: ${({theme})=>theme.colors.surface};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.shadowSm};
 `;
 
 export const AnswerOption = styled.div`
@@ -245,7 +245,7 @@ export const AnswerOption = styled.div`
 export const PasswordEye = styled.span`
   font-weight: 700;
   font-size: 13px;
-  color: ${({ $t }) => $t?.textMuted ?? "#6B6B6B"};
+  color: ${({theme})=>theme.colors.subtitle};
   position: absolute;
   top: 70%;
   right: 12px;
@@ -253,7 +253,7 @@ export const PasswordEye = styled.span`
   cursor: pointer;
   user-select: none;
   transition: color 0.2s;
-  &:hover { color: ${({ $t }) => $t?.textPrimary ?? "#0D0D0D"}; }
+  &:hover { color:${({theme})=>theme.colors.textPrimary}; }
 `;
 
 //add button
@@ -266,8 +266,8 @@ display: inline-flex;
   margin-top: 10px;
   padding: 10px 20px;
   border: none;
-  border-radius: ${({ $t }) => $t?.radiusMd ?? "8px"};
-  background: ${({ $t }) => $t?.buttonBg ?? "linear-gradient(135deg,#3A3A3A,#0D0D0D)"};
+  border-radius: ${({theme})=>theme.radius};
+  background: ${({theme})=>theme.buttonBg}
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -277,6 +277,6 @@ display: inline-flex;
   &:hover  {
     opacity: 0.85;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
   }
 `;
