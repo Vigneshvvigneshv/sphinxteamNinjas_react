@@ -200,3 +200,17 @@ export const QuestionUpperContainer=styled.div`
   display:flex;
   gap:10px;
 `
+
+export const SelectAllContainer=styled.div`
+  display:flex;
+  gap:5px;
+`
+
+export const PaginationContainer=styled.div`
+  display: "flex";
+  gap: "10px";
+  marginTop: "20px"
+`
+export const PageNo=styled.span`
+
+`

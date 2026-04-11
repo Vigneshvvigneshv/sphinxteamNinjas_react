@@ -21,6 +21,7 @@ const Header = () => {
       <HeaderNav>
         <HeaderButton to="/adduser">Add user / admin</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
+        <HeaderButton to="/questionList">Questions</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
         <NavButton to={'/'} onClick={removeUser}>Logout</NavButton>

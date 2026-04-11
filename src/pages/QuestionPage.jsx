@@ -13,7 +13,7 @@ const QuestionPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/question/getquestionsbytopic?topicId=' + id)
+      const response = await apiGet('/question/getquestions-by-topic?topicId=' + id)
       setData(response);
     }
     fetchData();
@@ -33,7 +33,7 @@ const QuestionPage = () => {
             </NavButton>
           </ButtonContainer>
         </CommonHeader>
-
+        
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
             ? data.questionList.map((e) => <QuestionTable data={e} name={data.topicName} key={e.questionId} />)
