@@ -31,7 +31,7 @@ const TopicPage = () => {
           <CommonHeading>Topics</CommonHeading>
           <ButtonContainer>
             <NavButton to='/uploadfile'>Upload File</NavButton>
-            <AddButton to="/addtopic"><FaPlus/></AddButton>
+            <AddButton to="/addtopic"><FaPlus/>Add</AddButton>
           </ButtonContainer>
         </CommonHeader>
 

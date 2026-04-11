@@ -253,7 +253,7 @@ const CreateQuestionPage = () => {
 
             </QuestionFieldContainer>
             
-            <SubmitButton>{id !== undefined ? 'Edit' : 'Add'}</SubmitButton>
+            <SubmitButton>{id !== undefined ? 'Save' : 'Add'}</SubmitButton>
             {show && <Modal>{error.message}</Modal>}
           </Form>
         </QuestionFormContainer>

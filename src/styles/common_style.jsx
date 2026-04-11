@@ -325,3 +325,50 @@ display: inline-flex;
     box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
   }
 `;
+
+
+export const ExamContainer=styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 10px;
+  margin-bottom:10px;
+  border-radius: ${({ theme }) => theme.radius};
+  background: ${({ theme }) => theme.colors.cream};
+  box-shadow: ${({ theme }) => theme.shadowLg};
+`;
+
+export const Card=styled.div`
+  padding: 14px;
+  border-radius: ${({ theme }) => theme.radius};
+
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: #ffffff;
+
+  box-shadow: ${({ theme }) => theme.shadowSm};
+
+  transition: all 0.25s ease;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  cursor: pointer;
+`;
+
+export const ExamHeader=styled.p`
+   font-weight: 600;
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+
+  display: flex;
+  justify-content: space-between;
+`;
+export const ExamContent=styled.span`
+  font-weight: 600;
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;

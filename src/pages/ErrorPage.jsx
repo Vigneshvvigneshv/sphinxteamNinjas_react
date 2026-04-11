@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, CommonContainer, CommonHeading, LoginContainer } from '../styles/common_style'
+import { AddButton, Button, CommonContainer, CommonHeading, LoginContainer } from '../styles/common_style'
 import { NavButton } from '../styles/header_style'
 
 const ErrorPage = () => {
@@ -7,7 +7,7 @@ const ErrorPage = () => {
     <LoginContainer>
       <CommonContainer>
         <CommonHeading>Page not found</CommonHeading>
-        <NavButton  to={'/'}>Back to login</NavButton>
+        <AddButton  to={'/'}>Back to login</AddButton>
       </CommonContainer>
     </LoginContainer>
   )

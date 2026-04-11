@@ -4,16 +4,17 @@ import { NavButton } from '../styles/header_style'
 import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common_style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
-import { apiGet } from '../ApiServices/apiServices'
+import { apiGet, apiPost } from '../ApiServices/apiServices'
 import { useLocation } from 'react-router-dom'
 import { SuccessMessage } from '../styles/form_style'
 import Modal from '../component/Modal'
 import { toast } from 'sonner'
 import { FaPlus } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
-  
+  const {user} = useSelector((state) => state.userReducer)
   const location=useLocation();
   const message=location.state?.msg;
   const[show,setShow]=useState(false);
@@ -24,7 +25,7 @@ const AdminDashBoard = () => {
   
   useEffect(()=>{
     const fetchData = async () => {
-      const response= await apiGet('/exam/getall-exam');
+      const response= await apiPost('/exam/getall-exam',{partyId:user[0]});
       setData(response);
     
     }

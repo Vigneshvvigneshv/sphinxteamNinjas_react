@@ -13,7 +13,7 @@ const QuestionPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/question/getquestionsbytopic?topicId=' + id)
+      const response = await apiGet('/question/getquestions-by-topic?topicId=' + id)
       setData(response);
     }
     fetchData();
@@ -28,7 +28,7 @@ const QuestionPage = () => {
           <CommonHeading>{data.topicName}</CommonHeading>
           <Content>Question type</Content>
           <ButtonContainer>
-            <NavButton to="/createquestion" state={{topicId: data.topicId, topicName: data.topicName}}>
+            <NavButton to="/create-question" state={{topicId: data.topicId, topicName: data.topicName}}>
               Add question
             </NavButton>
           </ButtonContainer>

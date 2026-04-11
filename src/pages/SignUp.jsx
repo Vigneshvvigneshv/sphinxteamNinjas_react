@@ -6,10 +6,11 @@ import { CommonContainer, Dropdown, PasswordEye } from '../styles/common_style';
 import { apiPost } from '../ApiServices/apiServices';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Modal from '../component/Modal';
+import { SiPayloadcms } from 'react-icons/si';
 
 const SignUp = () => {
   const[error,setError]=useState({});
-  const[roleTypeId,setRoleTypeId]=useState('SPHINX_USER');
+  // const[roleTypeId,setRoleTypeId]=useState('SPHINX_USER');
   const [showPassword,setShowPassword]=useState(true);
   const[show,setShow]=useState(false);
   console.log('Singup',error);
@@ -26,7 +27,7 @@ const SignUp = () => {
     lastName:"",
     email:"",
     password: "",
-    roleTypeId: roleTypeId,
+    roleTypeId: "SPHINX_USER",
   });
 
   const handleChange = (e) => {
@@ -107,7 +108,7 @@ const SignUp = () => {
               {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
             </FieldContainer>
 
-            {roleTypeId === 'SPHINX_ADMIN' ?
+            { formData.roleTypeId === 'SPHINX_ADMIN' ?
               <FieldContainer>
                 <FormLabel htmlFor='password'>Password</FormLabel>
                 <FormInput
@@ -127,7 +128,7 @@ const SignUp = () => {
             : ""}
 
             <FieldContainer>
-              <Dropdown value={roleTypeId} onChange={(e) => setRoleTypeId(e.target.value)}>
+              <Dropdown name='roleTypeId'  onChange={handleChange}>
                 <option value='SPHINX_USER'>User</option>
                 <option value='SPHINX_ADMIN'>Admin</option>
               </Dropdown>

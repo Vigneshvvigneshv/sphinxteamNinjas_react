@@ -5,7 +5,7 @@ import { NavButton } from '../styles/header_style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
 import { useSelector } from 'react-redux';
-import { FaEdit, FaTrash, FaUser } from 'react-icons/fa';
+import { FaEdit, FaPen, FaTrash, FaUser } from 'react-icons/fa';
 import { FaDeleteLeft } from 'react-icons/fa6';
 
 
@@ -32,7 +32,7 @@ const ExamTable = ({ data }) => {
         <ButtonContainer>
           <Button to={`/assignexam/${data.examId}`}><FaUser/>Assign</Button>
           <Button to={`/getexamtopic/${data.examId}`}>Topics</Button>
-          <EditButton to={`/getexam/${data.examId}`}><FaEdit/>Edit</EditButton>
+          <Button to={`/getexam/${data.examId}`}><FaPen/></Button>
           <DeleteButton onClick={deleteExam}><FaTrash/>Delete</DeleteButton>
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}
