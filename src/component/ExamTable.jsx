@@ -17,7 +17,7 @@ const ExamTable = ({ data }) => {
   console.log('Exam Table', response);
 
   const deleteExam = async () => {
-    const response = await apiDelete('/exam/deleteexam', { 'examId': data.examId, 'partyId': user[0] });
+    const response = await apiDelete('/exam/delete-exam', {'deleteList':[data.examId],'partyId': user[0] });
     console.log(response);
     setResponse(response);
     navigate(0);
