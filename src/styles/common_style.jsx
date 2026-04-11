@@ -41,6 +41,7 @@ export const Title = styled.h2`
 export const CommonHeading = styled.h3`
   font-size: 16px;
   font-weight: 600;
+ 
   color: ${({theme})=>theme.colors.textPrimary};
   margin: 0;
 `;

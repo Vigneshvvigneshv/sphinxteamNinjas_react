@@ -79,7 +79,7 @@ export const NavButton = styled(NavLink)`
   border-radius: 8px;
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.16);
-  color: ${({theme})=>theme.colors.surface};
+  color: ${({theme})=>theme.colors.textPrimary};
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;

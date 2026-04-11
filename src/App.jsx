@@ -16,6 +16,8 @@ import QuestionBulkUpload from './pages/QuestionBulkUpload'
 import { useSelector } from 'react-redux'
 import AssignExamPage from './pages/AssignExamPage'
 import ErrorPage from './pages/ErrorPage'
+import AllQuestionPage from './pages/AllQuestionPage'
+
 
 
 const App = () => {
@@ -72,6 +74,8 @@ const App = () => {
       <Route path='/getexamtopic/:id' element={<ProtectedRoute><ExamTopicPage/></ProtectedRoute>}/>
       <Route path='/editexamtopic/:id' element={<ProtectedRoute><AddTopicsToExam/></ProtectedRoute>}/>
       <Route path='/userlist' element={<ProtectedRoute><UserPage/></ProtectedRoute>}/>
+      <Route path='/questionList' element={<ProtectedRoute><AllQuestionPage></AllQuestionPage></ProtectedRoute>}/>
+
     </Routes>
     </>
   )

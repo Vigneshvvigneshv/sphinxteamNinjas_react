@@ -33,7 +33,7 @@ const QuestionPage = () => {
             </NavButton>
           </ButtonContainer>
         </CommonHeader>
-
+        
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
             ? data.questionList.map((e) => <QuestionTable data={e} name={data.topicName} key={e.questionId} />)
