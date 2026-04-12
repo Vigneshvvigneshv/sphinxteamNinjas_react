@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { AddButton, Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, TableRow } from '../styles/common_style';
+import { AddButton, Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, Navlink, TableRow } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
@@ -30,10 +30,10 @@ const ExamTable = ({ data }) => {
       <TableRow>
         <Content>{data.examName}</Content>
         <ButtonContainer>
-          <Button to={`/assignexam/${data.examId}`}><FaUser/>Assign</Button>
-          <Button to={`/getexamtopic/${data.examId}`}>Topics</Button>
-          <Button to={`/getexam/${data.examId}`}><FaPen/></Button>
-          <DeleteButton onClick={deleteExam}><FaTrash/>Delete</DeleteButton>
+          <Navlink to={`/assignexam/${data.examId}`}><FaUser/>Assign</Navlink>
+          <Navlink to={`/getexamtopic/${data.examId}`}>Topics</Navlink>
+          <Navlink to={`/getexam/${data.examId}`}><FaPen/></Navlink>
+          <DeleteButton onClick={deleteExam}><FaTrash/></DeleteButton>
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}
       </TableRow>

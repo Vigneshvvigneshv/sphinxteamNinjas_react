@@ -14,7 +14,7 @@ const UserTable = ({data,onDelete}) => {
     const [response, setResponse] = useState();
     const [ExamResponse,setExamResponse]=useState();
   const deleteUser = async () => {
-    const response = await apiDelete('/user/delete-user', {'partyId': data.partyId  });
+    const response = await apiDelete('/user/delete-user', {'partyId': data.partyId });
     // console.log(response);
     setResponse(response);
      if(response.errorMessage!==undefined){
