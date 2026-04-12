@@ -5,41 +5,155 @@ import { NavButton } from '../styles/header_style';
 import Empty from '../component/Empty';
 import { useParams } from 'react-router-dom';
 import QuestionTable from '../component/QuestionTable';
-import { apiGet } from '../ApiServices/apiServices';
+import { apiDelete, apiGet } from '../ApiServices/apiServices';
+import { PageNo, PaginationContainer, SelectAllContainer } from '../styles/question_style';
+import { CheckBox } from '../styles/form_style';
+import { toast } from 'sonner';
 
 const QuestionPage = () => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState({
+    questionList: [],
+    pageNo: 1,
+    totalPages: 1,
+    hasNext: false,
+    hasPrevious: false,
+    responseMessage: "",
+    topicName: "",
+    topicId: "",
+  });
+   const [selectedIds, setSelectedIds] = useState([]);
   const {id} = useParams();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await apiGet('/question/getquestions-by-topic?topicId=' + id)
-      setData(response);
+     //pagination
+         const [currentPage, setCurrentPage] = useState(1);
+ 
+    const fetchData = async (page) => {
+      if(page<1) return;
+      const response = await apiGet('/question/getquestions-by-topic?topicId=' + id +`&page=${page}`)
+      setData({
+        questionList: response.questionList ||[],
+        pageNo:response.pageNo,
+        totalPages:response.totalPages,
+        hasNext:response.hasNext,
+        hasPrevious:response.hasPrevious,
+        responseMessage:response.responseMessage,
+        topicName: response.topicName,
+    });
+       setSelectedIds([]);
+      setCurrentPage(response.pageNo);
     }
-    fetchData();
-  }, [])
+ 
+    useEffect(() => {
+        fetchData(1);
+      }, []);
 
-  console.log('Question Page', data);
+//handle Bulkdelete
+const handleBulkDelete = async () => {
+  if (selectedIds.length === 0) {
+     toast.error(`Please select the question to delete`,{position:'top-center',color:'red'})
+    return;
+  }
+
+  try {
+    await apiDelete("/question/delete-question", {
+      questionIds: selectedIds
+    });
+
+   toast.success("Deleted successfully", {
+      position: "top-center",
+    });
+    setSelectedIds([]);
+     await fetchData(currentPage);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+   const deleteQuestions = (e,questionId) => {
+    {console.log("e , ",e)}
+    const { checked } = e.target;
+  const id = Number(questionId); 
+  setSelectedIds((prev) => {
+    if (checked) { 
+      return prev.includes(id) ? prev : [...prev, id];
+    } else {
+      return prev.filter((item) => item !== id);
+    }
+  });
+};
+
+
+const handleSelectAll = (e) => {
+  const { checked } = e.target;
+
+  if (checked) {
+    const allIds = data.questionList.map((item) =>
+      Number(item.questionId)
+    );
+    setSelectedIds(allIds);
+  } else {
+    setSelectedIds([]);
+  }
+};
+  // console.log('Question Page', data);
 
   return (
     <Layout>
       <CommonContainer>
         <CommonHeader>
+          <SelectAllContainer>
+          <CheckBox
+                type="checkbox"
+                checked={
+                data.questionList.length > 0 &&
+                selectedIds.length === data.questionList.length
+                  }
+                 onChange={handleSelectAll}/>
+                 {console.log("topicName ",data.topicName)
+                 }
           <CommonHeading>{data.topicName}</CommonHeading>
+          </SelectAllContainer>
           <Content>Question type</Content>
           <ButtonContainer>
             <NavButton to="/create-question" state={{topicId: data.topicId, topicName: data.topicName}}>
               Add question
             </NavButton>
+            <NavButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Bulk Delete</NavButton>
+            
           </ButtonContainer>
         </CommonHeader>
         
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
-            ? data.questionList.map((e) => <QuestionTable data={e} name={data.topicName} key={e.questionId} />)
+            ? data.questionList.map((e) => <QuestionTable data={e} name={e.topicName} key={e.questionId} selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
+                change={deleteQuestions} />)
             : <Empty>No question available</Empty>
           }
         </CommonSection>
+        <PaginationContainer >
+         {data.hasPrevious && <NavButton
+            onClick={() => fetchData(currentPage - 1)}
+            disabled={!data.hasPrevious}>
+            Prev
+          </NavButton>}
+        
+          <PageNo>
+             {data.pageNo} / {data.totalPages}
+          </PageNo>
+        
+          {data.hasNext&&<NavButton
+             onClick={() => {
+            if (data.pageNo < data.totalPages) {
+              fetchData(data.pageNo + 1);
+            }
+          }}
+            disabled={!data.hasNext} 
+          >
+            Next
+          </NavButton>}
+        
+        </PaginationContainer>
       </CommonContainer>
     </Layout>
   )

@@ -27,7 +27,10 @@ const AllQuestionPage = () => {
     responseMessage: "",
   });
   const [selectedIds, setSelectedIds] = useState([]);
- 
+    //pagination
+    const [currentPage, setCurrentPage] = useState(1);
+
+
     const fetchData = async (page) => {
        if (page < 1) return;  
       console.log("Fetching page:", page);
@@ -50,8 +53,7 @@ useEffect(() => {
     fetchData(1);
   }, []);
 
-    //pagination
-const [currentPage, setCurrentPage] = useState(1);
+
 
 
 const handleBulkDelete = async () => {
@@ -74,6 +76,7 @@ const handleBulkDelete = async () => {
     console.error(error);
   }
 };
+
   const deleteQuestions = (e,questionId) => {
     {console.log("e , ",e)}
     const { checked } = e.target;
