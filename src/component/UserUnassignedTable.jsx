@@ -1,0 +1,55 @@
+import React, { useState } from "react";
+import { CommonTable, Content, Outer, RowContainer, TableRow } from "../styles/common_style";
+import { FormLabel,FormInput } from "../styles/form_style";
+
+const UserUnassignedTable = ({ data, onCheck }) => {
+
+    if(!data) return;
+
+    const [userObj, setUserObj] = useState({partyId: data.partyId, allowedAttempts: 1, timeoutDays: 10});
+    
+    const handleChange=(key, value)=>{
+        let newObj = {...userObj}
+        newObj[key] = value;
+        setUserObj(newObj);
+    }
+
+   {console.log(userObj)}
+
+  return (
+    <>
+      <CommonTable>
+        <TableRow>
+          <Content>{data.userLoginId}</Content>
+          <Outer>
+            <RowContainer>
+              <FormLabel>Allowed attempts</FormLabel>
+              <FormInput
+                type="text"
+                name="allowedAttempts"
+                value={userObj.allowedAttempts}
+                placeholder="Enter the Allowed attempts"
+                onChange={(e)=>handleChange("allowedAttempts", e.target.value)}
+              />
+            </RowContainer>
+          </Outer> 
+           <Outer>
+            <RowContainer>
+              <FormLabel>Timeout days</FormLabel>
+              <FormInput
+                type="text"
+                name="timeoutDays"
+                value={userObj.timeoutDays}
+                placeholder="Enter the Timeout days"
+                onChange={(e)=>handleChange("timeoutDays", e.target.value)}
+              />
+            </RowContainer>
+          </Outer> 
+          <input type="checkbox" onChange={(e)=>onCheck(e.target.checked,userObj)} />
+        </TableRow>
+      </CommonTable>
+    </>
+  );
+};
+
+export default UserUnassignedTable;
