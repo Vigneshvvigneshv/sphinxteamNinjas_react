@@ -58,7 +58,7 @@ useEffect(() => {
 
 const handleBulkDelete = async () => {
   if (selectedIds.length === 0) {
-     toast.error(`Please select the question to delete`,{position:'top-center',color:'red'})
+     toast.warning(`Please select the question to delete`,{position:'top-center'})
     return;
   }
 

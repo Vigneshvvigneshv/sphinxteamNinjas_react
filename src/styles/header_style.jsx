@@ -2,45 +2,45 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const HeaderContainer = styled.div`
-  background: ${({theme})=>theme.colors.headerBackground};
-  padding: 0 24px;
-  height: 58px;
+  background: ${({ theme }) => theme.colors.headerBackground};
+  padding: 0 28px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 `;
 
 export const HeaderLogo = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   z-index: 1;
 `;
 
 export const HeaderLogoIcon = styled.div`
   width: 34px;
   height: 34px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  transition: background 0.2s;
-  &:hover { background: rgba(255,255,255,0.14); }
+  transition: background 0.2s ease;
+  &:hover { background: rgba(255, 255, 255, 0.15); }
 `;
 
 export const HeaderAppName = styled.h1`
   font-size: 19px;
   font-weight: 700;
-  color: ${({theme})=>theme.colors.cream};
+  letter-spacing: -0.01em;
+  color: ${({ theme }) => theme.colors.cream};
   margin: 0;
-  letter-spacing: 0.05em;
-  font-family: ${({theme})=>theme.fontSerif};
+  font-family: ${({ theme }) => theme.fontSerif};
 `;
 
 export const HeaderNav = styled.nav`
@@ -52,19 +52,20 @@ export const HeaderNav = styled.nav`
 
 export const HeaderButton = styled(NavLink)`
   text-decoration: none;
-  padding: 7px 13px;
+  padding: 7px 14px;
   border-radius: 7px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.62);
   font-size: 13px;
   font-weight: 500;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.18s ease, color 0.18s ease;
   &:hover {
-    background: rgba(255,255,255,0.09);
-    color: rgba(255,255,255,0.92);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.92);
   }
   &.active {
-    background: rgba(255,255,255,0.13);
-    color: ${({theme})=>theme.colors.surface};
+    background: rgba(255, 255, 255, 0.14);
+    color: ${({ theme }) => theme.colors.surface};
+    font-weight: 600;
   }
 `;
 
@@ -73,22 +74,22 @@ export const NavButton = styled(NavLink)`
   text-decoration: none;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
   padding: 9px 18px;
   border: none;
   border-radius: 8px;
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.16);
-  color: ${({theme})=>theme.colors.textPrimary};
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: ${({ theme }) => theme.colors.textPrimary};
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-  &:hover  {
-    background: rgba(255,255,255,0.17);
+  transition: background 0.18s ease, transform 0.18s ease;
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
     transform: translateY(-1px);
   }
   &:active { transform: translateY(0); }
-  &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  &:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
 `;

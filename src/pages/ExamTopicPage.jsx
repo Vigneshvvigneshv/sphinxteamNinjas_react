@@ -17,7 +17,7 @@ const ExamTopicPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/examtopic/gettopicbyexamid?examId=' + id)
+      const response = await apiGet('/exam-topic/get-topicby-examid?examId=' + id)
       setData(response);
     }
     fetchData();

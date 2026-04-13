@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { AddButton, Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, Navlink, TableRow } from '../styles/common_style';
+import { AddButton, Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, Navlink, TableRow} from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';

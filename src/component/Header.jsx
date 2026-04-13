@@ -24,7 +24,7 @@ const Header = () => {
         <HeaderButton to="/questionList">Questions</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
-        <NavButton to={'/'} onClick={removeUser}>Logout</NavButton>
+        <NavButton style={{color:`white`}} to={'/'} onClick={removeUser}>Logout</NavButton>
      
       </HeaderNav>
 }

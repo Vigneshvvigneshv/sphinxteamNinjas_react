@@ -7,23 +7,25 @@ import {
 } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Empty from '../component/Empty';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormInput, FormLabel, SubmitButton } from '../styles/form_style';
 import Modal from '../component/Modal';
 import { validateAddTopicExam } from '../validation/ValidationUtil';
-import { apiGet, apiPost } from '../ApiServices/apiServices';
+import { apiDelete, apiGet, apiPost } from '../ApiServices/apiServices';
+import { toast } from 'sonner';
 
 const AddTopicsToExam = () => {
   const navigate = useNavigate();
   const {id} = useParams();
-  console.log(id);
+  console.log("ExamId ",id);
 
   const [data, setData] = useState("");
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
-
-  const location = useLocation();
-  const [exam] = useState(location.state);
+  const [exam, setExam] = useState(null);
+  const[examId,setExamId]=useState(null);
+ 
+  
   console.log(exam);
 
   const [rows, setRows] = useState([
@@ -64,35 +66,66 @@ const AddTopicsToExam = () => {
     }
   };
 
-  const removeRow = (id) => {
+  const removeRow = (topicId,index) => {
     console.log('length', rows.length);
-    if (rows.length > 1) {
-      const afterRemoved = rows.filter((e) => e.topicId !== id)
-      console.log('removed row', afterRemoved);
-      setRows(afterRemoved);
+    console.log("TopicId",topicId);
+
+    
+    if (rows.length >= 1) {
+      const deleteTopic=async()=>{
+        {console.log("ExamId ",examId)}
+          const response = await apiDelete(`/exam-topic/delete-topic-in-exam-topic`,{examId:examId, topicId: topicId});
+          console.log("Delete Topic ",response);
+
+          
+          if(response.responseMessage==="success"){
+            toast.success(`${response.message}`, {position: "top-center"});
+             setRows((prevRows) => prevRows.filter((_, i) => i !== index)); 
+          }else {
+              toast.error(`${response.message}`,{position:'top-center'})
+          }
+      }
+       deleteTopic();
     }
   }
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await apiGet('/topic/getall-topic');
+      console.log("AllTopic ",response)
       setData(response);
     }
     fetchData()
   }, []);
 
+
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/examtopic/gettopicbyexamid?examId=' + id)
+      const response = await apiGet(`/exam-topic/get-topicby-examid?examId=${id}` )
       console.log('gettopicbyexamid', response);
       if (response.message === 'success' && response.topicList.length !== 0) {
         const listTopic = response.topicList;
         console.log('List of Topics', listTopic);
         setRows(listTopic);
+  
       }
     }
     fetchData()
   }, []);
+
+  useEffect(() => {
+  const fetchExam = async () => {
+    const res = await apiGet(`/exam-topic/get-topicby-examid?examId=${id}`);
+
+    if (res.message === "success") {
+      setExam(res.examName);
+      setExamId(res.examId);
+    }
+  };
+
+  fetchExam();
+}, [id]);
 
   console.log(data);
   console.log(rows);
@@ -108,7 +141,7 @@ const AddTopicsToExam = () => {
       setError({'errorMessage': 'Percentage must be equal to 100'})
       return;
     } else {
-      const response = await apiPost('/generatequestions/generatequestion', {examId: exam.examId, topics: rows})
+      const response = await apiPost('/generate-questions/generate-question', {examId:examId, topics: rows})
       if (response.errorMessage !== undefined) {
         setError(response);
       } else if (response.successMessage !== undefined) {
@@ -122,7 +155,9 @@ const AddTopicsToExam = () => {
     <Layout>
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>{exam.examName}</CommonHeading>
+          {console.log("examName",exam)
+          }
+          <CommonHeading>{exam}</CommonHeading>
           <NavButton onClick={addRow}>Add topics</NavButton>
         </CommonHeader>
         <CommonSection>
@@ -178,7 +213,7 @@ const AddTopicsToExam = () => {
                   </Outer>
 
                   <RowContainer>
-                    <Button onClick={() => removeRow(row.topicId)}>Remove</Button>
+                    <Button type='button' onClick={()=>{ console.log("CLICK WORKING",row.topicId), removeRow(row.topicId,index)}}>Remove</Button>
                   </RowContainer>
                 </TableRow>
               ))
