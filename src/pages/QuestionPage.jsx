@@ -127,7 +127,7 @@ const handleSelectAll = (e) => {
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
             ? data.questionList.map((e) => <QuestionTable data={e} name={e.topicName} key={e.questionId} selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
-                change={deleteQuestions} />)
+                change={deleteQuestions}/>)
             : <Empty>No question available</Empty>
           }
         </CommonSection>
