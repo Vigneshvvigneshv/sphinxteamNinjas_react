@@ -40,7 +40,7 @@ const AdminDashBoard = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>Available Exams</CommonHeading>
-          <AddButton to="/addexam"><FaPlus/>Add</AddButton>
+          <AddButton to="/addexam"><FaPlus/></AddButton>
         </CommonHeader>
         
         <CommonSection>

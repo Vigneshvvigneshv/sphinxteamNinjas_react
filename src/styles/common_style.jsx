@@ -373,3 +373,28 @@ export const ExamContent=styled.span`
   font-size: 13px;
   color: ${({ theme }) => theme.colors.textPrimary};
 `;
+
+
+
+export const Navlink=styled(NavLink)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: ${({theme})=>theme.radius};
+  background:${({theme})=>theme.buttonBg};
+  color: ${({theme})=>theme.colors.surface};
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  &:hover  {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+  }
+`;

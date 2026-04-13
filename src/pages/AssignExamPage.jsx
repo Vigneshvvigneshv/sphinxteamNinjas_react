@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
-import { Button, CommonContainer, CommonHeader, CommonHeading, CommonSection, Dropdown, TableHeading, TableRow } from '../styles/common_style'
-import Empty from '../component/Empty';
+import { CommonContainer, CommonHeader, CommonHeading, CommonSection, Dropdown, TableHeading, TableRow } from '../styles/common_style'
 import { NavButton } from '../styles/header_style';
 import { apiGet } from '../ApiServices/apiServices';
+import { useParams } from 'react-router-dom';
 
 const AssignExamPage = () => {
+  const {id}=useParams();
   const [data, setData] = useState();
+  const [unassignedUser, setUnassignedUser] = useState();
   const [error, setError] = useState();
   const [rows, setRows] = useState([
     { partyId: "", allowedAttempts: "", timeOutDays: "" }
@@ -16,13 +18,23 @@ const AssignExamPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/user/getalluser');
+      const response = await apiGet('/exam-assign/get-assigned-user/'+id);
       setData(response);
-      console.log('Assing Exam Page', response);
+      console.log('Assing Exam Page',response);
     }
     fetchData()
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await apiGet('/exam-assign/get-unassigned-user/'+id);
+      setUnassignedUser(response);
+      console.log('unassign Exam Page',response);
+    }
+    fetchData()
+  }, []);
+
+  
   return (
     <Layout>
       <CommonContainer>
@@ -32,6 +44,7 @@ const AssignExamPage = () => {
         </CommonHeader>
         <CommonSection>
           {/* Assign exam form — placeholder for future implementation */}
+
         </CommonSection>
       </CommonContainer>
     </Layout>
