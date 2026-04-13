@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout';
 import {
   Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading,
-  CommonSection, Container, Content, Dropdown, Outer, Required,
+  CommonSection, Container, Content, DeleteButton, Dropdown, Outer, Required,
   RowContainer, TableHeading, TableRow
 } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
@@ -13,6 +13,7 @@ import Modal from '../component/Modal';
 import { validateAddTopicExam } from '../validation/ValidationUtil';
 import { apiDelete, apiGet, apiPost } from '../ApiServices/apiServices';
 import { toast } from 'sonner';
+import { FaTrash } from 'react-icons/fa';
 
 const AddTopicsToExam = () => {
   const navigate = useNavigate();
@@ -144,8 +145,10 @@ const AddTopicsToExam = () => {
       const response = await apiPost('/generate-questions/generate-question', {examId:examId, topics: rows})
       if (response.errorMessage !== undefined) {
         setError(response);
+
       } else if (response.successMessage !== undefined) {
         setError(response);
+        toast.success("Successfully generated questions", {position: "top-center"})
         changeShow();
       }
     }
@@ -213,7 +216,7 @@ const AddTopicsToExam = () => {
                   </Outer>
 
                   <RowContainer>
-                    <Button type='button' onClick={()=>{ console.log("CLICK WORKING",row.topicId), removeRow(row.topicId,index)}}>Remove</Button>
+                    <DeleteButton type='button' onClick={()=> removeRow(row.topicId,index)}><FaTrash/></DeleteButton>
                   </RowContainer>
                 </TableRow>
               ))
@@ -225,7 +228,6 @@ const AddTopicsToExam = () => {
               <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>
               <SubmitButton onClick={handleSubmit}>Generate Question</SubmitButton>
             </ButtonContainer>
-            {show && <Modal>{error.responseMessage}</Modal>}
           </Form>
         </CommonSection>
       </CommonContainer>

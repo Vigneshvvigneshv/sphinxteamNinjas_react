@@ -16,6 +16,7 @@ import AllQuestionsTable from "../component/AllQuestionsTable";
 import { toast } from "sonner";
 import { CheckBox } from "../styles/form_style";
 import { PageNo, PaginationContainer, SelectAllContainer } from "../styles/question_style";
+import Modal from "../component/Modal";
 
 const AllQuestionPage = () => {
   const [data, setData] = useState({
@@ -29,7 +30,7 @@ const AllQuestionPage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
     //pagination
     const [currentPage, setCurrentPage] = useState(1);
-
+  const [show,setShow]=useState(false);
 
     const fetchData = async (page) => {
        if (page < 1) return;  
@@ -44,7 +45,7 @@ const AllQuestionPage = () => {
         hasPrevious: response.hasPrevious,
         responseMessage: response.responseMessage,
       });
-      setSelectedIds([]);
+    
       setCurrentPage(response.pageNo);
     };
    
@@ -55,29 +56,38 @@ useEffect(() => {
 
 
 
-
 const handleBulkDelete = async () => {
   if (selectedIds.length === 0) {
      toast.warning(`Please select the question to delete`,{position:'top-center'})
     return;
   }
+  setShow(true);
+ 
+};
 
+const cancelDelete = () => {
+  setShow(false);
+};
+//Confirm Delete
+const confirmDelete = async () => {
   try {
     await apiDelete("/question/delete-question", {
-      questionIds: selectedIds
+      questionIds: selectedIds,
     });
 
-   toast.success("Deleted successfully", {
+    toast.success("Deleted successfully", {
       position: "top-center",
     });
+
     setSelectedIds([]);
-     await fetchData(currentPage);
+    setShow(false); 
+    await fetchData(currentPage);
   } catch (error) {
     console.error(error);
   }
 };
 
-  const deleteQuestions = (e,questionId) => {
+  const selectedQuestions = (e,questionId) => {
     {console.log("e , ",e)}
     const { checked } = e.target;
   const id = Number(questionId); 
@@ -89,20 +99,23 @@ const handleBulkDelete = async () => {
     }
   });
 };
-// {console.log("selectedIds ",selectedIds)}
+ {console.log("selectedIds ",selectedIds)}
 
 
 //selectAll function
 const handleSelectAll = (e) => {
   const { checked } = e.target;
 
+  const allIds = data.questionList.map((item) =>
+    Number(item.questionId)
+  );
+
   if (checked) {
-    const allIds = data.questionList.map((item) =>
-      Number(item.questionId)
-    );
-    setSelectedIds(allIds);
+    setSelectedIds((prev) => [...new Set([...prev, ...allIds])]);
   } else {
-    setSelectedIds([]);
+    setSelectedIds((prev) =>
+      prev.filter((id) => !allIds.includes(id))
+    );
   }
 };
   return (
@@ -114,7 +127,9 @@ const handleSelectAll = (e) => {
              type="checkbox"
             checked={
             data.questionList.length > 0 &&
-            selectedIds.length === data.questionList.length
+            data.questionList.every((q) =>
+            selectedIds.includes(Number(q.questionId))
+            )
               }
            onChange={handleSelectAll}
           />
@@ -129,11 +144,11 @@ const handleSelectAll = (e) => {
             >
               Add question
             </NavButton>
-           <NavButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Bulk Delete</NavButton>
+           <NavButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Bulk Delete</NavButton>
 
           </ButtonContainer>
         </CommonHeader>
-
+            {show && <Modal>{"ok"}</Modal>}
         <CommonSection>
           {/* {console.log("Data", data.questionList)}
           {console.log("TopicName", data.questionList)} */}
@@ -147,7 +162,7 @@ const handleSelectAll = (e) => {
                 key={e.questionId}
                 selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
-                change={deleteQuestions}/>
+                change={selectedQuestions}/>
             ))
           ) : (
             <Empty>No question available</Empty>

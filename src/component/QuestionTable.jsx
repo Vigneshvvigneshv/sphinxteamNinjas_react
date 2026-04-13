@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {
   AnswerContainer, AnswerOption, Button, ButtonContainer,
-  CommonTable, Content, TableRow
+  CommonTable, Content, DeleteButton, EditButton, TableRow
 } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import { apiDelete } from '../ApiServices/apiServices';
 import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
+import { FaPen, FaTrash } from 'react-icons/fa';
 
 const QuestionTable = ({ data, name,selectedIds,change }) => {
   const [answer, setAnswer] = useState();
@@ -42,13 +43,15 @@ const QuestionTable = ({ data, name,selectedIds,change }) => {
         <Content>{data.questionTypeId}</Content>
         <ButtonContainer>
           <Button onClick={showAnswer}>Answers</Button>
-          <NavButton
+          {console.log("TopicName ",name)}
+          <EditButton
             to={`/createquestion/${data.questionId}`}
+           
             state={{ topicId: data.topicId, topicName: name }}
           >
-            Edit
-          </NavButton>
-          <Button onClick={() => { handleSubmit(); }}>Delete</Button>
+           <FaPen/>
+          </EditButton>
+          <DeleteButton onClick={() => { handleSubmit(); }}><FaTrash/></DeleteButton>
         </ButtonContainer>
       </TableRow>
 

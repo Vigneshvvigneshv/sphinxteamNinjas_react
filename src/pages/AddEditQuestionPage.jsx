@@ -8,7 +8,7 @@ import {
   ButtonContainer, CommonContainer, CommonHeading,
   Container, Content, Dropdown, Title
 } from '../styles/common_style';
-import { useLocation, useParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import SingleChoice from '../component/SingleChoice';
 import MultiChoice from '../component/MultiChoice';
 import {
@@ -27,7 +27,7 @@ import Modal from '../component/Modal';
 const CreateQuestionPage = () => {
   const {id} = useParams();
   console.log('Create question page', id);
-
+  const navigate=useNavigate();
   const location = useLocation();
   const topicId = location.state?.topicId;
   const topicName = location.state?.topicName;
@@ -63,7 +63,7 @@ const CreateQuestionPage = () => {
     console.log(id);
     if (id !== undefined) {
       const fetchData = async () => {
-        const response = await apiGet('/question/getquestionbyid?questionId=' + id);
+        const response = await apiGet('/question/getquestion-by-id?questionId=' + id);
         console.log('create question page', response);
         setFormData({
           questionDetail: response.question.questionDetail,
@@ -84,6 +84,7 @@ const CreateQuestionPage = () => {
       fetchData()
     }
   }, [])
+
 
 
  const handleChange = (e) => {
@@ -131,7 +132,7 @@ const CreateQuestionPage = () => {
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);
-      } else if (response.responseMessage !== undefined) {
+      } else if (response.successMessage!== undefined) {
         setFormData({ ...formData, [e.target.name]: "" })
         setError(response);
         changeShow();
@@ -144,7 +145,8 @@ const CreateQuestionPage = () => {
       } else if (response.successMessage !== undefined) {
         setFormData({ ...formData, [e.target.name]: "" })
         setError(response);
-        changeShow();
+        // changeShow();
+      
       }
     }
   }
@@ -154,7 +156,7 @@ const CreateQuestionPage = () => {
       <QuestionContainer>
         
         <QuestionHeaderContainer>
-          <CommonHeading>{topicName} -</CommonHeading>
+          <CommonHeading>{topicName}</CommonHeading>
           <CommonHeading>Question type</CommonHeading>
           <Dropdown
             value={questionType}
@@ -254,7 +256,7 @@ const CreateQuestionPage = () => {
             </QuestionFieldContainer>
             
             <SubmitButton>{id !== undefined ? 'Save' : 'Add'}</SubmitButton>
-            {show && <Modal>{error.message}</Modal>}
+            {/* {show && <Modal>{error.successMessage}</Modal>} */}
           </Form>
         </QuestionFormContainer>
 

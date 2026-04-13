@@ -38,7 +38,6 @@ const QuestionPage = () => {
         responseMessage:response.responseMessage,
         topicName: response.topicName,
     });
-       setSelectedIds([]);
       setCurrentPage(response.pageNo);
     }
  
@@ -69,7 +68,7 @@ const handleBulkDelete = async () => {
 };
 
 
-   const deleteQuestions = (e,questionId) => {
+   const SelectedQuestions = (e,questionId) => {
     {console.log("e , ",e)}
     const { checked } = e.target;
   const id = Number(questionId); 
@@ -86,13 +85,16 @@ const handleBulkDelete = async () => {
 const handleSelectAll = (e) => {
   const { checked } = e.target;
 
+  const allIds = data.questionList.map((item) =>
+    Number(item.questionId)
+  );
+
   if (checked) {
-    const allIds = data.questionList.map((item) =>
-      Number(item.questionId)
-    );
-    setSelectedIds(allIds);
+    setSelectedIds((prev) => [...new Set([...prev, ...allIds])]);
   } else {
-    setSelectedIds([]);
+    setSelectedIds((prev) =>
+      prev.filter((id) => !allIds.includes(id))
+    );
   }
 };
   // console.log('Question Page', data);
@@ -109,8 +111,7 @@ const handleSelectAll = (e) => {
                 selectedIds.length === data.questionList.length
                   }
                  onChange={handleSelectAll}/>
-                 {console.log("topicName ",data.topicName)
-                 }
+                 
           <CommonHeading>{data.topicName}</CommonHeading>
           </SelectAllContainer>
           <Content>Question type</Content>
@@ -125,9 +126,9 @@ const handleSelectAll = (e) => {
         
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
-            ? data.questionList.map((e) => <QuestionTable data={e} name={e.topicName} key={e.questionId} selectedIds={selectedIds}
+            ? data.questionList.map((e) => <QuestionTable data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
-                change={deleteQuestions}/>)
+                change={SelectedQuestions}/>)
             : <Empty>No question available</Empty>
           }
         </CommonSection>
