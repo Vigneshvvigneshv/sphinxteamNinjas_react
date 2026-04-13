@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "../styles/common_style";
 import { NavButton } from "../styles/header_style";
-import { apiGet } from "../ApiServices/apiServices";
+import { apiGet, apiPost } from "../ApiServices/apiServices";
 import { useParams } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import UserAssignedTable from "../component/UserAssignedTable";
@@ -23,11 +23,24 @@ const AssignExamPage = () => {
   const [data, setData] = useState();
   const [unassignedUser, setUnassignedUser] = useState();
   const [error, setError] = useState();
-  const [rows, setRows] = useState([
-    { partyId: "", allowedAttempts: "", timeOutDays: "" },
-  ]);
+  const [rows, setRows] = useState([]);
 
-  console.log("Assign exam page data", data);
+  const addUser = (state, object) => {
+    if (state) {
+      setRows([...rows, { ...object }]);
+    } else {
+      const userRecords = rows.filter((userData) => {
+        return userData.userLoginId !== object.userLoginId;
+      });
+      setRows(userRecords);
+    }
+  };
+
+  // const assignUser =async()=>{
+  //   const response=  await apiPost("/exam-assign/assign-exam");
+  // }
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,12 +66,10 @@ const AssignExamPage = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>Assign</CommonHeading>
-          <AddButton>
-            <FaPlus></FaPlus>Add user
-          </AddButton>
         </CommonHeader>
         <CommonSection>
           {/* Assign exam form — placeholder for future implementation */}
+
           <CommonHeading>Assigned Users</CommonHeading>
           {data?.assignedUsers !== undefined &&
           data?.assignedUsers?.length <= 0 ? (
@@ -68,14 +79,19 @@ const AssignExamPage = () => {
               <UserAssignedTable data={data} key={index}></UserAssignedTable>
             ))
           )}
-          <CommonHeading>Unassigned Users</CommonHeading>
 
+          <CommonHeading>Unassigned Users</CommonHeading>
+          <AddButton>Submit</AddButton>
           {unassignedUser?.unassignedUsers !== undefined &&
           unassignedUser?.unassignedUsers?.length <= 0 ? (
             <Content>No user Available</Content>
           ) : (
             unassignedUser?.unassignedUsers?.map((data, index) => (
-              <UserUnassignedTable data={data} key={index}></UserUnassignedTable>
+              <UserUnassignedTable
+                data={data}
+                key={index}
+                onCheck={addUser}
+              ></UserUnassignedTable>
             ))
           )}
         </CommonSection>

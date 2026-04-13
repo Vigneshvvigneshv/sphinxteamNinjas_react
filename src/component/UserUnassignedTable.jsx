@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { CommonTable, Content, Outer, RowContainer, TableRow } from "../styles/common_style";
 import { FormLabel,FormInput } from "../styles/form_style";
 
-const UserUnassignedTable = ({ data }) => {
+const UserUnassignedTable = ({ data, onCheck }) => {
 
+    if(!data) return;
 
+    const [userObj, setUserObj] = useState({partyId: data.partyId, allowedAttempts: 1, timeoutDays: 10});
+    
+    const handleChange=(key, value)=>{
+        let newObj = {...userObj}
+        newObj[key] = value;
+        setUserObj(newObj);
+    }
 
-
-
-
-
+   {console.log(userObj)}
 
   return (
     <>
@@ -21,11 +26,10 @@ const UserUnassignedTable = ({ data }) => {
               <FormLabel>Allowed attempts</FormLabel>
               <FormInput
                 type="text"
-                // value={row.percentage}
-                // onChange={(e) =>
-                //   handleChange(index, "percentage", e.target.value)
-                // }
+                name="allowedAttempts"
+                value={userObj.allowedAttempts}
                 placeholder="Enter the Allowed attempts"
+                onChange={(e)=>handleChange("allowedAttempts", e.target.value)}
               />
             </RowContainer>
           </Outer> 
@@ -34,15 +38,14 @@ const UserUnassignedTable = ({ data }) => {
               <FormLabel>Timeout days</FormLabel>
               <FormInput
                 type="text"
-                // value={row.percentage}
-                // onChange={(e) =>
-                //   handleChange(index, "percentage", e.target.value)
-                // }
+                name="timeoutDays"
+                value={userObj.timeoutDays}
                 placeholder="Enter the Timeout days"
+                onChange={(e)=>handleChange("timeoutDays", e.target.value)}
               />
             </RowContainer>
           </Outer> 
-          
+          <input type="checkbox" onChange={(e)=>onCheck(e.target.checked,userObj)} />
         </TableRow>
       </CommonTable>
     </>
