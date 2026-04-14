@@ -8,7 +8,7 @@ const Modal = ({ children }) => {
   return (
     <Backdrop>
       <ModalContainer>
-        <ModalIconWrap>✓</ModalIconWrap>
+        <ModalIconWrap></ModalIconWrap>
         <ModalTitle>Success</ModalTitle>
         <Message>{children}</Message>
         <ModalButtons>
