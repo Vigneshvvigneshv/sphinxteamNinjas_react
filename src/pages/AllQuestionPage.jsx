@@ -152,7 +152,16 @@ const handleSelectAll = (e) => {
 
           </ButtonContainer>
         </CommonHeader>
-            {show && <Modal>{"ok"}</Modal>}
+            {show && (
+              <Modal 
+                title="Confirm Bulk Delete" 
+                showConfirmButton={true} 
+                onConfirm={confirmDelete} 
+                onCancel={cancelDelete}
+              >
+                Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
+              </Modal>
+            )}
         <CommonSection>
           {/* {console.log("Data", data.questionList)}
           {console.log("TopicName", data.questionList)} */}

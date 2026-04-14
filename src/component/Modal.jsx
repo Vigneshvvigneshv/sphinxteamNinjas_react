@@ -1,21 +1,37 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Backdrop, ModalContainer, ModalIconWrap, ModalTitle, Message, ModalButtons, ModalGhostBtn } from '../styles/modal_style'
+import { Backdrop, ModalContainer, ModalIconWrap, ModalTitle, Message, ModalButtons, ModalGhostBtn, ModalPrimaryBtn } from '../styles/modal_style'
+import { createGlobalStyle } from 'styled-components'
 
-const Modal = ({ children }) => {
+const ScrollLock = createGlobalStyle`
+  body {
+    overflow: hidden !important;
+  }
+`;
+
+const Modal = ({ children, title = "Success", onConfirm, onCancel, showConfirmButton = false }) => {
   const navigate = useNavigate();
 
+  const handleCancel = () => {
+    if (onCancel) return onCancel();
+    navigate(-1);
+  };
+
   return (
-    <Backdrop>
-      <ModalContainer>
-        <ModalIconWrap></ModalIconWrap>
-        <ModalTitle>Success</ModalTitle>
-        <Message>{children}</Message>
-        <ModalButtons>
-          <ModalGhostBtn onClick={() => { navigate(-1) }}>Ok</ModalGhostBtn>
-        </ModalButtons>
-      </ModalContainer>
-    </Backdrop>
+    <>
+      <ScrollLock />
+      <Backdrop>
+        <ModalContainer>
+          <ModalIconWrap></ModalIconWrap>
+          <ModalTitle>{title}</ModalTitle>
+          <Message>{children}</Message>
+          <ModalButtons>
+            {showConfirmButton && <ModalPrimaryBtn onClick={onConfirm} style={{ background: '#e11d48' }}>Delete</ModalPrimaryBtn>}
+            <ModalGhostBtn onClick={handleCancel}>{showConfirmButton ? "Cancel" : "Ok"}</ModalGhostBtn>
+          </ModalButtons>
+        </ModalContainer>
+      </Backdrop>
+    </>
   )
 }
 
