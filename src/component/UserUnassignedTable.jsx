@@ -6,15 +6,26 @@ const UserUnassignedTable = ({ data, onCheck }) => {
 
     if(!data) return;
 
-    const [userObj, setUserObj] = useState({partyId: data.partyId, allowedAttempts: 1, timeoutDays: 10});
+    const [userObj, setUserObj] = useState({
+      partyId: data.partyId, 
+      allowedAttempts: '1', 
+      timeoutDays: '10'
+    });
     
+    const [isChecked, setIsChecked] = useState(false);
+
     const handleChange=(key, value)=>{
-        let newObj = {...userObj}
-        newObj[key] = value;
+        let newObj = {...userObj, [key]: value};
         setUserObj(newObj);
+        if(isChecked){
+            onCheck(true, newObj);
+        }
     }
 
-   {console.log(userObj)}
+    const handleCheck = (e) => {
+        setIsChecked(e.target.checked);
+        onCheck(e.target.checked, userObj);
+    }
 
   return (
     <>
@@ -45,7 +56,7 @@ const UserUnassignedTable = ({ data, onCheck }) => {
               />
             </RowContainer>
           </Outer> 
-          <input type="checkbox" onChange={(e)=>onCheck(e.target.checked,userObj)} />
+          <input type="checkbox" checked={isChecked} onChange={handleCheck} />
         </TableRow>
       </CommonTable>
     </>
