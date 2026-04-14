@@ -6,12 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { CheckBox } from '../styles/form_style';
 import { apiDelete } from '../ApiServices/apiServices';
 import { FaPen, FaTrash } from 'react-icons/fa';
+import { toast } from 'sonner';
 
-const AllQuestionsTable = ({ data, name,change,selectedIds,setSelectedIds }) => {
+const AllQuestionsTable = ({ data, name, change, selectedIds = [], setSelectedIds }) => {
 
 const [answer, setAnswer] = useState();
- 
-
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -23,9 +22,15 @@ const [answer, setAnswer] = useState();
       : [data.questionId];
 
      
-    const response = await apiDelete('/question/delete-question', { questionIds: idsToDelete });
-    console.log(response);
-    navigate(0)
+  try {
+  const response = await apiDelete('/question/delete-question', { questionIds: idsToDelete });
+  console.log(response);
+  navigate(0); 
+} catch (error) {
+  console.error("Failed to delete:", error);
+  toast.error("Failed to delete question" ,{position:"top-center"})
+}
+
   }
 
   const showAnswer = () => {
@@ -37,7 +42,7 @@ const [answer, setAnswer] = useState();
             <SelectAllContainer>
             <CheckBox type="checkbox"
                       checked={selectedIds.includes(Number(data.questionId))} 
-                      onChange={(e)=>change(e,data.questionId)}
+                      onChange={(e)=> change && change(e,data.questionId)}
                       ></CheckBox>
             <Content>{data.questionDetail}</Content>
             </SelectAllContainer>
@@ -54,7 +59,7 @@ const [answer, setAnswer] = useState();
               <DeleteButton onClick={() => { handleSubmit() }} ><FaTrash/></DeleteButton>
             </ButtonContainer>
           </TableRow>
-    
+
           {answer && (
             <AnswerContainer>
               <AnswerHeader>

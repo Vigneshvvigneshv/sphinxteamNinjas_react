@@ -31,12 +31,13 @@ const AllQuestionPage = () => {
   const [selectedIds, setSelectedIds] = useState([]);
     //pagination
     const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10);
   const [show,setShow]=useState(false);
 
-    const fetchData = async (page) => {
+    const fetchData = async (page, customLimit = limit) => {
        if (page < 1) return;  
       console.log("Fetching page:", page);
-      const response = await apiGet( `/question/getall-questions?pageNo=${page}`);
+      const response = await apiGet( `/question/getall-questions?pageNo=${page}&pageSize=${customLimit}`);
       console.log("response", response);
       
       setData({
@@ -45,8 +46,7 @@ const AllQuestionPage = () => {
         totalPages: response.totalPages,
         hasNext: response.hasNext,
         hasPrevious: response.hasPrevious,
-        responseMessage: response.responseMessage,
-        
+        responseMessage: response.responseMessage,   
       });
     
       setCurrentPage(response.pageNo);
@@ -54,8 +54,8 @@ const AllQuestionPage = () => {
    
 
 useEffect(() => {
-    fetchData(1);
-  }, []);
+    if (limit) fetchData(1, limit);
+  }, [limit]);
 
 
 
@@ -188,13 +188,30 @@ const handleSelectAll = (e) => {
   {data.hasNext&&<NavButton
      onClick={() => {
     if (data.pageNo < data.totalPages) {
-      fetchData(data.pageNo + 1);
+      fetchData(currentPage + 1);
     }
   }}
     disabled={!data.hasNext} 
   >
     Next
   </NavButton>}
+
+    <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "5px" }}>
+      <span style={{ fontSize: "14px", fontWeight: "500", whiteSpace: "nowrap" }}>Items per page:</span>
+      <input 
+        type="number"
+        min="1"
+        value={limit} 
+        onChange={(e) => {
+          const val = e.target.value;
+          setLimit(val === '' ? '' : (val));
+        }}
+        onBlur={() => {
+          if (!limit || limit < 1) setLimit(10);
+        }}
+        style={{ padding: "5px", borderRadius: "5px", border: "1px solid #ccc", width: "60px" }}
+      />
+    </div>
 
 </PaginationContainer>
       </CommonContainer>

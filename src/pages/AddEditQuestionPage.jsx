@@ -40,7 +40,7 @@ const CreateQuestionPage = () => {
   const [difficultyLevel, setDifficultyLevel] = useState('1');
   const [show, setShow] = useState(false);
   const[topic,setTopic]=useState([]);
-  const[showTopic,setShowTopic]=useState();
+ 
 
   const changeShow = () => {
     setShow(!show);
@@ -48,7 +48,7 @@ const CreateQuestionPage = () => {
 
   console.log(error);
   const [formData, setFormData] = useState({
-    topicId: topicId,
+    topicId: topicId || "",
     questionDetail: "",
     optionA: "",
     optionB: "",
@@ -69,7 +69,7 @@ const CreateQuestionPage = () => {
       const fetchData = async () => {
         const response = await apiGet('/question/getquestion-by-id?questionId=' + id);
         console.log('create question page', response);
-        
+
         setFormData({
           questionDetail: response.question.questionDetail,
           optionA: response.question.optionA,
@@ -113,8 +113,7 @@ const CreateQuestionPage = () => {
 
   if (name === "answer" && questionType === "MULTI_CHOICE") {
     setFormData((prev) => {
-      let updatedAnswers = [...prev.answer];
-
+      let updatedAnswers = Array.isArray(prev.answer) ? [...prev.answer] : [];
       if (checked) {
         updatedAnswers.push(value);
       } else {
@@ -141,12 +140,24 @@ const CreateQuestionPage = () => {
   }));
 };
 
+
+//Whenever Question Type change answer value will be empty
+useEffect(() => {
+  setFormData((prev) => ({
+    ...prev,
+    answer: questionType === "MULTI_CHOICE" ? [] : "",
+    questionTypeId: questionType
+  }));
+}, [questionType]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateQuestion(formData);
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
+
+    // console.log("formData => ", formData);
+    // return;
     if (id !== undefined) {
       const response = await apiPut('/question/update-question', {...formData, questionId: id});
       console.log(response);
@@ -165,8 +176,7 @@ const CreateQuestionPage = () => {
       } else if (response.successMessage !== undefined) {
         setFormData({ ...formData, [e.target.name]: "" })
         setError(response);
-        // changeShow();
-      
+        // changeShow(); 
       }
     }
   }
@@ -176,6 +186,11 @@ const CreateQuestionPage = () => {
     console.log("topicList => ",topic)
   }, [topic])
 
+
+  const handleTopic=(value)=>{
+    const newObj = {...formData, topicId:value}
+    setFormData(newObj);
+  }
   return (
     <Layout>
       <QuestionContainer>
@@ -198,15 +213,10 @@ const CreateQuestionPage = () => {
           
 
     {!topicName && 
-          <Dropdown value={topicId} onChange={(e)=>handleTopic(e.target.value)}>
-
+          <Dropdown name ="" value={topicId} onChange={(e)=>handleTopic(e.target.value)}>
             {topic.map((e)=>(
-            
-              <option  value={e.topicId}>{e.topicName}</option>
-              
+              <option  value={e.topicId}>{e.topicName}</option>       
             ))}
-
-
           </Dropdown>}
         </QuestionHeaderContainer>
   
@@ -227,7 +237,6 @@ const CreateQuestionPage = () => {
               />
               {error.questionDetail && <ErrorMessage>{error.questionDetail}</ErrorMessage>}
             </QuestionFieldContainer>
-
             {questionType === 'SINGLE_CHOICE' && <SingleChoice change={handleChange} error={error} data={formData} />}
             {questionType === 'MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData} />}
             {questionType === 'TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData, optionA: "TRUE", optionB: "FALSE"}} />}

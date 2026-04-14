@@ -25,28 +25,33 @@ const QuestionPage = () => {
   const {id} = useParams();
      //pagination
     const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10);
  
-    const fetchData = async (page) => {
+    const fetchData = async (page, customLimit = limit) => {
       if(page<1) return;
-      const response = await apiGet('/question/getquestions-by-topic?topicId=' + id +`&page=${page}`)
+      try {
+        const response = await apiGet(`/question/getquestions-by-topic?topicId=${id}&pageNo=${page}&pageSize=${customLimit}`);
+        if (!response) return;
 
-      {console.log("inside topic ",response.topicName)
+        setData({
+          questionList: response.questionList ||[],
+          pageNo:response.pageNo,
+          totalPages:response.totalPages,
+          hasNext:response.hasNext,
+          hasPrevious:response.hasPrevious,
+          responseMessage:response.responseMessage,
+          topicName: response.topicName,
+          topicId: response.topicId,
+        });
+        setCurrentPage(response.pageNo);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
       }
-      setData({
-        questionList: response.questionList ||[],
-        pageNo:response.pageNo,
-        totalPages:response.totalPages,
-        hasNext:response.hasNext,
-        hasPrevious:response.hasPrevious,
-        responseMessage:response.responseMessage,
-        topicName: response.topicName,
-    });
-      setCurrentPage(response.pageNo);
     }
  
     useEffect(() => {
-        fetchData(1);
-      }, []);
+        if (limit) fetchData(1, limit);
+    }, [id, limit]);
 
 //handle Bulkdelete
 const handleBulkDelete = async () => {
@@ -110,10 +115,10 @@ const handleSelectAll = (e) => {
           <CheckBox
                 type="checkbox"
                 checked={
-                data.questionList.length > 0 &&
-                selectedIds.length === data.questionList.length
-                  }
-                 onChange={handleSelectAll}/>
+                  data.questionList.length > 0 &&
+                  data.questionList.every((item) => selectedIds.includes(Number(item.questionId)))
+                }
+                onChange={handleSelectAll}/>
                  
           <CommonHeading>{data.topicName}</CommonHeading>
           </SelectAllContainer>
@@ -136,29 +141,47 @@ const handleSelectAll = (e) => {
             : <Empty>No question available</Empty>
           }
         </CommonSection>
-        <PaginationContainer >
-         {data.hasPrevious && <NavButton
-            onClick={() => fetchData(currentPage - 1)}
-            disabled={!data.hasPrevious}>
-            Prev
-          </NavButton>}
-        
-          <PageNo>
-             {data.pageNo} / {data.totalPages}
-          </PageNo>
-        
-          {data.hasNext&&<NavButton
-             onClick={() => {
-            if (data.pageNo < data.totalPages) {
-              fetchData(data.pageNo + 1);
-            }
-          }}
-            disabled={!data.hasNext} 
-          >
-            Next
-          </NavButton>}
-        
-        </PaginationContainer>
+        {data.questionList.length > 0 && (
+          <PaginationContainer >
+           {data.hasPrevious && <NavButton
+              onClick={() => fetchData(currentPage - 1)}
+              disabled={!data.hasPrevious}>
+              Prev
+            </NavButton>}
+          
+            <PageNo>
+               {data.pageNo} / {data.totalPages}
+            </PageNo>
+          
+            {data.hasNext&&<NavButton
+               onClick={() => {
+              if (data.pageNo < data.totalPages) {
+                fetchData(currentPage+ 1);
+              }
+            }}
+              disabled={!data.hasNext} 
+            >
+              Next
+            </NavButton>}
+            
+            <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "5px" }}>
+              <span style={{ fontSize: "14px", fontWeight: "500", whiteSpace: "nowrap" }}>Items per page:</span>
+              <input 
+                type="number"
+                min="1"
+                value={limit} 
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setLimit(val === '' ? '' : (val));
+                }}
+                onBlur={() => {
+                  if (!limit || limit < 1) setLimit(10);
+                }}
+                style={{ padding: "5px", borderRadius: "5px", border: "1px solid #ccc", width: "60px" }}
+              />
+            </div>
+          </PaginationContainer>
+        )}
       </CommonContainer>
     </Layout>
   )
