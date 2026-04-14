@@ -43,7 +43,7 @@ const QuestionTable = ({ data, name,selectedIds,change }) => {
         <Content>{data.questionTypeId}</Content>
         <ButtonContainer>
           <Button onClick={showAnswer}>Answers</Button>
-          {console.log("TopicName ",name)}
+          
           <EditButton
             to={`/createquestion/${data.questionId}`}
            

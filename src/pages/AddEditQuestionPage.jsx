@@ -16,7 +16,8 @@ import {
   QuestionHeaderContainer, QuestionTypeBadge, ProgressLabel,
   LeftSideContainer,
   RightSideContainer,
-  QuestionUpperContainer
+  QuestionUpperContainer,
+  Option
 } from '../styles/question_style';
 import { validateQuestion } from '../validation/ValidationUtil';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
@@ -26,18 +27,20 @@ import Modal from '../component/Modal';
 
 const CreateQuestionPage = () => {
   const {id} = useParams();
-  console.log('Create question page', id);
+  
   const navigate=useNavigate();
   const location = useLocation();
   const topicId = location.state?.topicId;
   const topicName = location.state?.topicName;
   console.log('create question page topic id', topicId);
+  console.log('create question page topic Name', topicName)
 
   const [error, setError] = useState("");
   const [questionType, setQuestionType] = useState('SINGLE_CHOICE');
   const [difficultyLevel, setDifficultyLevel] = useState('1');
   const [show, setShow] = useState(false);
-  console.log('Create question Page', show);
+  const[topic,setTopic]=useState([]);
+  const[showTopic,setShowTopic]=useState();
 
   const changeShow = () => {
     setShow(!show);
@@ -62,9 +65,11 @@ const CreateQuestionPage = () => {
   useEffect(() => {
     console.log(id);
     if (id !== undefined) {
+
       const fetchData = async () => {
         const response = await apiGet('/question/getquestion-by-id?questionId=' + id);
         console.log('create question page', response);
+        
         setFormData({
           questionDetail: response.question.questionDetail,
           optionA: response.question.optionA,
@@ -77,6 +82,7 @@ const CreateQuestionPage = () => {
           negativeMarkValue: response.question.negativeMarkValue,
           questionTypeId: response.question.questionTypeId,
           difficultyLevel: response.question.difficultyLevel
+
         })
         setQuestionType(response.question.questionTypeId);
         setDifficultyLevel(response.question.difficultyLevel);
@@ -86,6 +92,21 @@ const CreateQuestionPage = () => {
   }, [])
 
 
+//fetching all topics
+  const getTopic=async()=>{
+      const response = await apiGet('/topic/getall-topic');
+        console.log("AllTopic ",response)
+        setTopic(response.topicList);
+  }
+
+ useEffect(()=>{
+    if(!topicName){
+      getTopic();
+    }
+  },[])
+
+
+  
 
  const handleChange = (e) => {
   const { name, value,checked } = e.target;
@@ -110,8 +131,7 @@ const CreateQuestionPage = () => {
       ...prev,
       [name]: value,
       questionTypeId: questionType,
-      difficultyLevel: difficultyLevel,
-      
+      difficultyLevel: difficultyLevel, 
     }));
   }
 
@@ -151,11 +171,17 @@ const CreateQuestionPage = () => {
     }
   }
 
+  useEffect(()=>{
+    console.log("topicName => ",topicName)
+    console.log("topicList => ",topic)
+  }, [topic])
+
   return (
     <Layout>
       <QuestionContainer>
         
         <QuestionHeaderContainer>
+          {/* {console.log("TopicName ",topicName)} */}
           <CommonHeading>{topicName}</CommonHeading>
           <CommonHeading>Question type</CommonHeading>
           <Dropdown
@@ -168,6 +194,20 @@ const CreateQuestionPage = () => {
             <option value='FILL_BLANKS'>Fill in the blanks</option>
             <option value='DETAILED_ANSWER'>Detailed answer</option>
           </Dropdown>
+
+          
+
+    {!topicName && 
+          <Dropdown value={topicId} onChange={(e)=>handleTopic(e.target.value)}>
+
+            {topic.map((e)=>(
+            
+              <option  value={e.topicId}>{e.topicName}</option>
+              
+            ))}
+
+
+          </Dropdown>}
         </QuestionHeaderContainer>
   
         <QuestionFormContainer>

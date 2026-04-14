@@ -26,6 +26,7 @@ const AllQuestionPage = () => {
     hasNext: false,
     hasPrevious: false,
     responseMessage: "",
+    
   });
   const [selectedIds, setSelectedIds] = useState([]);
     //pagination
@@ -37,6 +38,7 @@ const AllQuestionPage = () => {
       console.log("Fetching page:", page);
       const response = await apiGet( `/question/getall-questions?pageNo=${page}`);
       console.log("response", response);
+      
       setData({
         questionList: response.questionList || [],
         pageNo: response.pageNo,
@@ -44,6 +46,7 @@ const AllQuestionPage = () => {
         hasNext: response.hasNext,
         hasPrevious: response.hasPrevious,
         responseMessage: response.responseMessage,
+        
       });
     
       setCurrentPage(response.pageNo);
@@ -138,6 +141,7 @@ const handleSelectAll = (e) => {
           <Content>Topic</Content>
           <Content>QuestionType</Content>
           <ButtonContainer>
+              
             <NavButton
               to="/createquestion"
               state={{ topicId: data.topicId, topicName: data.topicName }}

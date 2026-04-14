@@ -24,11 +24,14 @@ const QuestionPage = () => {
    const [selectedIds, setSelectedIds] = useState([]);
   const {id} = useParams();
      //pagination
-         const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
  
     const fetchData = async (page) => {
       if(page<1) return;
       const response = await apiGet('/question/getquestions-by-topic?topicId=' + id +`&page=${page}`)
+
+      {console.log("inside topic ",response.topicName)
+      }
       setData({
         questionList: response.questionList ||[],
         pageNo:response.pageNo,
@@ -115,8 +118,9 @@ const handleSelectAll = (e) => {
           <CommonHeading>{data.topicName}</CommonHeading>
           </SelectAllContainer>
           <Content>Question type</Content>
+          {console.log("Topic Name inside question page",data.topicId)}
           <ButtonContainer>
-            <NavButton to="/create-question" state={{topicId: data.topicId, topicName: data.topicName}}>
+            <NavButton to="/createquestion" state={{topicId: data.topicId, topicName: data.topicName}}>
               Add question
             </NavButton>
             <NavButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Bulk Delete</NavButton>
