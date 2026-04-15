@@ -38,7 +38,7 @@ const UserTable = ({data,onDelete}) => {
             <TableRow>
                 <Content>{data.userLoginId}</Content>
                 <ButtonContainer>
-                    <Button onClick={()=>{setShow(!show);show?"":getExams()}}>{show?"Hide":"Exam"}</Button>
+                    <Button onClick={()=>{setShow(!show);show?"":getExams()}}>{show?"Hide":"View exam"}</Button>
                     <DeleteButton onClick={deleteUser}><FaTrash></FaTrash></DeleteButton>
                 </ButtonContainer>
             

@@ -6,7 +6,7 @@ import Modal from './Modal';
 import { apiDelete } from '../ApiServices/apiServices';
 import { useSelector } from 'react-redux';
 import { FaEdit, FaPen, FaTrash, FaUser } from 'react-icons/fa';
-import { FaDeleteLeft } from 'react-icons/fa6';
+import { FaArrowUpRightFromSquare, FaDeleteLeft } from 'react-icons/fa6';
 
 
 const ExamTable = ({ data }) => {
@@ -31,9 +31,9 @@ const ExamTable = ({ data }) => {
         <Content>{data.examName}</Content>
         <ButtonContainer>
           <Navlink to={`/assignexam/${data.examId}`}><FaUser/>Assign</Navlink>
-          <Navlink to={`/getexamtopic/${data.examId}`}>Topics</Navlink>
-          <Navlink to={`/getexam/${data.examId}`}><FaPen/></Navlink>
-          <DeleteButton onClick={deleteExam}><FaTrash/></DeleteButton>
+          <Navlink to={`/getexamtopic/${data.examId}`}><FaArrowUpRightFromSquare />  Topics</Navlink>
+          <EditButton to={`/getexam/${data.examId}`}><FaPen/></EditButton>
+          <DeleteButton onClick={deleteExam} title='Delete'><FaTrash/></DeleteButton>
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}
       </TableRow>
