@@ -26,6 +26,7 @@ const QuestionBulkUpload = () => {
         return;
       }
       setFile(selectedFile);
+      setError(null);
     }
   }
 
@@ -41,6 +42,8 @@ const QuestionBulkUpload = () => {
     console.log("Response:", response);
     if (response.successMessage !== undefined) {
       setData(response);
+      setError(null);
+      changeShow();
     } else {
       setError(response.errorMessage);
     }
@@ -85,7 +88,7 @@ const QuestionBulkUpload = () => {
             <Button onClick={handleUpload}>Upload</Button>
           </ButtonContainer>
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          {show && <Modal>{data.successMessage}</Modal>}
+          {show && <Modal>{data?.successMessage}</Modal>}
         </FormContainer>
 
         <Button onClick={downloadTemplate}>Download Template</Button>

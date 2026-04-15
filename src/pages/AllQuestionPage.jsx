@@ -65,7 +65,6 @@ const handleBulkDelete = async () => {
     return;
   }
   setShow(true);
- 
 };
 
 const cancelDelete = () => {

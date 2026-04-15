@@ -17,7 +17,10 @@ import {
   LeftSideContainer,
   RightSideContainer,
   QuestionUpperContainer,
-  Option
+  Option,
+  ProfessionalHeaderContainer, ConfigGroup, FieldWrapper, TopicBadge, ConfigDropdown, FormMainContainer, MainFieldContainer, OptionsWrapper, OptionsSection, OptionsDisclaimer, ScoringSidebar, ScoringHeading, ScoringRow, ScoringFieldWrapper, ActionBottomWrapper, ActionButton,
+  QuestionInputWrapper,
+  QuestionInputBox
 } from '../styles/question_style';
 import { validateQuestion } from '../validation/ValidationUtil';
 import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
@@ -195,122 +198,150 @@ useEffect(() => {
     <Layout>
       <QuestionContainer>
         
-        <QuestionHeaderContainer>
-          {/* {console.log("TopicName ",topicName)} */}
-          <CommonHeading>{topicName}</CommonHeading>
-          <CommonHeading>Question type</CommonHeading>
-          <Dropdown
-            value={questionType}
-            onChange={(e) => { setQuestionType(e.target.value); setError("") }}
-          >
-            <option value='SINGLE_CHOICE'>Single choice</option>
-            <option value='MULTI_CHOICE'>Multiple choice</option>
-            <option value='TRUE_FALSE'>True or false</option>
-            <option value='FILL_BLANKS'>Fill in the blanks</option>
-            <option value='DETAILED_ANSWER'>Detailed answer</option>
-          </Dropdown>
-
-          
-
-    {!topicName && 
-          <Dropdown name ="" value={topicId} onChange={(e)=>handleTopic(e.target.value)}>
-            {topic.map((e)=>(
-              <option  value={e.topicId}>{e.topicName}</option>       
-            ))}
-          </Dropdown>}
-        </QuestionHeaderContainer>
-  
-        <QuestionFormContainer>
-          <Form onSubmit={handleSubmit}>
-              <QuestionUpperContainer>
-            <LeftSideContainer>
-            <QuestionFieldContainer>
+        <ProfessionalHeaderContainer>
+          <ConfigGroup>
+            <FieldWrapper>
               <LabelContainer>
-              <FormLabel>Question</FormLabel>
+                <FormLabel>Topic</FormLabel>
               </LabelContainer>
-              <FormText
-                name='questionDetail'
-                placeholder='Enter the question here'
-                type='text'
-                value={formData.questionDetail}
-                onChange={handleChange}
-              />
-              {error.questionDetail && <ErrorMessage>{error.questionDetail}</ErrorMessage>}
-            </QuestionFieldContainer>
-            {questionType === 'SINGLE_CHOICE' && <SingleChoice change={handleChange} error={error} data={formData} />}
-            {questionType === 'MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData} />}
-            {questionType === 'TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData, optionA: "TRUE", optionB: "FALSE"}} />}
-          </LeftSideContainer>
+              {topicName ? (
+                 <TopicBadge>
+                   {topicName}
+                 </TopicBadge>
+              ) : (
+                 <ConfigDropdown name="" value={topicId} onChange={(e)=>handleTopic(e.target.value)} $minWidth="200px">
+                   <option value="">Select Topic</option>
+                   {topic.map((e)=>(
+                     <option key={e.topicId} value={e.topicId}>{e.topicName}</option>       
+                   ))}
+                 </ConfigDropdown>
+              )}
+            </FieldWrapper>
 
-          <RightSideContainer>
-            <QuestionFieldContainer>
+            <FieldWrapper>
               <LabelContainer>
-              <FormLabel>Answer</FormLabel>
+                <FormLabel>Question Type</FormLabel>
               </LabelContainer>
-              <FormInput
-                name='answer'
-                placeholder='Enter the answer option'
-                type='text' disabled={questionType !== 'FILL_BLANKS' && questionType!== 'DETAILED_ANSWER'} 
-                value={formData.answer}
-                onChange={handleChange}
-              />
-              {error.answer && <ErrorMessage>{error.answer}</ErrorMessage>}
-            </QuestionFieldContainer>
-
-            <QuestionFieldContainer>
-              <LabelContainer>
-              <FormLabel>Mark</FormLabel>
-              </LabelContainer>
-              <FormInput
-                name='answerValue'
-                placeholder='Enter the mark'
-                type='text'
-                value={formData.answerValue}
-                onChange={handleChange}
-              />
-              {error.answerValue && <ErrorMessage>{error.answerValue}</ErrorMessage>}
-            </QuestionFieldContainer>
+              <ConfigDropdown
+                value={questionType}
+                onChange={(e) => { setQuestionType(e.target.value); setError("") }}
+                $minWidth="200px"
+              >
+                <option value='SINGLE_CHOICE'>Single choice</option>
+                <option value='MULTI_CHOICE'>Multiple choice</option>
+                <option value='TRUE_FALSE'>True or false</option>
+                <option value='FILL_BLANKS'>Fill in the blanks</option>
+                <option value='DETAILED_ANSWER'>Detailed answer</option>
+              </ConfigDropdown>
+            </FieldWrapper>
             
-            
-            {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-            {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
-            </RightSideContainer>
-    </QuestionUpperContainer>
-    {/* negative mark */}
-             <QuestionFieldContainer>
+            <FieldWrapper>
               <LabelContainer>
-              <FormLabel>Negative mark</FormLabel>
+                <FormLabel>Difficulty Level</FormLabel>
               </LabelContainer>
-              <FormInput
-                name='negativeMarkValue'
-                placeholder='Enter the negative mark'
-                type='text'
-                value={formData.negativeMarkValue}
-                onChange={handleChange}
-              />
-              {error.negativeMarkValue && <ErrorMessage>{error.negativeMarkValue}</ErrorMessage>}
-            </QuestionFieldContainer>
-            {/* difficulty level */}
-            <QuestionFieldContainer>
-              <LabelContainer>
-              <FormLabel>Difficulty level</FormLabel>
-              </LabelContainer>
-              <Dropdown value={difficultyLevel} onChange={(e) => setDifficultyLevel(e.target.value)}>
+              <ConfigDropdown value={difficultyLevel} onChange={(e) => setDifficultyLevel(e.target.value)} $minWidth="140px">
                 <option value='1'>Easy</option>
                 <option value='2'>Medium</option>
                 <option value='3'>Hard</option>
-              </Dropdown>
+              </ConfigDropdown>
+            </FieldWrapper>
+          </ConfigGroup>
+        </ProfessionalHeaderContainer>
+  
+        <FormMainContainer>
+          <Form onSubmit={handleSubmit}>
+            <QuestionUpperContainer>
+              <LeftSideContainer>
+                <FieldContainer>
+                  <LabelContainer>
+                    <FormLabel>Question Content</FormLabel>
+                  </LabelContainer>
+                  <QuestionInputWrapper>
+                    <QuestionInputBox
+                      name='questionDetail'
+                      placeholder='Enter the full question text here...'
+                      type='text'
+                      value={formData.questionDetail}
+                      onChange={handleChange}
+                    />
+                  </QuestionInputWrapper>
+                  {error.questionDetail && <ErrorMessage>{error.questionDetail}</ErrorMessage>}
+                </FieldContainer>
 
+                <OptionsWrapper>
+                  <FormLabel>Options Configuration</FormLabel>
+                  <OptionsSection>
+                    {questionType === 'SINGLE_CHOICE' && <SingleChoice change={handleChange} error={error} data={formData} />}
+                    {questionType === 'MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData} />}
+                    {questionType === 'TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData, optionA: "TRUE", optionB: "FALSE"}} />}
+                    {questionType === 'FILL_BLANKS' && <OptionsDisclaimer>No predefined options required for Fill in the Blanks. Configure the answer directly on the right panel.</OptionsDisclaimer>}
+                    {questionType === 'DETAILED_ANSWER' && <OptionsDisclaimer>No predefined options required for Detailed Answer. Configure the answer directly on the right panel.</OptionsDisclaimer>}
+                  </OptionsSection>
+                </OptionsWrapper>
+              </LeftSideContainer>
 
-            </QuestionFieldContainer>
-            
-            <SubmitButton>{id !== undefined ? 'Save' : 'Add'}</SubmitButton>
-            {/* {show && <Modal>{error.successMessage}</Modal>} */}
+              <ScoringSidebar>
+                <div>
+                  <ScoringHeading>Scoring & Answers</ScoringHeading>
+                  
+                  <ScoringFieldWrapper>
+                    <LabelContainer>
+                      <FormLabel>Correct Answer</FormLabel>
+                    </LabelContainer>
+                    <FormInput
+                      name='answer'
+                      placeholder='Enter the correct answer'
+                      type='text' disabled={questionType !== 'FILL_BLANKS' && questionType !== 'DETAILED_ANSWER'} 
+                      value={formData.answer}
+                      onChange={handleChange}
+                    />
+                    {error.answer && <ErrorMessage>{error.answer}</ErrorMessage>}
+                  </ScoringFieldWrapper>
+
+                  <ScoringRow>
+                    <ScoringFieldWrapper>
+                      <LabelContainer>
+                        <FormLabel>Mark (+)</FormLabel>
+                      </LabelContainer>
+                      <FormInput
+                        name='answerValue'
+                        placeholder='0'
+                        type='number'
+                        value={formData.answerValue}
+                        onChange={handleChange}
+                      />
+                      {error.answerValue && <ErrorMessage>{error.answerValue}</ErrorMessage>}
+                    </ScoringFieldWrapper>
+                    
+                    <ScoringFieldWrapper>
+                      <LabelContainer>
+                        <FormLabel>Negative Mark (-)</FormLabel>
+                      </LabelContainer>
+                      <FormInput
+                        name='negativeMarkValue'
+                        placeholder='0'
+                        type='number'
+                        value={formData.negativeMarkValue}
+                        onChange={handleChange}
+                      />
+                      {error.negativeMarkValue && <ErrorMessage>{error.negativeMarkValue}</ErrorMessage>}
+                    </ScoringFieldWrapper>
+                  </ScoringRow>
+                </div>
+
+                {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
+                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+                
+                <ActionBottomWrapper>
+                  <ActionButton>{id !== undefined ? 'Save Changes' : 'Add Question'}</ActionButton>
+                </ActionBottomWrapper>
+              </ScoringSidebar>
+            </QuestionUpperContainer>
           </Form>
-        </QuestionFormContainer>
+        </FormMainContainer>
 
         <CommonContainer>
-          <NavButton to={`/question/${topicId}`} state={{topicId: topicId}}>Back to Question</NavButton>
+          <NavButton to={`/question/${topicId}`} state={{topicId: topicId}}>Back to Questions Overview</NavButton>
         </CommonContainer>
         
       </QuestionContainer>
