@@ -150,7 +150,7 @@ const AddExam = () => {
               <FormLabel>Pass percentage</FormLabel>
               <FormInput
                 name='passPercentage'
-                placeholder='Enter the pass percentage (0 to 100)'
+                placeholder='Enter the pass percentage (20 to 100)'
                 type='text'
                 value={formData.passPercentage}
                 onChange={handleChange}
