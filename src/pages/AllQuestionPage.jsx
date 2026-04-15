@@ -82,7 +82,6 @@ const confirmDelete = async () => {
     toast.success("Deleted successfully", {
       position: "top-center",
     });
-
     setSelectedIds([]);
     setShow(false); 
     await fetchData(currentPage);
@@ -203,7 +202,6 @@ const handleSelectAll = (e) => {
           data.questionList.length > 0 ? (
             data.questionList.map((e) => (
               <AllQuestionsTable
-
                 data={e}
                 name={e.topicName}
                 key={e.questionId}
@@ -217,7 +215,7 @@ const handleSelectAll = (e) => {
         </CommonSection>
 
 
-   <PaginationContainer >
+  {data.questionList.length > 0 && <PaginationContainer >
  {data.hasPrevious && <NavButton
     onClick={() => fetchData(currentPage - 1)}
     disabled={!data.hasPrevious}>
@@ -256,8 +254,8 @@ const handleSelectAll = (e) => {
       />
     </div>
 
-</PaginationContainer>
-      </CommonContainer>
+</PaginationContainer>}
+    </CommonContainer>
     </Layout>
   );
 };
