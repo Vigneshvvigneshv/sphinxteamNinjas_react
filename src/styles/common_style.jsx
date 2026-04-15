@@ -243,6 +243,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   gap: 8px;
   width:250px;
+  justify-content:end;
 `;
 
 export const EmptyContent = styled.p`
