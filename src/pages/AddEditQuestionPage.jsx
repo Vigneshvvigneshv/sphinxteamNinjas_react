@@ -62,7 +62,7 @@ const CreateQuestionPage = () => {
     questionTypeId: questionType,
     difficultyLevel: difficultyLevel,
     answerValue: 1,
-    negativeMarkValue: ""
+    negativeMarkValue: 0
   });
 
   useEffect(() => {

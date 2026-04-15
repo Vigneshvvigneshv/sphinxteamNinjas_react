@@ -36,11 +36,14 @@ const TopicPage = () => {
         </CommonHeader>
 
         <CommonSection>
+          <CommonTable>
+            
           {message && <SuccessMessage>{message}</SuccessMessage>}
           {(data.responseMessage === 'success')
             ? data.topicList.map((e) => <Table data={e} key={e.topicId} />)
             : <Empty>No topic available</Empty>
           }
+          </CommonTable>
         </CommonSection>
       </CommonContainer>
     </Layout>
