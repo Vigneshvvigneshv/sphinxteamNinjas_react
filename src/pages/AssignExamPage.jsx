@@ -4,12 +4,16 @@ import {
   AddButton,
   AssignButton,
   Button,
+  ButtonContainer,
   CommonContainer,
   CommonHeader,
   CommonHeading,
   CommonSection,
   Content,
+  DeleteButton,
   Dropdown,
+  EditButton,
+  ExamHeader,
   TableHeading,
   TableRow,
 } from "../styles/common_style";
@@ -23,6 +27,8 @@ import { toast } from "sonner";
 import { style } from "framer-motion/client";
 import Empty from "../component/Empty";
 import Modal from "../component/Modal";
+import BackDrop from "../component/BackDrop";
+import { FileInput } from "../styles/form_style";
 
 const AssignExamPage = () => {
 
@@ -33,16 +39,59 @@ const AssignExamPage = () => {
   const [showDelete,setShowDelete]=useState(false);
   const [rows, setRows] = useState([]);
   const [partyId, setPartyId] = useState();
+
+  //this is used to show the edit modal
+    const [showEdit,setShowEdit]=useState(false);
+    //this is used to store the user object from the UserAssignedTable component
+    const [userObj,setUserObj]=useState({
+      partyId:'',
+      allowedAttempts:'',
+      timeoutDays:'',
+      userLoginId:''
+    });
+  //this is used to handle the change in the edit modal
+    const handleChange=(key, value)=>{
+      let newObj = {...userObj, [key]: value};
+      setUserObj(newObj);
+    } 
   
-  const changeShow=(partyId)=>{
+//this is used to show the edit modal
+const changeShowEdit=(partyExamData)=>{
+    setShowEdit(!showEdit);
+    setUserObj(partyExamData);
+}
+
+
+
+
+
+
+  //this delete is used to show th modal and set the partyId 
+  const changeShowDelete=(partyId)=>{
     setShowDelete(!showDelete);
     setPartyId(partyId);
   }
+  //this is used to call the delete method
   const onDelete=()=>{
     deleteUser(partyId)
     setShowDelete(!showDelete);
   }
+    //this method is used to delete the user from the backend by passing the partyId and examId
+    const deleteUser=async(partyId)=>{
+    const response=await apiDelete("/exam-assign/remove-assigned-exam",{
+      examId:id,
+      partyId:partyId
+    })
+    if(response.errorMessage!==undefined){
+      toast.error(`${response.errorMessage}`, { position: 'top-center' });
+    }else if(response.successMessage!==undefined){
+      toast.success(response.successMessage, { position: 'top-center' });
+      fetchAssignedUsers();
+      fetchUnassignedUsers();
+    }
+  }
  
+  //this is used to add the user to the rows array
   const addUser = (state, object) => {
     setRows((prevRows) => {
       if (state) {
@@ -79,19 +128,7 @@ const AssignExamPage = () => {
   };
 
 
-  const deleteUser=async(partyId)=>{
-    const response=await apiDelete("/exam-assign/remove-assigned-exam",{
-      examId:id,
-      partyId:partyId
-    })
-    if(response.errorMessage!==undefined){
-      toast.error(`${response.errorMessage}`, { position: 'top-center' });
-    }else if(response.successMessage!==undefined){
-      toast.success(response.successMessage, { position: 'top-center' });
-      fetchAssignedUsers();
-      fetchUnassignedUsers();
-    }
-  }
+
 
   const updateExam=async(userObj)=>{
     const response=await apiPut("/exam-assign/update-assigned-exam",{...userObj,examId:id});
@@ -124,7 +161,7 @@ const AssignExamPage = () => {
             <Empty>No user assigned</Empty>
           ) : (
             data?.assignedUsers?.map((data) => (
-              <UserAssignedTable data={data} key={data.partyId}  changeShow={changeShow} onDelete={deleteUser} onUpdate={updateExam}></UserAssignedTable>
+              <UserAssignedTable data={data} key={data.partyId}  changeShowDelete={changeShowDelete}   changeShowEdit={changeShowEdit} onUpdate={updateExam}></UserAssignedTable>
             ))
           )}
           </CommonSection>
@@ -152,12 +189,24 @@ const AssignExamPage = () => {
        {showDelete && <Modal
               title="Remove user" 
               onConfirm={onDelete}
-              onCancel={changeShow}
+              onCancel={changeShowDelete}
               type='delete'
               showConfirmButton={true}>
                 Are you sure you want to remove this user?
               </Modal>
-              }   
+              }  
+
+              {showEdit && 
+          <BackDrop>
+            <ExamHeader>Username : {userObj.userLoginId}</ExamHeader>
+            <ExamHeader>Allowed attempts:<FileInput type="text" value={userObj.allowedAttempts} onChange={(e)=>handleChange("allowedAttempts", e.target.value)}></FileInput></ExamHeader>
+            <ExamHeader>Timeout Days:<FileInput type="text" value={userObj.timeoutDays} onChange={(e)=>handleChange("timeoutDays", e.target.value)}></FileInput></ExamHeader>
+            <ButtonContainer style={{width:'100%'}}>
+              <DeleteButton onClick={()=>setShowEdit(!showEdit)}>Cancle</DeleteButton>
+              <EditButton onClick={()=>{updateExam(userObj);setShowEdit(!showEdit)}}>Save</EditButton>
+            </ButtonContainer>
+          </BackDrop>
+        } 
     </Layout>
   );
 };

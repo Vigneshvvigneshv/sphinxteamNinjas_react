@@ -412,7 +412,9 @@ export const ExamHeader=styled.p`
 
   display: flex;
   justify-content: space-between;
-`;
+  align-items: center;
+  
+  `;
 export const ExamContent=styled.span`
   font-weight: 600;
   font-size: 13px;

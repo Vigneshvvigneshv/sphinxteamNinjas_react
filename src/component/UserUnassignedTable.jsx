@@ -14,6 +14,7 @@ const UserUnassignedTable = ({ data, onCheck }) => {
     
     const [isChecked, setIsChecked] = useState(false);
 
+    //this is used to handle the change in the edit modal
     const handleChange=(key, value)=>{
         let newObj = {...userObj, [key]: value};
         setUserObj(newObj);
@@ -22,6 +23,7 @@ const UserUnassignedTable = ({ data, onCheck }) => {
         }
     }
 
+    //this is used to handle the check event
     const handleCheck = (e) => {
         setIsChecked(e.target.checked);
         onCheck(e.target.checked, userObj);
