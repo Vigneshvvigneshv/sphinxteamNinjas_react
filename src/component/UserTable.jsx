@@ -7,25 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Empty from "./Empty";
 import ExamCard from "./ExamCard";
-import { FaArrowUpRightFromSquare, FaX } from "react-icons/fa6";
+import { FaX } from "react-icons/fa6";
 
 const UserTable = ({data,onDelete}) => {
 
     const [show, setShow] = useState(false);
-    const [response, setResponse] = useState();
     const [ExamResponse,setExamResponse]=useState();
-  const deleteUser = async () => {
-    const response = await apiDelete('/user/delete-user', {'partyId': data.partyId });
-    // console.log(response);
-    setResponse(response);
-     if(response.errorMessage!==undefined){
-        toast.error(`${response.errorMessage}`,{position:'top-center'})
-    }else if(response.successMessage!==undefined){
-      toast.success(`${response.successMessage}`, {position: "top-center"});
-      onDelete(data.partyId);
-    }
-  }
-
 
   const getExams=async ()=>{
     const response = await apiGet('/exam/getexam-by-partyId/'+data.partyId);
@@ -40,7 +27,7 @@ const UserTable = ({data,onDelete}) => {
                 <Content>{data.userLoginId}</Content>
                 <ButtonContainer>
                     <Button onClick={()=>{setShow(!show);show?"":getExams()}}> {show?<FaX/>:<FaAngleDoubleDown/>} {show?"Hide":"View exam"}</Button>
-                    <DeleteButton onClick={deleteUser}><FaTrash></FaTrash></DeleteButton>
+                    <DeleteButton onClick={()=>onDelete(data.partyId)}><FaTrash></FaTrash></DeleteButton>
                 </ButtonContainer>
             
                 {show && <ExamContainer>
