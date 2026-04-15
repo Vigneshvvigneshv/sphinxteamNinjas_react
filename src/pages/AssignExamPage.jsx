@@ -153,6 +153,7 @@ const AssignExamPage = () => {
               title="Remove user" 
               onConfirm={onDelete}
               onCancel={changeShow}
+              type='delete'
               showConfirmButton={true}>
                 Are you sure you want to remove this user?
               </Modal>

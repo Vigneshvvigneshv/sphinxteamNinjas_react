@@ -7,7 +7,7 @@ import { FaTrash } from 'react-icons/fa';
 
 
 
-const Modal = ({ children, title,type, onConfirm, onCancel, showConfirmButton = false }) => {
+const Modal = ({ children, title,type='success', onConfirm, onCancel, showConfirmButton = false }) => {
   const navigate = useNavigate();
 
   const handleCancel = () => {
@@ -16,13 +16,11 @@ const Modal = ({ children, title,type, onConfirm, onCancel, showConfirmButton = 
   };
   const icon=()=>{
     if(type==="success"){
-      return <TiTick/>
+      return <TiTick style={{ color:'green'}}/>
     }else if(type==="delete"){
-      return <FaTrash/>
+      return <FaTrash style={{ color:'red'}}/>
     }else if(type==="edit"){
-      return <FaPen/>
-    }else{
-      return <TiTick/>
+      return <FaPen style={{color:'blue'}}/>
     }
   }
   
