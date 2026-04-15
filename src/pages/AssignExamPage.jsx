@@ -150,11 +150,11 @@ const AssignExamPage = () => {
             </CommonSection>
       </CommonContainer>
        {showDelete && <Modal
-              title="Delete user" 
+              title="Remove user" 
               onConfirm={onDelete}
               onCancel={changeShow}
               showConfirmButton={true}>
-                Are you sure you want to delete this user?
+                Are you sure you want to remove this user?
               </Modal>
               }   
     </Layout>
