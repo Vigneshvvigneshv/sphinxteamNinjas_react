@@ -88,7 +88,7 @@ const CreateQuestionPage = () => {
           negativeMarkValue: response.question.negativeMarkValue,
           questionTypeId: response.question.questionTypeId,
           difficultyLevel: response.question.difficultyLevel
-
+          
         })
         setQuestionType(response.question.questionTypeId);
         setDifficultyLevel(response.question.difficultyLevel);
@@ -200,44 +200,6 @@ useEffect(() => {
       }
     }
   }
-
-  //handle save question
-  const handleSaveQuestion=async()=>{
-    if (id!== undefined) {
-      const response = await apiPut('/question/update-question', {...formData, questionId: id,topicId:topicId});
-      console.log(response);
-      if (response.errorMessage !== undefined) {
-        setError(response);
-        toast.error(`${response.errorMessage}`,{
-          position:"top-center"
-        })
-      } else if (response.successMessage!== undefined) {
-        setFormData({ ...formData, [e.target.name]: "" })
-        setError(response);
-        toast.success(`${response.message}`,{
-          position:"top-center"
-        })
-        changeShow();
-      }
-    } else {
-      const response = await apiPost('/question/create-question', formData);
-      console.log(response);
-      if (response.errorMessage !== undefined) {
-        setError(response);
-        toast.error(`${response.errorMessage}`,{
-          position:"top-center"
-        })
-      } else if (response.successMessage !== undefined) {
-        setFormData({ ...formData, [e.target.name]: "" })
-        setError(response);
-        toast.success(`${response.successMessage}`,{
-          position:"top-center"
-        })
-      }
-    }
-  }
-
-
 
   useEffect(()=>{
     console.log("topicName => ",topicName)
