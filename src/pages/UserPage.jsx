@@ -94,6 +94,7 @@ const deleteParty=()=>{
           onConfirm={deleteParty}
           onCancel={changeShow}
           showConfirmButton={true}
+          type="delete"
         >
           Are you sure to delete user?
         </Modal>
