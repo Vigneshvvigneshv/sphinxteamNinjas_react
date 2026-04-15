@@ -3,7 +3,7 @@ import Layout from '../component/Layout';
 import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Empty from '../component/Empty';
-import { useParams } from 'react-router-dom';
+import {  Navigate, useParams } from 'react-router-dom';
 import QuestionTable from '../component/QuestionTable';
 import { apiDelete, apiGet } from '../ApiServices/apiServices';
 import { PageNo, PaginationContainer, SelectAllContainer } from '../styles/question_style';
@@ -22,12 +22,17 @@ const QuestionPage = () => {
     topicName: "",
     topicId: "",
   });
+
+  
    const [selectedIds, setSelectedIds] = useState([]);
   const {id} = useParams();
      //pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [show,setShow]=useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteQuestion, setDeleteQuestion] = useState(null);
+
 
     const fetchData = async (page, customLimit = limit) => {
       if(page<1) return;
@@ -91,15 +96,21 @@ const handleSelectAll = (e) => {
 //handle Bulkdelete
 const handleBulkDelete = async () => {
   if (selectedIds.length === 0) {
+    console.log("selectedIds ",selectedIds )
      toast.error(`Please select the question to delete`,{position:'top-center',color:'red'})
     return;
   }
   setShow(true);
 };
 
-const cancelDelete = () => {
-  setShow(false);
+
+const cancelBulkDelete = () => {
+  setShow(false); 
 };
+
+const cancelDelete=()=>{
+  setShowDeleteModal(false);
+}
 //confirm Delete
 const confirmDelete = async () => {
   try {
@@ -110,14 +121,45 @@ const confirmDelete = async () => {
     toast.success("Deleted successfully", {
       position: "top-center",
     });
-
     setSelectedIds([]);
-    setShow(false); 
+    setShow(false);
     await fetchData(currentPage);
   } catch (error) {
     console.error(error);
   }
 };
+//singleDelete
+ const handleDelete=(q)=>{
+    console.log("delete",q) 
+    setDeleteQuestion(q);
+    setShowDeleteModal(true);
+  }
+
+//single Delete
+ const handleConfirmDelete = async () => {
+    try {
+      // const isToDelete=[data.questionId];
+
+      if(!deleteQuestion){
+        return;
+      }
+
+      console.log("Confirm Delete ",deleteQuestion.questionId)
+      const response = await apiDelete('/question/delete-question', { "questionIds": [deleteQuestion.questionId] });
+      console.log(response);
+      toast.success("Question deleted successfully", { position: "top-center" });
+
+      setShowDeleteModal(false);
+      setDeleteQuestion(null);
+
+      await fetchData(currentPage); 
+    } catch (error) {
+      console.error(error);  
+    }
+  }
+
+ 
+
   // console.log('Question Page', data);
 
   return (
@@ -151,15 +193,25 @@ const confirmDelete = async () => {
                         title="Confirm Bulk Delete" 
                         showConfirmButton={true} 
                         onConfirm={confirmDelete} 
-                        onCancel={cancelDelete}
+                        onCancel={cancelBulkDelete}
                       >
                         Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
                   </Modal>
                     )}
-        
+
+        {showDeleteModal && (
+        <Modal 
+          title="Confirm Delete" 
+          showConfirmButton={true} 
+          onConfirm={handleConfirmDelete} 
+          onCancel={cancelDelete}
+        >
+          Are you sure you want to delete this question? This action cannot be undone.
+        </Modal>
+      )}                    
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
-            ? data.questionList.map((e) => <QuestionTable data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
+            ? data.questionList.map((e) => <QuestionTable handleDelete={handleDelete} data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
                 change={SelectedQuestions}/>)
             : <Empty>No question available</Empty>
