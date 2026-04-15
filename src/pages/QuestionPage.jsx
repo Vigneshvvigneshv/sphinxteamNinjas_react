@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout';
-import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common_style';
+import { AddButton, Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, Content, DeleteButton } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Empty from '../component/Empty';
 import {  Navigate, useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { PageNo, PaginationContainer, SelectAllContainer } from '../styles/quest
 import { CheckBox } from '../styles/form_style';
 import { toast } from 'sonner';
 import Modal from '../component/Modal';
+import { FaPlus } from 'react-icons/fa';
 
 const QuestionPage = () => {
   const [data, setData] = useState({
@@ -181,10 +182,10 @@ const confirmDelete = async () => {
           <Content>Question type</Content>
           {console.log("Topic Name inside question page",data.topicId)}
           <ButtonContainer>
-            <NavButton to="/createquestion" state={{topicId: data.topicId, topicName: data.topicName}}>
-              Add question
-            </NavButton>
-            <NavButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Bulk Delete</NavButton>
+            <AddButton to="/createquestion" state={{topicId: data.topicId, topicName: data.topicName}}>
+              <FaPlus/>Add 
+            </AddButton>
+            <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Bulk Delete</DeleteButton>
             
           </ButtonContainer>
         </CommonHeader>
@@ -211,12 +212,14 @@ const confirmDelete = async () => {
         </Modal>
       )}                    
         <CommonSection>
+          <CommonTable>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
             ? data.questionList.map((e) => <QuestionTable handleDelete={handleSingleDelete} data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
                 change={SelectedQuestions}/>)
             : <Empty>No question available</Empty>
           }
+          </CommonTable>
         </CommonSection>
         {data.questionList.length > 0 && (
           <PaginationContainer >

@@ -8,7 +8,8 @@ import { NavButton } from '../styles/header_style';
 import { apiDelete } from '../ApiServices/apiServices';
 import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
-import { FaPen, FaTrash } from 'react-icons/fa';
+import { FaAngleDoubleDown, FaPen, FaTrash } from 'react-icons/fa';
+import { FaX } from 'react-icons/fa6';
 
 const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
   const [answer, setAnswer] = useState();
@@ -21,7 +22,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
 
   return (
   
-    <CommonTable>
+    <>
       <TableRow>
         <SelectAllContainer>
           <CheckBox type="checkbox"
@@ -31,7 +32,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
                     </SelectAllContainer>
         <Content>{data.questionTypeId}</Content>
         <ButtonContainer>
-          <Button onClick={showAnswer}> Answers</Button>
+          <Button onClick={showAnswer}><FaAngleDoubleDown/> Answers</Button>
           
           <EditButton
             to={`/createquestion/${data.questionId}`}
@@ -48,7 +49,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
         <AnswerContainer>
           <AnswerHeader>
             <Content>Answer</Content>
-            <Button onClick={() => { setAnswer('') }}>Hide</Button>
+            <Button onClick={() => { setAnswer('') }}>Hide<FaX/></Button>
           </AnswerHeader>
           <AnswerOption>
             {data.optionA && <Option>Option A — {data.optionA}</Option>}
@@ -59,9 +60,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
           <Answer>Answer: option - {data.answer}</Answer>
         </AnswerContainer>
       )}
-   
-    </CommonTable>
-    
+  </>
   
   )
 }

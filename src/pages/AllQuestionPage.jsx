@@ -159,8 +159,7 @@ const handleSelectAll = (e) => {
   return (
     <Layout>
           <ButtonContainer>
-              
-            <AddButton
+            <AddButton style={{fontSize:"16px"}}
               to="/createquestion"
               state={{ topicId: data.topicId, topicName: data.topicName }}
             >

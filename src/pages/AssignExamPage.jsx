@@ -8,6 +8,7 @@ import {
   CommonHeader,
   CommonHeading,
   CommonSection,
+  CommonTable,
   Content,
   Dropdown,
   TableHeading,
@@ -135,6 +136,7 @@ const AssignExamPage = () => {
           <CommonHeading>Unassigned users</CommonHeading>
           <AssignButton onClick={assignUser} disabled={(rows?.length<=0) } >Assign</AssignButton>
           </CommonHeader>
+          <CommonTable>
           {unassignedUser?.unassignedUsers !== undefined &&
           unassignedUser?.unassignedUsers?.length <= 0 ? (
             <Empty>No user Available</Empty>
@@ -147,6 +149,7 @@ const AssignExamPage = () => {
               ></UserUnassignedTable>
             ))
           )}
+          </CommonTable>
             </CommonSection>
       </CommonContainer>
        {showDelete && <Modal
