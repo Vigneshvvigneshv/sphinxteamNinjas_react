@@ -30,17 +30,19 @@ const TopicPage = () => {
         <CommonHeader>
           <CommonHeading>Topics</CommonHeading>
           <ButtonContainer>
-            <NavButton to='/uploadfile'>Upload File</NavButton>
             <AddButton to="/addtopic"><FaPlus/>Add</AddButton>
           </ButtonContainer>
         </CommonHeader>
 
         <CommonSection>
+          <CommonTable>
+            
           {message && <SuccessMessage>{message}</SuccessMessage>}
           {(data.responseMessage === 'success')
             ? data.topicList.map((e) => <Table data={e} key={e.topicId} />)
             : <Empty>No topic available</Empty>
           }
+          </CommonTable>
         </CommonSection>
       </CommonContainer>
     </Layout>

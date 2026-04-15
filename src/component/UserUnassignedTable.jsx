@@ -30,8 +30,8 @@ const UserUnassignedTable = ({ data, onCheck }) => {
     }
 
   return (
-    <>
-      <CommonTable>
+  
+     
         <TableRow>
           <Content>{data.userLoginId}</Content>
           <Outer>
@@ -60,8 +60,7 @@ const UserUnassignedTable = ({ data, onCheck }) => {
           </Outer> 
           <input type="checkbox" checked={isChecked} onChange={handleCheck} />
         </TableRow>
-      </CommonTable>
-    </>
+      
   );
 };
 

@@ -9,6 +9,7 @@ import {
   CommonHeader,
   CommonHeading,
   CommonSection,
+  CommonTable,
   Content,
   DeleteButton,
   Dropdown,
@@ -172,6 +173,7 @@ const changeShowEdit=(partyExamData)=>{
           <CommonHeading>Unassigned users</CommonHeading>
           <AssignButton onClick={assignUser} disabled={(rows?.length<=0) } >Assign</AssignButton>
           </CommonHeader>
+          <CommonTable>
           {unassignedUser?.unassignedUsers !== undefined &&
           unassignedUser?.unassignedUsers?.length <= 0 ? (
             <Empty>No user Available</Empty>
@@ -184,6 +186,7 @@ const changeShowEdit=(partyExamData)=>{
               ></UserUnassignedTable>
             ))
           )}
+          </CommonTable>
             </CommonSection>
       </CommonContainer>
        {showDelete && <Modal

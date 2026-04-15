@@ -9,6 +9,7 @@ import {
   CommonSection,
   Content,
   DeleteButton,
+  Navlink,
 } from "../styles/common_style";
 import { NavButton } from "../styles/header_style";
 import Empty from "../component/Empty";
@@ -19,7 +20,7 @@ import { toast } from "sonner";
 import { CheckBox } from "../styles/form_style";
 import { PageNo, PaginationContainer, SelectAllContainer } from "../styles/question_style";
 import Modal from "../component/Modal";
-import { FaAd, FaPlus, FaTrash } from "react-icons/fa";
+import { FaAd, FaFile, FaPlus, FaTrash } from "react-icons/fa";
 
 const AllQuestionPage = () => {
   const [data, setData] = useState({
@@ -99,15 +100,18 @@ const handleSingleDelete = (questionId) => {
   setShowDeleteModal(true);
 };
 
-const cancelDeleteQuestion = () => {
+const cancelSingleDelete = () => {
   setShowDeleteModal(false);
 };
 
 //Single deleteQuestion
 const handleSingleDeleteQuestion = async () => {
+  if(!deleteQuestion){
+    return;
+  }
   try {
     await apiDelete("/question/delete-question", {
-      questionIds: [deleteQuestion],
+      questionIds: [deleteQuestion.questionId],
     });
 
     toast.success("Deleted successfully", {
@@ -158,17 +162,6 @@ const handleSelectAll = (e) => {
 
   return (
     <Layout>
-          <ButtonContainer>
-              
-            <AddButton
-              to="/createquestion"
-              state={{ topicId: data.topicId, topicName: data.topicName }}
-            >
-              <FaPlus></FaPlus>Add
-            </AddButton>
-           <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Delete all</DeleteButton>
-
-          </ButtonContainer>
       <CommonContainer>
         <CommonHeader>
           <SelectAllContainer>
@@ -186,7 +179,18 @@ const handleSelectAll = (e) => {
           </SelectAllContainer>
           <Content>Topic</Content>
           <Content>QuestionType</Content>
-          <Content></Content>
+         
+          <ButtonContainer>
+            <Navlink to='/uploadfile'><FaFile/> Upload File</Navlink>
+            <AddButton
+              to="/createquestion"
+              state={{ topicId: data.topicId, topicName: data.topicName }}
+            >
+              <FaPlus></FaPlus>Add
+            </AddButton>
+           <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Delete all</DeleteButton>
+
+          </ButtonContainer>
         </CommonHeader>
         <CommonSection>
           {/* {console.log("Data", data.questionList)}
@@ -196,7 +200,7 @@ const handleSelectAll = (e) => {
           data.questionList.length > 0 ? (
             data.questionList.map((e) => (
               <AllQuestionsTable
-
+                handleSingleDelete={handleSingleDelete}
                 data={e}
                 name={e.topicName}
                 key={e.questionId}
@@ -253,12 +257,25 @@ const handleSelectAll = (e) => {
       </CommonContainer>
       {show && (
         <Modal 
+          type="delete"
           title="Confirm Bulk Delete" 
           showConfirmButton={true} 
           onConfirm={confirmDelete} 
           onCancel={cancelDelete}
         >
           Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
+        </Modal>
+      )}
+
+      {showDeleteModal && (
+        <Modal 
+          type="delete"
+          title="Confirm Delete" 
+          showConfirmButton={true} 
+          onConfirm={handleSingleDeleteQuestion} 
+          onCancel={cancelSingleDelete}
+        >
+          Are you sure you want to delete this question? This action cannot be undone.
         </Modal>
       )}
     </Layout>
