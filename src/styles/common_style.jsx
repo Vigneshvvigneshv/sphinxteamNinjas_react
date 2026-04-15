@@ -85,14 +85,12 @@ export const Button = styled.button`
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 9px 12px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background:${({theme})=>theme.buttonBg};
-  color: ${({theme})=>theme.colors.surface};
-  font-size: 14px;
-  font-weight: 600;
+  color: ${({theme})=>theme.colors.textPrimary};
+  font-size: 12px;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;

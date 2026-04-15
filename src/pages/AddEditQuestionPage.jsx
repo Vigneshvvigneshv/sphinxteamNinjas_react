@@ -269,7 +269,7 @@ useEffect(() => {
                 </FieldContainer>
 
                 <OptionsWrapper>
-                  <FormLabel>Options Configuration</FormLabel>
+                  <FormLabel>Options</FormLabel>
                   <OptionsSection>
                     {questionType === 'SINGLE_CHOICE' && <SingleChoice change={handleChange} error={error} data={formData} />}
                     {questionType === 'MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData} />}
@@ -341,7 +341,7 @@ useEffect(() => {
         </FormMainContainer>
 
         <CommonContainer>
-          <NavButton to={`/question/${topicId}`} state={{topicId: topicId}}>Back to Questions Overview</NavButton>
+          <NavButton to={`/question/${topicId}`} state={{topicId: topicId}}>Back to Question page</NavButton>
         </CommonContainer>
         
       </QuestionContainer>

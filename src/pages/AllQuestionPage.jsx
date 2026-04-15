@@ -153,7 +153,7 @@ const handleSelectAll = (e) => {
           </SelectAllContainer>
           <Content>Topic</Content>
           <Content>QuestionType</Content>
-          <Content>Action</Content>
+          <Content></Content>
         </CommonHeader>
         <CommonSection>
           {/* {console.log("Data", data.questionList)}
