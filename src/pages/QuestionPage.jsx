@@ -25,7 +25,9 @@ const QuestionPage = () => {
 
   
    const [selectedIds, setSelectedIds] = useState([]);
+  //topicId
   const {id} = useParams();
+  console.log("ID ",id);
      //pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
@@ -33,7 +35,7 @@ const QuestionPage = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteQuestion, setDeleteQuestion] = useState(null);
 
-
+    //FetchQuestions by topic
     const fetchData = async (page, customLimit = limit) => {
       if(page<1) return;
       try {
@@ -56,12 +58,14 @@ const QuestionPage = () => {
       }
     }
  
+    
+    //fetch data on page load 
     useEffect(() => {
         if (limit) fetchData(1, limit);
     }, [id, limit]);
 
 
-
+    //select multiple questions
    const SelectedQuestions = (e,questionId) => {
     {console.log("e , ",e)}
     const { checked } = e.target;
@@ -76,6 +80,7 @@ const QuestionPage = () => {
 };
 
 
+//select all questions
 const handleSelectAll = (e) => {
   const { checked } = e.target;
 
@@ -111,7 +116,7 @@ const cancelBulkDelete = () => {
 const cancelDelete=()=>{
   setShowDeleteModal(false);
 }
-//confirm Delete
+//confirm Delete for bulk delete
 const confirmDelete = async () => {
   try {
     await apiDelete("/question/delete-question", {
@@ -128,18 +133,17 @@ const confirmDelete = async () => {
     console.error(error);
   }
 };
+
 //singleDelete
- const handleDelete=(q)=>{
+ const handleSingleDelete=(q)=>{
     console.log("delete",q) 
     setDeleteQuestion(q);
     setShowDeleteModal(true);
   }
 
 //single Delete
- const handleConfirmDelete = async () => {
+ const handleSingleDeleteQuestion = async () => {
     try {
-      // const isToDelete=[data.questionId];
-
       if(!deleteQuestion){
         return;
       }
@@ -158,9 +162,6 @@ const confirmDelete = async () => {
     }
   }
 
- 
-
-  // console.log('Question Page', data);
 
   return (
     <Layout>
@@ -203,7 +204,7 @@ const confirmDelete = async () => {
         <Modal 
           title="Confirm Delete" 
           showConfirmButton={true} 
-          onConfirm={handleConfirmDelete} 
+          onConfirm={handleSingleDeleteQuestion} 
           onCancel={cancelDelete}
         >
           Are you sure you want to delete this question? This action cannot be undone.
@@ -211,7 +212,7 @@ const confirmDelete = async () => {
       )}                    
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
-            ? data.questionList.map((e) => <QuestionTable handleDelete={handleDelete} data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
+            ? data.questionList.map((e) => <QuestionTable handleDelete={handleSingleDelete} data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
                 change={SelectedQuestions}/>)
             : <Empty>No question available</Empty>

@@ -25,15 +25,17 @@ const AllQuestionPage = () => {
     totalPages: 1,
     hasNext: false,
     hasPrevious: false,
-    responseMessage: "",
-    
+    responseMessage: "",  
   });
   const [selectedIds, setSelectedIds] = useState([]);
     //pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
-  const [show,setShow]=useState(false);
-
+    const [show,setShow]=useState(false);
+    const [deleteQuestion, setDeleteQuestion] = useState(null);
+    const[showDeleteModal,setShowDeleteModal]=useState(false);
+  
+    //fetch all questions
     const fetchData = async (page, customLimit = limit) => {
        if (page < 1) return;  
       console.log("Fetching page:", page);
@@ -58,7 +60,7 @@ useEffect(() => {
   }, [limit]);
 
 
-
+//bulk delete
 const handleBulkDelete = async () => {
   if (selectedIds.length === 0) {
      toast.warning(`Please select the question to delete`,{position:'top-center'})
@@ -83,6 +85,35 @@ const confirmDelete = async () => {
 
     setSelectedIds([]);
     setShow(false); 
+    await fetchData(currentPage);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+//Single Delete
+const handleSingleDelete = (questionId) => {
+  setDeleteQuestion(questionId);
+  setShowDeleteModal(true);
+};
+
+const cancelDeleteQuestion = () => {
+  setShowDeleteModal(false);
+};
+
+//Single deleteQuestion
+const handleSingleDeleteQuestion = async () => {
+  try {
+    await apiDelete("/question/delete-question", {
+      questionIds: [deleteQuestion],
+    });
+
+    toast.success("Deleted successfully", {
+      position: "top-center",
+    });
+
+    setSelectedIds([]);
+    setShowDeleteModal(false); 
     await fetchData(currentPage);
   } catch (error) {
     console.error(error);
@@ -120,6 +151,9 @@ const handleSelectAll = (e) => {
     );
   }
 };
+
+
+
   return (
     <Layout>
       <CommonContainer>
@@ -169,6 +203,7 @@ const handleSelectAll = (e) => {
           data.questionList.length > 0 ? (
             data.questionList.map((e) => (
               <AllQuestionsTable
+
                 data={e}
                 name={e.topicName}
                 key={e.questionId}
