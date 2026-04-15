@@ -264,14 +264,12 @@ display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 5px 9px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background: ${({theme})=>theme.addButtonBg};
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
+  color: green;
+  font-size: 12px;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
@@ -279,22 +277,22 @@ display: inline-flex;
     opacity: 0.85;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+    background: ${({theme})=>theme.addButtonBg};
+    color:#fff;
   }
 `;
 
 export const EditButton=styled(NavLink)`
-display: inline-flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 5px 9px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background: ${({theme})=>theme.editButtonBg};
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
+  color: blue;
+  font-size: 12px;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
@@ -302,28 +300,27 @@ display: inline-flex;
     opacity: 0.85;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+    background: ${({theme})=>theme.editButtonBg};
+    color:#fff;
   }
 `;
 export const DeleteButton=styled(NavLink)`
-display: inline-flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 5px 9px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background: ${({theme})=>theme.deleteButtonBg};
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
+  color:${({theme})=>theme.colors.error};
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
   &:hover  {
     opacity: 0.85;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+    background: ${({theme})=>theme.deleteButtonBg};
+    color: #fff;
   }
 `;
 
@@ -381,20 +378,20 @@ export const Navlink=styled(NavLink)`
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 9px 12px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background:${({theme})=>theme.buttonBg};
-  color: ${({theme})=>theme.colors.surface};
-  font-size: 14px;
-  font-weight: 600;
+  color:${({theme})=>theme.colors.textSecondary};
+  font-size: 12px;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
   &:hover  {
     opacity: 0.85;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+    background:${({theme})=>theme.colors.textPrimary};
+    color: ${({theme})=>theme.colors.surface};
   }
 `;
+

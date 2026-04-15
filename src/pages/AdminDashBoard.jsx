@@ -39,8 +39,8 @@ const AdminDashBoard = () => {
     <Layout> 
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>Available Exams</CommonHeading>
-          <AddButton to="/addexam"><FaPlus/></AddButton>
+          <CommonHeading>Available Assessment</CommonHeading>
+          <AddButton to="/addexam"><FaPlus/>Add</AddButton>
         </CommonHeader>
         
         <CommonSection>
