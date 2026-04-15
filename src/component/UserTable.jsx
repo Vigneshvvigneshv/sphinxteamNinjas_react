@@ -22,18 +22,18 @@ const UserTable = ({data,onDelete}) => {
 
 
   return (
-      
+      <>
             <TableRow>
                 <Content>{data.userLoginId}</Content>
                 <ButtonContainer>
                     <Button onClick={()=>{setShow(!show);show?"":getExams()}}> {show?<FaX/>:<FaAngleDoubleDown/>} {show?"Hide":"View exam"}</Button>
                     <DeleteButton onClick={()=>onDelete(data.partyId)}><FaTrash></FaTrash></DeleteButton>
                 </ButtonContainer>
-            
-                {show && <ExamContainer>
-                    {(ExamResponse?.examList===undefined||ExamResponse?.examList?.length<=0)?<ExamContent>No exam assigned -</ExamContent>:ExamResponse?.examList?.map((data,index)=><ExamCard data={data} key={index}></ExamCard>)}
-                    </ExamContainer>}
             </TableRow>
+                {show && <ExamContainer>
+                    {(ExamResponse?.examList===undefined||ExamResponse?.examList?.length<=0)?<ExamContent>No exam assigned </ExamContent>:ExamResponse?.examList?.map((data,index)=><ExamCard data={data} key={index}></ExamCard>)}
+                    </ExamContainer>}
+            </>
 
   )
 };
