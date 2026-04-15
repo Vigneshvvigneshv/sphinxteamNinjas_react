@@ -8,7 +8,7 @@ import { apiDelete } from '../ApiServices/apiServices';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { toast } from 'sonner';
 
-const AllQuestionsTable = ({ data, name, change, selectedIds = [], setSelectedIds }) => {
+const AllQuestionsTable = ({handleSingleDelete, data, name, change, selectedIds = [], setSelectedIds }) => {
 
 const [answer, setAnswer] = useState();
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const [answer, setAnswer] = useState();
               >
                 <FaPen/>
               </EditButton>
-              <DeleteButton onClick={() => { handleSubmit() }} ><FaTrash/></DeleteButton>
+              <DeleteButton onClick={() => { handleSingleDelete(data) }} ><FaTrash/></DeleteButton>
             </ButtonContainer>
           </TableRow>
 

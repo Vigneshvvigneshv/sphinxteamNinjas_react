@@ -27,13 +27,16 @@ import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 import { NavButton } from '../styles/header_style';
 import TrueOrFalse from '../component/TrueOrFalse';
 import Modal from '../component/Modal';
+import { toast } from 'sonner';
 
 const CreateQuestionPage = () => {
+  //questionId
   const {id} = useParams();
-  
+  console.log("Id ",id);
   const navigate=useNavigate();
   const location = useLocation();
   const topicId = location.state?.topicId;
+  console.log("TopicId ",topicId)
   const topicName = location.state?.topicName;
   console.log('create question page topic id', topicId);
   console.log('create question page topic Name', topicName)
@@ -43,7 +46,7 @@ const CreateQuestionPage = () => {
   const [difficultyLevel, setDifficultyLevel] = useState('1');
   const [show, setShow] = useState(false);
   const[topic,setTopic]=useState([]);
- 
+  
 
   const changeShow = () => {
     setShow(!show);
@@ -85,7 +88,7 @@ const CreateQuestionPage = () => {
           negativeMarkValue: response.question.negativeMarkValue,
           questionTypeId: response.question.questionTypeId,
           difficultyLevel: response.question.difficultyLevel
-
+          
         })
         setQuestionType(response.question.questionTypeId);
         setDifficultyLevel(response.question.difficultyLevel);
@@ -113,7 +116,6 @@ const CreateQuestionPage = () => {
 
  const handleChange = (e) => {
   const { name, value,checked } = e.target;
-
   if (name === "answer" && questionType === "MULTI_CHOICE") {
     setFormData((prev) => {
       let updatedAnswers = Array.isArray(prev.answer) ? [...prev.answer] : [];
@@ -150,8 +152,12 @@ useEffect(() => {
     ...prev,
     answer: questionType === "MULTI_CHOICE" ? [] : "",
     questionTypeId: questionType
+
   }));
 }, [questionType]);
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateQuestion(formData);
@@ -161,14 +167,20 @@ useEffect(() => {
 
     // console.log("formData => ", formData);
     // return;
-    if (id !== undefined) {
-      const response = await apiPut('/question/update-question', {...formData, questionId: id});
+    if (id!== undefined) {
+      const response = await apiPut('/question/update-question', {...formData, questionId: id,topicId:topicId});
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);
+        toast.error(`${response.errorMessage}`,{
+          position:"top-center"
+        })
       } else if (response.successMessage!== undefined) {
         setFormData({ ...formData, [e.target.name]: "" })
         setError(response);
+        toast.success(`${response.message}`,{
+          position:"top-center"
+        })
         changeShow();
       }
     } else {
@@ -176,10 +188,15 @@ useEffect(() => {
       console.log(response);
       if (response.errorMessage !== undefined) {
         setError(response);
+        toast.error(`${response.errorMessage}`,{
+          position:"top-center"
+        })
       } else if (response.successMessage !== undefined) {
         setFormData({ ...formData, [e.target.name]: "" })
         setError(response);
-        // changeShow(); 
+        toast.success(`${response.successMessage}`,{
+          position:"top-center"
+        })
       }
     }
   }
@@ -329,11 +346,11 @@ useEffect(() => {
                   </ScoringRow>
                 </div>
 
-                {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>}
+                {/* {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
+                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>} */}
                 
                 <ActionBottomWrapper>
-                  <ActionButton>{id !== undefined ? 'Save Changes' : 'Add Question'}</ActionButton>
+                  <ActionButton type="submit" >{id !== undefined ? 'Save Changes' : 'Add Question'}</ActionButton>
                 </ActionBottomWrapper>
               </ScoringSidebar>
             </QuestionUpperContainer>

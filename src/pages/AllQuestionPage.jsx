@@ -99,15 +99,18 @@ const handleSingleDelete = (questionId) => {
   setShowDeleteModal(true);
 };
 
-const cancelDeleteQuestion = () => {
+const cancelSingleDelete = () => {
   setShowDeleteModal(false);
 };
 
 //Single deleteQuestion
 const handleSingleDeleteQuestion = async () => {
+  if(!deleteQuestion){
+    return;
+  }
   try {
     await apiDelete("/question/delete-question", {
-      questionIds: [deleteQuestion],
+      questionIds: [deleteQuestion.questionId],
     });
 
     toast.success("Deleted successfully", {
@@ -195,7 +198,7 @@ const handleSelectAll = (e) => {
           data.questionList.length > 0 ? (
             data.questionList.map((e) => (
               <AllQuestionsTable
-
+                handleSingleDelete={handleSingleDelete}
                 data={e}
                 name={e.topicName}
                 key={e.questionId}
@@ -252,12 +255,25 @@ const handleSelectAll = (e) => {
       </CommonContainer>
       {show && (
         <Modal 
+          type="delete"
           title="Confirm Bulk Delete" 
           showConfirmButton={true} 
           onConfirm={confirmDelete} 
           onCancel={cancelDelete}
         >
           Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
+        </Modal>
+      )}
+
+      {showDeleteModal && (
+        <Modal 
+          type="delete"
+          title="Confirm Delete" 
+          showConfirmButton={true} 
+          onConfirm={handleSingleDeleteQuestion} 
+          onCancel={cancelSingleDelete}
+        >
+          Are you sure you want to delete this question? This action cannot be undone.
         </Modal>
       )}
     </Layout>
