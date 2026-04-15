@@ -41,7 +41,7 @@ export const Title = styled.h2`
 export const CommonHeading = styled.h3`
   font-size: 16px;
   font-weight: 600;
- 
+  width:220px;
   color: ${({theme})=>theme.colors.textPrimary};
   margin: 0;
 `;
@@ -85,14 +85,12 @@ export const Button = styled.button`
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
-  padding: 10px 20px;
+  padding: 9px 12px;
   border: none;
   border-radius: ${({theme})=>theme.radius};
-  background:${({theme})=>theme.buttonBg};
-  color: ${({theme})=>theme.colors.surface};
-  font-size: 14px;
-  font-weight: 600;
+  color: ${({theme})=>theme.colors.textPrimary};
+  font-size: 12px;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
@@ -104,6 +102,30 @@ export const Button = styled.button`
   &:active { transform: translateY(0); opacity: 1; box-shadow: none; }
   &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 `;
+export const AssignButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: ${({theme})=>theme.radius};
+  background:${({theme})=>theme.colors.headerBackground};
+  color: ${({theme})=>theme.colors.surface};
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  &:hover  {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+  }
+  &:active { transform: translateY(0); opacity: 1; box-shadow: none; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+`;
+
 
 export const Container = styled.div`
   display: flex;

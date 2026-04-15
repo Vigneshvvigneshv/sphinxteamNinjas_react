@@ -1,7 +1,7 @@
 import { HeaderButton, HeaderContainer, HeaderLogo, HeaderLogoIcon, HeaderAppName, HeaderNav, NavButton } from '../styles/header_style'
 import { useDispatch, useSelector } from 'react-redux'
 import { userAction } from '../store/userSlice';
-import { FaKey } from "react-icons/fa";
+import { FaKey, FaUserPlus } from "react-icons/fa";
 
 const Header = () => {
   const { user, role } = useSelector((state) => state.userReducer);
@@ -19,7 +19,7 @@ const Header = () => {
       </HeaderLogo>
       {user.length!==0 &&
       <HeaderNav>
-        <HeaderButton to="/adduser">Add user / admin</HeaderButton>
+        <HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
         <HeaderButton to="/questionList">Questions</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>

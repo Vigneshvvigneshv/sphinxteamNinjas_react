@@ -9,8 +9,6 @@ import { apiDelete } from '../ApiServices/apiServices';
 import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
 import { FaPen, FaTrash } from 'react-icons/fa';
-import Modal from './Modal';
-import { toast } from 'sonner';
 
 const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
   const [answer, setAnswer] = useState();
@@ -33,7 +31,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
                     </SelectAllContainer>
         <Content>{data.questionTypeId}</Content>
         <ButtonContainer>
-          <Button onClick={showAnswer}>Answers</Button>
+          <Button onClick={showAnswer}> Answers</Button>
           
           <EditButton
             to={`/createquestion/${data.questionId}`}
@@ -58,7 +56,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
             {data.optionC && <Option>Option C — {data.optionC}</Option>}
             {data.optionD && <Option>Option D — {data.optionD}</Option>}
           </AnswerOption>
-          <Answer>Answer: option — {data.answer}</Answer>
+          <Answer>Answer: option - {data.answer}</Answer>
         </AnswerContainer>
       )}
    

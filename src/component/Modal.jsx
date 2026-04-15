@@ -1,28 +1,38 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Backdrop, ModalContainer, ModalIconWrap, ModalTitle, Message, ModalButtons, ModalGhostBtn, ModalPrimaryBtn } from '../styles/modal_style'
-import { createGlobalStyle } from 'styled-components'
+import { TiTick } from 'react-icons/ti';
+import { FaTrash } from 'react-icons/fa';
 
-const ScrollLock = createGlobalStyle`
-  body {
-    overflow: hidden !important;
-  }
-`;
 
-const Modal = ({ children, title = "Success", onConfirm, onCancel, showConfirmButton = false }) => {
+
+
+const Modal = ({ children, title,type, onConfirm, onCancel, showConfirmButton = false }) => {
   const navigate = useNavigate();
 
   const handleCancel = () => {
     if (onCancel) return onCancel();
     navigate(-1);
   };
+  const icon=()=>{
+    if(type==="success"){
+      return <TiTick/>
+    }else if(type==="delete"){
+      return <FaTrash/>
+    }else if(type==="edit"){
+      return <FaPen/>
+    }else{
+      return <TiTick/>
+    }
+  }
+  
 
   return (
     <>
-      <ScrollLock />
+      
       <Backdrop>
         <ModalContainer>
-          <ModalIconWrap></ModalIconWrap>
+          <ModalIconWrap>{icon()}</ModalIconWrap>
           <ModalTitle>{title}</ModalTitle>
           <Message>{children}</Message>
           <ModalButtons>

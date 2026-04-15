@@ -95,8 +95,8 @@ const AddExam = () => {
     <Layout>
       <CommonContainer>
         <FormContainer>
-          <FormHeading>{id === undefined ? 'Add Exam' : 'Edit Exam'}</FormHeading>
-          <FormSubtitle>Fill in the details below to {id === undefined ? 'create a new' : 'update the'} exam</FormSubtitle>
+          <FormHeading>{id === undefined ? 'Add Assessment' : 'Edit Assessment'}</FormHeading>
+          <FormSubtitle>Fill in the details below to {id === undefined ? 'create a new' : 'update the'} assessment</FormSubtitle>
           <Form onSubmit={handleSubmit}>
             <FieldContainer>
               <FormLabel>Exam name</FormLabel>

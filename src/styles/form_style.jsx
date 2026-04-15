@@ -146,7 +146,7 @@ export const SubmitButton = styled.button`
   padding: 13px;
   border: none;
   border-radius: ${({ theme }) => theme.radius};
-  background: ${({ $t }) => $t?.buttonBg ?? "linear-gradient(135deg,#3A3A3A,#0D0D0D)"};
+  background:${({ theme }) => theme.colors.headerBackground};
   color: #fff;
   font-size: 15px;
   font-weight: 700;

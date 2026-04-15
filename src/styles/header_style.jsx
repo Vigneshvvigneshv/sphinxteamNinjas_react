@@ -51,7 +51,10 @@ export const HeaderNav = styled.nav`
 `;
 
 export const HeaderButton = styled(NavLink)`
+  display: inline-flex;
   text-decoration: none;
+  align-items: center;
+  gap:6px;
   padding: 7px 14px;
   border-radius: 7px;
   color: rgba(255, 255, 255, 0.62);

@@ -97,7 +97,7 @@ const LoginPage = () => {
               </PasswordEye>
             ) : ""}
           </FieldContainer>
-          <Button type='submit'>Login</Button>
+          <SubmitButton type='submit'>Login</SubmitButton>
         </Form>
         </FormContainer>
       </CommonContainer> 

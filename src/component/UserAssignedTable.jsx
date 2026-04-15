@@ -6,9 +6,9 @@ import BackDrop from "./BackDrop";
 import { FileInput } from "../styles/form_style";
 import Modal from "../component/Modal";
 
-const UserAssignedTable = ({data,onDelete,onUpdate}) => {
+const UserAssignedTable = ({data,onDelete,onUpdate,changeShow}) => {
   const [showEdit,setShowEdit]=useState(false);
-  const [showDelete,setShowDelete]=useState(false);
+  // const [showDelete,setShowDelete]=useState(false);
   const [userObj,setUserObj]=useState({
     partyId:data.partyId,
     allowedAttempts:data.allowedAttempts,
@@ -20,13 +20,8 @@ const UserAssignedTable = ({data,onDelete,onUpdate}) => {
     setUserObj(newObj);
   } 
 
-  const deleteUser=()=>{
-    onDelete(data.partyId)
-  }
 
-  const changeShow=()=>{
-    setShowDelete(!showDelete)
-  }
+  
 
   return (
     <>
@@ -37,7 +32,7 @@ const UserAssignedTable = ({data,onDelete,onUpdate}) => {
             <ExamHeader>Timeout Days:<Content>{data.timeoutDays}</Content></ExamHeader>
             <ButtonContainer>
             <Button onClick={()=>{setShowEdit(!showEdit)}}><FaPen/></Button>
-            <DeleteButton onClick={()=>setShowDelete(!showDelete)}><FaX/></DeleteButton>
+            <DeleteButton onClick={()=>changeShow(data.partyId)}><FaX/></DeleteButton>
             </ButtonContainer>
         </TableRow>
         </CommonTable>
@@ -52,14 +47,7 @@ const UserAssignedTable = ({data,onDelete,onUpdate}) => {
             </ButtonContainer>
           </BackDrop>
         }
-        {showDelete && <Modal
-        title="Delete user" 
-        onConfirm={deleteUser}
-        onCancle={changeShow}
-        showConfirmButton={true}>
-          Are you sure you want to delete?
-        </Modal>
-        }      
+      
     </>
   );
 };
