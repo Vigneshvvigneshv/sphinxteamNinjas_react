@@ -26,9 +26,11 @@ const ExamTable = ({ data }) => {
 
   return (
     
-    <CommonTable>
+    
       <TableRow>
         <Content>{data.examName}</Content>
+        <Content>{data.duration}</Content>
+        <Content>{data.noOfQuestions}</Content>
         <ButtonContainer>
           <Navlink to={`/assignexam/${data.examId}`}><FaUser/>Assign</Navlink>
           <Navlink to={`/getexamtopic/${data.examId}`}><FaArrowUpRightFromSquare />  Topics</Navlink>
@@ -37,7 +39,7 @@ const ExamTable = ({ data }) => {
         </ButtonContainer>
         {show && <Modal>{response.successMessage}</Modal>}
       </TableRow>
-    </CommonTable>
+    
     
   )
 }

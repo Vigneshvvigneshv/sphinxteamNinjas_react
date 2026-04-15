@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { NavButton } from '../styles/header_style'
-import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection } from '../styles/common_style'
+import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, Content } from '../styles/common_style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
 import { apiGet, apiPost } from '../ApiServices/apiServices'
@@ -40,15 +40,20 @@ const AdminDashBoard = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>Available Assessment</CommonHeading>
+          <Content>Duration</Content>
+          <Content>No of Questions</Content>
           <AddButton to="/addexam"><FaPlus/>Add</AddButton>
         </CommonHeader>
         
         <CommonSection>
+          <CommonTable>
+
           {message && <SuccessMessage>{message}</SuccessMessage>}
           {(data.responseMessage === 'success') && (data.examList.length > 0)
             ? data.examList.map((e) => <ExamTable data={e} key={e.examId} />)
             : <Empty>No exam available</Empty>
           }
+          </CommonTable>
         </CommonSection>
       </CommonContainer>
     </Layout>
