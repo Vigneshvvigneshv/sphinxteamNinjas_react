@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
 import {
   AddButton,
+  AssignButton,
   Button,
   CommonContainer,
   CommonHeader,
@@ -20,6 +21,8 @@ import UserAssignedTable from "../component/UserAssignedTable";
 import UserUnassignedTable from "../component/UserUnassignedTable";
 import { toast } from "sonner";
 import { style } from "framer-motion/client";
+import Empty from "../component/Empty";
+import Modal from "../component/Modal";
 
 const AssignExamPage = () => {
 
@@ -27,7 +30,19 @@ const AssignExamPage = () => {
   const { id } = useParams();
   const [data, setData] = useState();
   const [unassignedUser, setUnassignedUser] = useState();
+  const [showDelete,setShowDelete]=useState(false);
   const [rows, setRows] = useState([]);
+  const [partyId, setPartyId] = useState();
+  
+  const changeShow=(partyId)=>{
+    setShowDelete(!showDelete);
+    setPartyId(partyId);
+  }
+  const onDelete=()=>{
+    deleteUser(partyId)
+    setShowDelete(!showDelete);
+  }
+ 
   const addUser = (state, object) => {
     setRows((prevRows) => {
       if (state) {
@@ -99,26 +114,30 @@ const AssignExamPage = () => {
     <Layout>
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>Assign</CommonHeading>
+          <CommonHeading>Assigned users</CommonHeading>
         </CommonHeader>
         <CommonSection>
           {/* Assign exam form — placeholder for future implementation */}
 
-          <CommonHeading>Assigned Users</CommonHeading>
           {data?.assignedUsers !== undefined &&
           data?.assignedUsers?.length <= 0 ? (
-            <Content>No user assigned</Content>
+            <Empty>No user assigned</Empty>
           ) : (
             data?.assignedUsers?.map((data) => (
-              <UserAssignedTable data={data} key={data.partyId} onDelete={deleteUser} onUpdate={updateExam}></UserAssignedTable>
+              <UserAssignedTable data={data} key={data.partyId}  changeShow={changeShow} onDelete={deleteUser} onUpdate={updateExam}></UserAssignedTable>
             ))
           )}
+          </CommonSection>
+          <CommonSection>
+            
+          <CommonHeader>
 
-          <CommonHeading>Unassigned Users</CommonHeading>
-          <Button onClick={assignUser} disabled={(rows?.length<=0) } style={{marginBottom :"20px"} } >Assign</Button>
+          <CommonHeading>Unassigned users</CommonHeading>
+          <AssignButton onClick={assignUser} disabled={(rows?.length<=0) } >Assign</AssignButton>
+          </CommonHeader>
           {unassignedUser?.unassignedUsers !== undefined &&
           unassignedUser?.unassignedUsers?.length <= 0 ? (
-            <Content>No user Available</Content>
+            <Empty>No user Available</Empty>
           ) : (
             unassignedUser?.unassignedUsers?.map((data) => (
               <UserUnassignedTable
@@ -128,8 +147,16 @@ const AssignExamPage = () => {
               ></UserUnassignedTable>
             ))
           )}
-        </CommonSection>
+            </CommonSection>
       </CommonContainer>
+       {showDelete && <Modal
+              title="Delete user" 
+              onConfirm={onDelete}
+              onCancel={changeShow}
+              showConfirmButton={true}>
+                Are you sure you want to delete this user?
+              </Modal>
+              }   
     </Layout>
   );
 };

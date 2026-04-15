@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Button, ButtonContainer, CommonTable, Content, DeleteButton, TableRow, ExamContainer, ExamContent } from "../styles/common_style";
-import { FaTrash } from "react-icons/fa";
+import { FaAngellist, FaAngleDoubleDown, FaTrash } from "react-icons/fa";
 import Modal from "./Modal";
 import { apiDelete, apiGet } from "../ApiServices/apiServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Empty from "./Empty";
 import ExamCard from "./ExamCard";
+import { FaArrowUpRightFromSquare, FaX } from "react-icons/fa6";
 
 const UserTable = ({data,onDelete}) => {
 
@@ -38,13 +39,13 @@ const UserTable = ({data,onDelete}) => {
             <TableRow>
                 <Content>{data.userLoginId}</Content>
                 <ButtonContainer>
-                    <Button onClick={()=>{setShow(!show);show?"":getExams()}}>{show?"Hide":"View exam"}</Button>
+                    <Button onClick={()=>{setShow(!show);show?"":getExams()}}> {show?<FaX/>:<FaAngleDoubleDown/>} {show?"Hide":"View exam"}</Button>
                     <DeleteButton onClick={deleteUser}><FaTrash></FaTrash></DeleteButton>
                 </ButtonContainer>
             
             </TableRow>
             {show && <ExamContainer>
-                {(ExamResponse?.examList===undefined||ExamResponse?.examList?.length<=0)?<ExamContent>No exam assigned</ExamContent>:ExamResponse?.examList?.map((data,index)=><ExamCard data={data} key={index}></ExamCard>)}
+                {(ExamResponse?.examList===undefined||ExamResponse?.examList?.length<=0)?<ExamContent>No exam assigned -</ExamContent>:ExamResponse?.examList?.map((data,index)=><ExamCard data={data} key={index}></ExamCard>)}
                 </ExamContainer>}
 
         </CommonTable>

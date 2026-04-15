@@ -1,6 +1,6 @@
 export const sphinxTheme={
     colors:{
-        background:"#F8FAFC",
+        background:"#dcdedfff",
         headerBackground:"#0F172A",
         textPrimary:"#1E293B",
         borderHover:"#475569",

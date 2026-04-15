@@ -102,6 +102,30 @@ export const Button = styled.button`
   &:active { transform: translateY(0); opacity: 1; box-shadow: none; }
   &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 `;
+export const AssignButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: ${({theme})=>theme.radius};
+  background:${({theme})=>theme.colors.headerBackground};
+  color: ${({theme})=>theme.colors.surface};
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  &:hover  {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px ${({theme})=>theme.colors.boxShadow};
+  }
+  &:active { transform: translateY(0); opacity: 1; box-shadow: none; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+`;
+
 
 export const Container = styled.div`
   display: flex;
