@@ -9,6 +9,7 @@ import { apiDelete, apiGet } from '../ApiServices/apiServices';
 import { PageNo, PaginationContainer, SelectAllContainer } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
 import { toast } from 'sonner';
+import Modal from '../component/Modal';
 
 const QuestionPage = () => {
   const [data, setData] = useState({
@@ -26,7 +27,8 @@ const QuestionPage = () => {
      //pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
- 
+    const [show,setShow]=useState(false);
+
     const fetchData = async (page, customLimit = limit) => {
       if(page<1) return;
       try {
@@ -53,27 +55,6 @@ const QuestionPage = () => {
         if (limit) fetchData(1, limit);
     }, [id, limit]);
 
-//handle Bulkdelete
-const handleBulkDelete = async () => {
-  if (selectedIds.length === 0) {
-     toast.error(`Please select the question to delete`,{position:'top-center',color:'red'})
-    return;
-  }
-
-  try {
-    await apiDelete("/question/delete-question", {
-      questionIds: selectedIds
-    });
-
-   toast.success("Deleted successfully", {
-      position: "top-center",
-    });
-    setSelectedIds([]);
-     await fetchData(currentPage);
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 
    const SelectedQuestions = (e,questionId) => {
@@ -105,6 +86,38 @@ const handleSelectAll = (e) => {
     );
   }
 };
+
+
+//handle Bulkdelete
+const handleBulkDelete = async () => {
+  if (selectedIds.length === 0) {
+     toast.error(`Please select the question to delete`,{position:'top-center',color:'red'})
+    return;
+  }
+  setShow(true);
+};
+
+const cancelDelete = () => {
+  setShow(false);
+};
+//confirm Delete
+const confirmDelete = async () => {
+  try {
+    await apiDelete("/question/delete-question", {
+      questionIds: selectedIds,
+    });
+
+    toast.success("Deleted successfully", {
+      position: "top-center",
+    });
+
+    setSelectedIds([]);
+    setShow(false); 
+    await fetchData(currentPage);
+  } catch (error) {
+    console.error(error);
+  }
+};
   // console.log('Question Page', data);
 
   return (
@@ -132,6 +145,17 @@ const handleSelectAll = (e) => {
             
           </ButtonContainer>
         </CommonHeader>
+
+         {show && (
+                   <Modal 
+                        title="Confirm Bulk Delete" 
+                        showConfirmButton={true} 
+                        onConfirm={confirmDelete} 
+                        onCancel={cancelDelete}
+                      >
+                        Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
+                  </Modal>
+                    )}
         
         <CommonSection>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
