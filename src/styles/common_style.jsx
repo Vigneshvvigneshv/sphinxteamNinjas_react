@@ -39,9 +39,9 @@ export const Title = styled.h2`
 `;
 
 export const CommonHeading = styled.h3`
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
-  width:220px;
+  width:240px;
   color: ${({theme})=>theme.colors.textPrimary};
   margin: 0;
 `;
@@ -154,9 +154,20 @@ export const CommonContainer = styled.div`
 `;
 
 export const CommonHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  width: 100%;
+  background: ${({theme})=>theme.colors.surface};
+  padding: 12px 18px;
+  border-radius:${({theme})=>theme.radius};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.shadowSm};
+`;
+
+export const ExamCommonHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   width: 100%;
   background: ${({theme})=>theme.colors.surface};
   padding: 12px 18px;
@@ -179,10 +190,9 @@ export const CommonTable = styled.div`
 `;
 
 export const TableRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   background: ${({theme}) => theme.colors.surface};
   padding: 14px 18px;
   border-radius: ${({theme})=>theme.radius};
@@ -197,6 +207,22 @@ export const TableRow = styled.div`
   }
 `;
 
+export const ExamTableRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  background: ${({theme}) => theme.colors.surface};
+  padding: 14px 18px;
+  border-radius: ${({theme})=>theme.radius};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  box-shadow: ${({theme})=>theme.shadowSm};
+  gap: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  &:hover {
+    border-color: ${({theme})=>theme.colors.borderHover};
+    box-shadow: ${({theme})=>theme.colors.shadowMd};
+    transform: translateY(-1px);
+  }
+`;
 export const TableHeading = styled.h3`
   font-size: 15px;
   font-weight: 600;
@@ -205,19 +231,17 @@ export const TableHeading = styled.h3`
 `;
 
 export const Content = styled.p`
-  width: 180px;
+  width: 200px;
   font-weight: 500;
   font-size: 13px;
   color:${({theme})=>theme.colors.textSecondary};
-  margin: 0;
+  
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
   gap: 8px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  button { padding: 7px 13px; font-size: 12px; }
+  width:250px;
 `;
 
 export const EmptyContent = styled.p`

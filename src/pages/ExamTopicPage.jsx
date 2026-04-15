@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout';
-import { Button, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common_style';
+import { AddButton, Button, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import Table from '../component/Table';
 import Empty from '../component/Empty';
@@ -30,12 +30,12 @@ const ExamTopicPage = () => {
       <CommonContainer>
         <CommonHeader>
           <CommonHeading>{data.examName} — Available Topics</CommonHeading>
-          <NavButton
+          <AddButton
             to={`/editexamtopic/${data.examId}`}
             state={{examName: data.examName, examId: data.examId}}
           >
             {(data.responseMessage === 'SUCCESS' && data.topicList.length > 0) ? 'Edit topic' : 'Add topic'}
-          </NavButton>
+          </AddButton>
         </CommonHeader>
 
         <CommonSection>
