@@ -4,9 +4,11 @@ import { FaPen } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import BackDrop from "./BackDrop";
 import { FileInput } from "../styles/form_style";
+import Modal from "../component/Modal";
 
 const UserAssignedTable = ({data,onDelete,onUpdate}) => {
   const [showEdit,setShowEdit]=useState(false);
+  const [showDelete,setShowDelete]=useState(false);
   const [userObj,setUserObj]=useState({
     partyId:data.partyId,
     allowedAttempts:data.allowedAttempts,
@@ -18,6 +20,14 @@ const UserAssignedTable = ({data,onDelete,onUpdate}) => {
     setUserObj(newObj);
   } 
 
+  const deleteUser=()=>{
+    onDelete(data.partyId)
+  }
+
+  const changeShow=()=>{
+    setShowDelete(!showDelete)
+  }
+
   return (
     <>
       <CommonTable>
@@ -27,11 +37,11 @@ const UserAssignedTable = ({data,onDelete,onUpdate}) => {
             <ExamHeader>Timeout Days:<Content>{data.timeoutDays}</Content></ExamHeader>
             <ButtonContainer>
             <Button onClick={()=>{setShowEdit(!showEdit)}}><FaPen/></Button>
-            <Button onClick={()=>onDelete(data.partyId)}><FaX/></Button>
+            <DeleteButton onClick={()=>setShowDelete(!showDelete)}><FaX/></DeleteButton>
             </ButtonContainer>
         </TableRow>
         </CommonTable>
-        {showEdit && (
+        {showEdit && 
           <BackDrop>
             <Content>{data.userLoginId}</Content>
             <ExamHeader>Allowed attempts:<FileInput type="text" value={userObj.allowedAttempts} onChange={(e)=>handleChange("allowedAttempts", e.target.value)}></FileInput></ExamHeader>
@@ -41,8 +51,15 @@ const UserAssignedTable = ({data,onDelete,onUpdate}) => {
               <Button onClick={()=>{onUpdate(userObj);setShowEdit(!showEdit)}}>Save</Button>
             </ButtonContainer>
           </BackDrop>
-        )}
-      
+        }
+        {showDelete && <Modal
+        title="Delete user" 
+        onConfirm={deleteUser}
+        onCancle={changeShow}
+        showConfirmButton={true}>
+          Are you sure you want to delete?
+        </Modal>
+        }      
     </>
   );
 };
