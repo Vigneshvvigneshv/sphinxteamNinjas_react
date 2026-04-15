@@ -35,7 +35,7 @@ const UserTable = ({data,onDelete}) => {
 
 
   return (
-        <CommonTable>
+      
             <TableRow>
                 <Content>{data.userLoginId}</Content>
                 <ButtonContainer>
@@ -43,12 +43,11 @@ const UserTable = ({data,onDelete}) => {
                     <DeleteButton onClick={deleteUser}><FaTrash></FaTrash></DeleteButton>
                 </ButtonContainer>
             
+                {show && <ExamContainer>
+                    {(ExamResponse?.examList===undefined||ExamResponse?.examList?.length<=0)?<ExamContent>No exam assigned -</ExamContent>:ExamResponse?.examList?.map((data,index)=><ExamCard data={data} key={index}></ExamCard>)}
+                    </ExamContainer>}
             </TableRow>
-            {show && <ExamContainer>
-                {(ExamResponse?.examList===undefined||ExamResponse?.examList?.length<=0)?<ExamContent>No exam assigned -</ExamContent>:ExamResponse?.examList?.map((data,index)=><ExamCard data={data} key={index}></ExamCard>)}
-                </ExamContainer>}
 
-        </CommonTable>
   )
 };
 
