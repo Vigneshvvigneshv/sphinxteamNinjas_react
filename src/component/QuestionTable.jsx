@@ -8,30 +8,19 @@ import { NavButton } from '../styles/header_style';
 import { apiDelete } from '../ApiServices/apiServices';
 import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
-import { FaList, FaPen, FaTrash } from 'react-icons/fa';
+import { FaPen, FaTrash } from 'react-icons/fa';
 
-const QuestionTable = ({ data, name,selectedIds,change }) => {
+const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
   const [answer, setAnswer] = useState();
-  // console.log('Question Table Page', data);
-
-  const navigate = useNavigate();
-
-  const handleSubmit = async () => {
-    console.log('handle submit called');
-     const idsToDelete =
-    selectedIds.length > 0
-      ? selectedIds
-      : [data.questionId];
-    const response = await apiDelete('/question/delete-question', { "questionIds": idsToDelete});
-    console.log(response);
-    navigate(0)
-  }
+  
+  
 
   const showAnswer = () => {
     setAnswer(data)
   }
 
   return (
+  
     <CommonTable>
       <TableRow>
         <SelectAllContainer>
@@ -51,7 +40,7 @@ const QuestionTable = ({ data, name,selectedIds,change }) => {
           >
            <FaPen/>
           </EditButton>
-          <DeleteButton onClick={() => { handleSubmit(); }}><FaTrash/></DeleteButton>
+          <DeleteButton onClick={() => handleDelete(data)}><FaTrash/></DeleteButton>
         </ButtonContainer>
       </TableRow>
 
@@ -70,7 +59,10 @@ const QuestionTable = ({ data, name,selectedIds,change }) => {
           <Answer>Answer: option - {data.answer}</Answer>
         </AnswerContainer>
       )}
+   
     </CommonTable>
+    
+  
   )
 }
 
