@@ -250,7 +250,7 @@ useEffect(() => {
               <FormInput
                 name='answer'
                 placeholder='Enter the answer option'
-                type='text' disabled={true} 
+                type='text' disabled={questionType !== 'FILL_BLANKS' && questionType!== 'DETAILED_ANSWER'} 
                 value={formData.answer}
                 onChange={handleChange}
               />
