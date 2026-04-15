@@ -85,7 +85,6 @@ const confirmDelete = async () => {
     toast.success("Deleted successfully", {
       position: "top-center",
     });
-
     setSelectedIds([]);
     setShow(false); 
     await fetchData(currentPage);
@@ -197,12 +196,14 @@ const handleSelectAll = (e) => {
           data.questionList.length > 0 ? (
             data.questionList.map((e) => (
               <AllQuestionsTable
-              data={e}
-              name={e.topicName}
-              key={e.questionId}
-              selectedIds={selectedIds}
-              setSelectedIds={setSelectedIds}
-              change={selectedQuestions}/>
+
+                data={e}
+                name={e.topicName}
+                key={e.questionId}
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
+                change={selectedQuestions}/>
+
             ))
           ) : (
             <Empty>No question available</Empty>
@@ -210,7 +211,7 @@ const handleSelectAll = (e) => {
         </CommonSection>
 
 
-   <PaginationContainer >
+  {data.questionList.length > 0 && <PaginationContainer >
  {data.hasPrevious && <NavButton
     onClick={() => fetchData(currentPage - 1)}
     disabled={!data.hasPrevious}>
@@ -248,8 +249,7 @@ const handleSelectAll = (e) => {
         style={{ padding: "5px", borderRadius: "5px", border: "1px solid #ccc", width: "60px" }}
         />
     </div>
-
-</PaginationContainer>
+</PaginationContainer>}
       </CommonContainer>
       {show && (
         <Modal 
