@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
 import {
+  AddButton,
   ButtonContainer,
   CommonContainer,
   CommonHeader,
   CommonHeading,
   CommonSection,
   Content,
+  DeleteButton,
 } from "../styles/common_style";
 import { NavButton } from "../styles/header_style";
 import Empty from "../component/Empty";
@@ -17,6 +19,7 @@ import { toast } from "sonner";
 import { CheckBox } from "../styles/form_style";
 import { PageNo, PaginationContainer, SelectAllContainer } from "../styles/question_style";
 import Modal from "../component/Modal";
+import { FaAd, FaPlus, FaTrash } from "react-icons/fa";
 
 const AllQuestionPage = () => {
   const [data, setData] = useState({
@@ -122,6 +125,17 @@ const handleSelectAll = (e) => {
 };
   return (
     <Layout>
+          <ButtonContainer>
+              
+            <AddButton
+              to="/createquestion"
+              state={{ topicId: data.topicId, topicName: data.topicName }}
+            >
+              <FaPlus></FaPlus>Add
+            </AddButton>
+           <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Delete all</DeleteButton>
+
+          </ButtonContainer>
       <CommonContainer>
         <CommonHeader>
           <SelectAllContainer>
@@ -139,28 +153,8 @@ const handleSelectAll = (e) => {
           </SelectAllContainer>
           <Content>Topic</Content>
           <Content>QuestionType</Content>
-          <ButtonContainer>
-              
-            <NavButton
-              to="/createquestion"
-              state={{ topicId: data.topicId, topicName: data.topicName }}
-            >
-              Add question
-            </NavButton>
-           <NavButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Bulk Delete</NavButton>
-
-          </ButtonContainer>
+          <Content>Action</Content>
         </CommonHeader>
-            {show && (
-              <Modal 
-                title="Confirm Bulk Delete" 
-                showConfirmButton={true} 
-                onConfirm={confirmDelete} 
-                onCancel={cancelDelete}
-              >
-                Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
-              </Modal>
-            )}
         <CommonSection>
           {/* {console.log("Data", data.questionList)}
           {console.log("TopicName", data.questionList)} */}
@@ -169,9 +163,9 @@ const handleSelectAll = (e) => {
           data.questionList.length > 0 ? (
             data.questionList.map((e) => (
               <AllQuestionsTable
-                data={e}
-                name={e.topicName}
-                key={e.questionId}
+              data={e}
+              name={e.topicName}
+              key={e.questionId}
                 selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
                 change={selectedQuestions}/>
@@ -195,12 +189,12 @@ const handleSelectAll = (e) => {
 
   {data.hasNext&&<NavButton
      onClick={() => {
-    if (data.pageNo < data.totalPages) {
-      fetchData(currentPage + 1);
-    }
-  }}
-    disabled={!data.hasNext} 
-  >
+       if (data.pageNo < data.totalPages) {
+         fetchData(currentPage + 1);
+        }
+      }}
+      disabled={!data.hasNext} 
+      >
     Next
   </NavButton>}
 
@@ -218,11 +212,21 @@ const handleSelectAll = (e) => {
           if (!limit || limit < 1) setLimit(10);
         }}
         style={{ padding: "5px", borderRadius: "5px", border: "1px solid #ccc", width: "60px" }}
-      />
+        />
     </div>
 
 </PaginationContainer>
       </CommonContainer>
+      {show && (
+        <Modal 
+          title="Confirm Bulk Delete" 
+          showConfirmButton={true} 
+          onConfirm={confirmDelete} 
+          onCancel={cancelDelete}
+        >
+          Are you sure you want to delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
+        </Modal>
+      )}
     </Layout>
   );
 };
