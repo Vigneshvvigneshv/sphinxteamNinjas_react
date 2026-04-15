@@ -34,7 +34,7 @@ const UserTable = ({data,onDelete}) => {
   }
 
 
-  return <>
+  return (
         <CommonTable>
             <TableRow>
                 <Content>{data.userLoginId}</Content>
@@ -49,7 +49,7 @@ const UserTable = ({data,onDelete}) => {
                 </ExamContainer>}
 
         </CommonTable>
-  </>;
+  )
 };
 
 export default UserTable;
