@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { validate } from '../validation/LoginFormValidation';
 import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton, FormEyebrow, FormSubtitle } from '../styles/form_style';
-import { AppName, CommonContainer, Loader, LoginContainer, PasswordEye } from '../styles/common_style';
+import { AppName, Button, CommonContainer, Loader, LoginContainer, PasswordEye } from '../styles/common_style';
 import { apiPost } from '../ApiServices/apiServices';
 import { useDispatch } from 'react-redux'
 import { userAction } from '../store/userSlice';
@@ -97,7 +97,7 @@ const LoginPage = () => {
               </PasswordEye>
             ) : ""}
           </FieldContainer>
-          <SubmitButton type='submit'>Login</SubmitButton>
+          <Button type='submit'>Login</Button>
         </Form>
         </FormContainer>
       </CommonContainer> 

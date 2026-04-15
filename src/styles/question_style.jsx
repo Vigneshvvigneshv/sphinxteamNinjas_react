@@ -243,3 +243,171 @@ export const PageNo = styled.span`
     color: ${({ theme }) => theme.colors.surface};
   }
 `;
+
+export const ProfessionalHeaderContainer = styled(QuestionHeaderContainer)`
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+`;
+
+export const ConfigGroup = styled.div`
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+`;
+
+export const FieldWrapper = styled.div`
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TopicBadge = styled.div`
+  padding: 9px 13px;
+  background: #f5f5f5;
+  border: 1.5px solid #eaeaea;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 180px;
+  color: #333;
+`;
+
+export const ConfigDropdown = styled.select`
+  padding: 9px 13px;
+  border-radius: 8px;
+  border: 1.5px solid #eaeaea;
+  background: #fafafa;
+  color: #333;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  min-width: ${({ $minWidth }) => $minWidth || '200px'};
+  cursor: pointer;
+  &:focus {
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+  }
+`;
+
+export const FormMainContainer = styled(QuestionFormContainer)`
+  padding: 32px;
+`;
+
+export const MainFieldContainer = styled(QuestionFieldContainer)`
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  cursor: default;
+  &:hover {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    transform: none;
+  }
+`;
+
+export const QuestionInputWrapper = styled.div`
+  width: 100%;
+`;
+
+export const OptionsWrapper = styled.div`
+  margin-top: 24px;
+`;
+
+export const OptionsSection = styled.div`
+  margin-top: 8px;
+  padding: 20px;
+  background: #fafafa;
+  border: 1.5px solid #eaeaea;
+  border-radius: 12px;
+`;
+
+export const OptionsDisclaimer = styled.p`
+  font-size: 13.5px;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+`;
+
+export const ScoringSidebar = styled(RightSideContainer)`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background: #fcfcfc;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+`;
+
+export const ScoringHeading = styled.h4`
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 8px;
+`;
+
+export const ScoringRow = styled.div`
+  display: flex;
+  flex-direction:column;
+  gap: 16px;
+`;
+
+export const ScoringFieldWrapper = styled(FieldWrapper)`
+  flex: 1;
+  margin-bottom: 16px;
+`;
+
+export const ActionBottomWrapper = styled.div`
+  margin-top: auto;
+  padding-top: 20px;
+`;
+
+export const ActionButton = styled.button`
+  width: 100%;
+  margin: 0;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#3A3A3A,#0D0D0D);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.18s ease;
+  &:hover {
+    opacity: 0.88;
+    transform: translateY(-2px);
+  }
+`;
+
+export const QuestionInputBox = styled.textarea`
+  padding: 11px 13px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1.5px solid #eaeaea;
+  background: #fafafa;
+  color: #333;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 130px;
+  line-height: 1.6;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  &::placeholder {
+    color: #999;
+  }
+  &:focus {
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+`;
