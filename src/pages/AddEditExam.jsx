@@ -159,7 +159,7 @@ const AddExam = () => {
             </FieldContainer>
 
             {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-            <SubmitButton>{id !== undefined ? 'Save' : 'Add'}</SubmitButton>
+            <SubmitButton>{id !== undefined ? 'Save changes' : 'Add'}</SubmitButton>
           </Form>
         </FormContainer>
 

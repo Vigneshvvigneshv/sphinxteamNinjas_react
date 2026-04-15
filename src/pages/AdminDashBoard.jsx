@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout'
 import { NavButton } from '../styles/header_style'
-import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, Content } from '../styles/common_style'
+import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, Content, ExamCommonHeader } from '../styles/common_style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
 import { apiGet, apiPost } from '../ApiServices/apiServices'
@@ -38,12 +38,13 @@ const AdminDashBoard = () => {
   return (
     <Layout> 
       <CommonContainer>
-        <CommonHeader>
+        <ExamCommonHeader>
           <CommonHeading>Available Assessment</CommonHeading>
           <Content>Duration</Content>
           <Content>No of Questions</Content>
+          <Content>Pass Percentage</Content>
           <AddButton to="/addexam"><FaPlus/>Add</AddButton>
-        </CommonHeader>
+        </ExamCommonHeader>
         
         <CommonSection>
           <CommonTable>
