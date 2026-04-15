@@ -9,6 +9,7 @@ import {
   CommonSection,
   Content,
   DeleteButton,
+  Navlink,
 } from "../styles/common_style";
 import { NavButton } from "../styles/header_style";
 import Empty from "../component/Empty";
@@ -19,7 +20,7 @@ import { toast } from "sonner";
 import { CheckBox } from "../styles/form_style";
 import { PageNo, PaginationContainer, SelectAllContainer } from "../styles/question_style";
 import Modal from "../component/Modal";
-import { FaAd, FaPlus, FaTrash } from "react-icons/fa";
+import { FaAd, FaFile, FaPlus, FaTrash } from "react-icons/fa";
 
 const AllQuestionPage = () => {
   const [data, setData] = useState({
@@ -161,16 +162,6 @@ const handleSelectAll = (e) => {
 
   return (
     <Layout>
-          <ButtonContainer>
-            <AddButton style={{fontSize:"16px"}}
-              to="/createquestion"
-              state={{ topicId: data.topicId, topicName: data.topicName }}
-            >
-              <FaPlus></FaPlus>Add
-            </AddButton>
-           <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Delete all</DeleteButton>
-
-          </ButtonContainer>
       <CommonContainer>
         <CommonHeader>
           <SelectAllContainer>
@@ -188,7 +179,18 @@ const handleSelectAll = (e) => {
           </SelectAllContainer>
           <Content>Topic</Content>
           <Content>QuestionType</Content>
-          <Content></Content>
+         
+          <ButtonContainer>
+            <Navlink to='/uploadfile'><FaFile/> Upload File</Navlink>
+            <AddButton
+              to="/createquestion"
+              state={{ topicId: data.topicId, topicName: data.topicName }}
+            >
+              <FaPlus></FaPlus>Add
+            </AddButton>
+           <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0} >Delete all</DeleteButton>
+
+          </ButtonContainer>
         </CommonHeader>
         <CommonSection>
           {/* {console.log("Data", data.questionList)}

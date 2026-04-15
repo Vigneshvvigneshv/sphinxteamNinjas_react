@@ -185,7 +185,7 @@ const confirmDelete = async () => {
             <AddButton to="/createquestion" state={{topicId: data.topicId, topicName: data.topicName}}>
               <FaPlus/>Add 
             </AddButton>
-            <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Bulk Delete</DeleteButton>
+            <DeleteButton onClick={handleBulkDelete} disabled={selectedIds.length === 0}>Delete all</DeleteButton>
             
           </ButtonContainer>
         </CommonHeader>
