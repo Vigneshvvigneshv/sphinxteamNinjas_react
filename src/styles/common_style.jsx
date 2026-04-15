@@ -41,9 +41,9 @@ export const Title = styled.h2`
 export const CommonHeading = styled.h3`
   font-size: 13px;
   font-weight: 600;
-  width:240px;
+  width:200px;
   color: ${({theme})=>theme.colors.textPrimary};
-  margin: 0;
+  
 `;
 
 export const Loader = styled.span`
@@ -168,8 +168,8 @@ export const CommonHeader = styled.div`
 export const ExamCommonHeader = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  width: 100%;
   background: ${({theme})=>theme.colors.surface};
+  width:100%;
   padding: 12px 18px;
   border-radius:${({theme})=>theme.radius};
   border: 1px solid ${({theme})=>theme.colors.border};
@@ -210,6 +210,7 @@ export const TableRow = styled.div`
 export const ExamTableRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  align-items:center;
   background: ${({theme}) => theme.colors.surface};
   padding: 14px 18px;
   border-radius: ${({theme})=>theme.radius};
@@ -231,7 +232,7 @@ export const TableHeading = styled.h3`
 `;
 
 export const Content = styled.p`
-  width: 200px;
+  text-align:left;
   font-weight: 500;
   font-size: 13px;
   color:${({theme})=>theme.colors.textSecondary};

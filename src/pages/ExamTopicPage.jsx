@@ -29,7 +29,7 @@ const ExamTopicPage = () => {
     <Layout>
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>{data.examName} — Available Topics</CommonHeading>
+          <CommonHeading>{data.examName} - Available Topics</CommonHeading>
           <AddButton
             to={`/editexamtopic/${data.examId}`}
             state={{examName: data.examName, examId: data.examId}}

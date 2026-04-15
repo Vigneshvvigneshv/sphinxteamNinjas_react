@@ -81,16 +81,15 @@ export const NavButton = styled(NavLink)`
   padding: 9px 18px;
   border: none;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.10);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: ${({ theme }) => theme.colors.textPrimary};
+  background: ${({ theme }) => theme.colors.headerBackground};
+  color: ${({ theme }) => theme.colors.cream};
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: background 0.18s ease, transform 0.18s ease;
   &:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: ${({ theme }) => theme.colors.hoverBackground};
     transform: translateY(-1px);
   }
   &:active { transform: translateY(0); }

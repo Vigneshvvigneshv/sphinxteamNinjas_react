@@ -63,7 +63,6 @@ export const FieldContainer = styled.div`
 export const FormLabel = styled.label`
   font-size: 13px;
   font-weight: 600;
-  width: 100%;
   color: ${({ theme }) => theme.colors.textSecondary};
   margin-bottom: 6px;
   letter-spacing: 0.01em;
