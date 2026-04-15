@@ -43,7 +43,7 @@ export const ModalIconWrap = styled.div`
   height: 54px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.cream};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.textSecondary};
   display: flex;
   align-items: center;
   justify-content: center;
