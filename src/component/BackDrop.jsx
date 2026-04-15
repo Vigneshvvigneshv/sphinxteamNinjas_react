@@ -10,7 +10,7 @@ const BackContainer=styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10001;
+    z-index:10003;
 `;  
 const BackContent=styled.div`
     background-color: ${({theme})=>theme.colors.cream};
