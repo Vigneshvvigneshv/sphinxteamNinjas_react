@@ -5,8 +5,9 @@ import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/ques
 import { useNavigate } from 'react-router-dom';
 import { CheckBox } from '../styles/form_style';
 import { apiDelete } from '../ApiServices/apiServices';
-import { FaPen, FaTrash } from 'react-icons/fa';
+import { FaAngleDoubleDown, FaPen, FaTrash } from 'react-icons/fa';
 import { toast } from 'sonner';
+import { FaX } from 'react-icons/fa6';
 
 const AllQuestionsTable = ({handleSingleDelete, data, name, change, selectedIds = [], setSelectedIds }) => {
 
@@ -49,7 +50,7 @@ const [answer, setAnswer] = useState();
             <Content>{data.topicName}</Content>
             <Content>{data.questionTypeId}</Content>
             <ButtonContainer>
-              <Button onClick={showAnswer}>Answers</Button>
+              <Button onClick={showAnswer}><FaAngleDoubleDown/> Answers</Button>
               <EditButton
                 to={`/createquestion/${data.questionId}`}
                 state={{ topicId: data.topicId, topicName: name }}
@@ -64,7 +65,7 @@ const [answer, setAnswer] = useState();
             <AnswerContainer>
               <AnswerHeader>
                 <Content>Answer</Content>
-                <Button onClick={() => { setAnswer('') }}>Hide</Button>
+                <Button onClick={() => { setAnswer('') }}>Hide <FaX/></Button>
               </AnswerHeader>
               <AnswerOption>
                 {data.optionA && <Option>Option A — {data.optionA}</Option>}

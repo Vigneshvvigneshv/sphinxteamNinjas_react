@@ -7,6 +7,7 @@ import {
   CommonHeader,
   CommonHeading,
   CommonSection,
+  CommonTable,
   Content,
   DeleteButton,
   Navlink,
@@ -193,6 +194,7 @@ const handleSelectAll = (e) => {
           </ButtonContainer>
         </CommonHeader>
         <CommonSection>
+        <CommonTable>
           {/* {console.log("Data", data.questionList)}
           {console.log("TopicName", data.questionList)} */}
 
@@ -212,6 +214,7 @@ const handleSelectAll = (e) => {
           ) : (
             <Empty>No question available</Empty>
           )}
+          </CommonTable>
         </CommonSection>
 
 

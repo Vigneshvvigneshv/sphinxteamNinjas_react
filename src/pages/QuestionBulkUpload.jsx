@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Content } from "../styles/common_style";
+import { Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading, CommonSection, Container, Content } from "../styles/common_style";
 import Layout from "../component/Layout";
-import { ErrorMessage, FileInput, FormContainer, SuccessMessage } from "../styles/form_style";
+import { ErrorMessage, FileInput, FormContainer, SubmitButton, SuccessMessage } from "../styles/form_style";
 import { apiFilePost, apiPost } from "../ApiServices/apiServices";
 import Modal from "../component/Modal";
+import { NavButton } from "../styles/header_style";
 
 const QuestionBulkUpload = () => {
   const [file, setFile] = useState(null);
@@ -79,19 +80,19 @@ const QuestionBulkUpload = () => {
         </CommonHeader>
 
         <FormContainer>
-          <ButtonContainer>
+          <CommonContainer>
             <FileInput
               type="file"
               accept=".xlsx,.xls"
               onChange={handleChange}
             />
-            <Button onClick={handleUpload}>Upload</Button>
-          </ButtonContainer>
+            <NavButton onClick={handleUpload}>Upload</NavButton>
+          </CommonContainer>
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {show && <Modal>{data?.successMessage}</Modal>}
         </FormContainer>
 
-        <Button onClick={downloadTemplate}>Download Template</Button>
+        <NavButton onClick={downloadTemplate}>Download Template</NavButton>
       </CommonContainer>
     </Layout>
   );
