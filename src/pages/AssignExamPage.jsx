@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
 import {
-  AddButton,
   AssignButton,
   Button,
   ButtonContainer,
@@ -12,24 +11,21 @@ import {
   CommonTable,
   Content,
   DeleteButton,
-  Dropdown,
   EditButton,
   ExamHeader,
-  TableHeading,
-  TableRow,
+ 
 } from "../styles/common_style";
-import { NavButton } from "../styles/header_style";
 import { apiDelete, apiGet, apiPost, apiPut } from "../ApiServices/apiServices";
-import { useNavigate, useParams } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { FaAngleDoubleDown, FaAngleDoubleUp, FaPlus, FaSave, FaUserPlus } from "react-icons/fa";
 import UserAssignedTable from "../component/UserAssignedTable";
 import UserUnassignedTable from "../component/UserUnassignedTable";
 import { toast } from "sonner";
-import { style } from "framer-motion/client";
 import Empty from "../component/Empty";
 import Modal from "../component/Modal";
 import BackDrop from "../component/BackDrop";
 import { FileInput } from "../styles/form_style";
+import { FaX } from "react-icons/fa6";
 
 const AssignExamPage = () => {
 
@@ -38,9 +34,15 @@ const AssignExamPage = () => {
   const [data, setData] = useState();
   const [unassignedUser, setUnassignedUser] = useState();
   const [showDelete,setShowDelete]=useState(false);
+  const [showAssignedUser,setShowAssignedUser]=useState(false);
   const [rows, setRows] = useState([]);
   const [partyId, setPartyId] = useState();
+ 
 
+  //get the state from the navigate the when click the assign in the adminDashboard
+  //location is used to get the useLocation
+   const location=useLocation();
+  const [examName,setExamName]=useState(location.state?.examName);
   //this is used to show the edit modal
     const [showEdit,setShowEdit]=useState(false);
     //this is used to store the user object from the UserAssignedTable component
@@ -61,11 +63,6 @@ const changeShowEdit=(partyExamData)=>{
     setShowEdit(!showEdit);
     setUserObj(partyExamData);
 }
-
-
-
-
-
 
   //this delete is used to show th modal and set the partyId 
   const changeShowDelete=(partyId)=>{
@@ -104,6 +101,16 @@ const changeShowEdit=(partyExamData)=>{
     });
   };
 
+  const viewAssignedUser=()=>{
+     if(!showAssignedUser){
+        fetchAssignedUsers();
+      }else{
+        setData();
+      }
+      setShowAssignedUser(!showAssignedUser);
+     
+  }
+
   const fetchAssignedUsers = async () => {
     const response = await apiGet("/exam-assign/get-assigned-user/" + id);
     setData(response);
@@ -123,7 +130,6 @@ const changeShowEdit=(partyExamData)=>{
     } else if (response.successMessage !== undefined) {
       toast.success(response.successMessage, { position: 'top-center' });
       setRows([]);
-      fetchAssignedUsers();
       fetchUnassignedUsers();
     }
   };
@@ -137,32 +143,39 @@ const changeShowEdit=(partyExamData)=>{
       toast.error(`${response.errorMessage}`, { position: 'top-center' });
     }else if(response.successMessage!==undefined){
       toast.success(response.successMessage, { position: 'top-center' });
-      fetchAssignedUsers();
       fetchUnassignedUsers();
     }
+    
   }
-
+  useEffect(()=>{
+    if(location.state?.examName===undefined){
+      setExamName(location.state?.examName);
+    }
+  },[])
   useEffect(() => {
-    fetchAssignedUsers();
     fetchUnassignedUsers();
   }, []);
+
   console.log("unAssing Exam Page", unassignedUser);
 
   return (
     <Layout>
       <CommonContainer>
         <CommonHeader>
-          <CommonHeading>Assigned users</CommonHeading>
+            <CommonHeading>Assigned users - {examName}</CommonHeading>
+          <ButtonContainer>
+            <Button onClick={viewAssignedUser}>{!showAssignedUser?<FaAngleDoubleDown/>:<FaAngleDoubleUp/>} {showAssignedUser?"Hide":"View assigned User"}</Button>
+          </ButtonContainer>
         </CommonHeader>
         <CommonSection>
           {/* Assign exam form — placeholder for future implementation */}
-
-          {data?.assignedUsers !== undefined &&
+{showAssignedUser &&
+          data?.assignedUsers !== undefined &&
           data?.assignedUsers?.length <= 0 ? (
             <Empty>No user assigned</Empty>
           ) : (
             data?.assignedUsers?.map((data) => (
-              <UserAssignedTable data={data} key={data.partyId}  changeShowDelete={changeShowDelete}   changeShowEdit={changeShowEdit} onUpdate={updateExam}></UserAssignedTable>
+              <UserAssignedTable data={data} key={data.partyId}  changeShowDelete={changeShowDelete}   changeShowEdit={changeShowEdit}></UserAssignedTable>
             ))
           )}
           </CommonSection>
@@ -171,7 +184,7 @@ const changeShowEdit=(partyExamData)=>{
           <CommonHeader>
 
           <CommonHeading>Unassigned users</CommonHeading>
-          <AssignButton onClick={assignUser} disabled={(rows?.length<=0) } >Assign</AssignButton>
+          <AssignButton onClick={assignUser} disabled={(rows?.length<=0) }><FaUserPlus/>Assign</AssignButton>
           </CommonHeader>
           <CommonTable>
           {unassignedUser?.unassignedUsers !== undefined &&
@@ -199,14 +212,15 @@ const changeShowEdit=(partyExamData)=>{
               </Modal>
               }  
 
-              {showEdit && 
+{/**exam name bug is there */}
+        {showEdit && 
           <BackDrop>
-            <ExamHeader>Username : {userObj.userLoginId}</ExamHeader>
+            <ExamHeader>Username : {userObj.userLoginId} <Content>{examName}</Content></ExamHeader>
             <ExamHeader>Allowed attempts:<FileInput type="text" value={userObj.allowedAttempts} onChange={(e)=>handleChange("allowedAttempts", e.target.value)}></FileInput></ExamHeader>
             <ExamHeader>Timeout Days:<FileInput type="text" value={userObj.timeoutDays} onChange={(e)=>handleChange("timeoutDays", e.target.value)}></FileInput></ExamHeader>
             <ButtonContainer style={{width:'100%'}}>
-              <DeleteButton onClick={()=>setShowEdit(!showEdit)}>Cancle</DeleteButton>
-              <EditButton onClick={()=>{updateExam(userObj);setShowEdit(!showEdit)}}>Save</EditButton>
+              <DeleteButton onClick={()=>setShowEdit(!showEdit)}><FaX/>Cancel</DeleteButton>
+              <EditButton onClick={()=>{updateExam(userObj);setShowEdit(!showEdit)}}><FaSave/>Save</EditButton>
             </ButtonContainer>
           </BackDrop>
         } 
