@@ -17,7 +17,6 @@ import { toast } from 'sonner';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
 const AddTopicsToExam = () => {
-  const navigate = useNavigate();
   const {id} = useParams();
   console.log("ExamId ",id);
 

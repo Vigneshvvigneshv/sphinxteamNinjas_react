@@ -5,14 +5,13 @@ import { Header2 } from '../component/Header2'
 
 const UserDashBoard = () => {
   return (
-    <>
-      <Header2/>
+   
     <Layout>
       <CommonContainer>
         <CommonHeading>Welcome to the User Dashboard</CommonHeading>
       </CommonContainer>
     </Layout>
-    </>
+    
   )
 }
 

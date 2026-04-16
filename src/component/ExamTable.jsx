@@ -35,6 +35,8 @@ const ExamTable = ({ data }) => {
         <ButtonContainer>
           <Navlink to={`/assignexam/${data.examId}`} state={{examName:data.examName}}><FaUser/>Assign</Navlink>
           <Navlink to={`/getexamtopic/${data.examId}`}><FaArrowUpRightFromSquare />  Topics</Navlink>
+          <Navlink  to={`/editexamtopic/${data.examId}`}
+            state={{examName: data.examName, examId: data.examId}}><FaArrowUpRightFromSquare /> Edit Topics</Navlink>
           <EditButton to={`/getexam/${data.examId}`}><FaPen/></EditButton>
           <DeleteButton onClick={deleteExam} title='Delete'><FaTrash/></DeleteButton>
         </ButtonContainer>
