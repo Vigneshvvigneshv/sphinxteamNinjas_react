@@ -8,6 +8,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { apiGet } from '../ApiServices/apiServices';
 import ExamTopicTable from '../component/ExamTopicTabel';
 import { SuccessMessage } from '../styles/form_style';
+import { FaEdit, FaPlus } from 'react-icons/fa';
 
 const ExamTopicPage = () => {
   const [data, setData] = useState("");
@@ -34,6 +35,7 @@ const ExamTopicPage = () => {
             to={`/editexamtopic/${data.examId}`}
             state={{examName: data.examName, examId: data.examId}}
           >
+            {(data.responseMessage === 'SUCCESS' && data.topicList.length > 0) ? <FaEdit/> : <FaPlus/>}
             {(data.responseMessage === 'SUCCESS' && data.topicList.length > 0) ? 'Edit topic' : 'Add topic'}
           </AddButton>
         </CommonHeader>

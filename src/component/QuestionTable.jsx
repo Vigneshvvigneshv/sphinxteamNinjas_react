@@ -6,12 +6,12 @@ import {
 } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
 import { apiDelete } from '../ApiServices/apiServices';
-import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/question_style';
+import { Answer, AnswerHeader, Option, SelectAllContainer, SerialNumber } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
 import { FaAngleDoubleDown, FaPen, FaTrash } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 
-const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
+const QuestionTable = ({handleDelete, data, name, selectedIds, change,index }) => {
   const [answer, setAnswer] = useState();
   
   
@@ -28,6 +28,7 @@ const QuestionTable = ({handleDelete, data, name, selectedIds, change }) => {
           <CheckBox type="checkbox"
                     checked={selectedIds.includes(Number(data.questionId))} 
                     onChange={(e)=>change(e,data.questionId)}></CheckBox>
+                    <SerialNumber>{index}</SerialNumber>
                     <Content>{data.questionDetail}</Content>
                     </SelectAllContainer>
         <Content>{data.questionTypeId}</Content>

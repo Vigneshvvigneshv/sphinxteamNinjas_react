@@ -6,7 +6,7 @@ import Empty from '../component/Empty';
 import {  Navigate, useParams } from 'react-router-dom';
 import QuestionTable from '../component/QuestionTable';
 import { apiDelete, apiGet } from '../ApiServices/apiServices';
-import { PageNo, PaginationContainer, SelectAllContainer } from '../styles/question_style';
+import { PageNo, PaginationContainer, SelectAllContainer, SerialNumber } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';
 import { toast } from 'sonner';
 import Modal from '../component/Modal';
@@ -176,8 +176,8 @@ const confirmDelete = async () => {
                   data.questionList.every((item) => selectedIds.includes(Number(item.questionId)))
                 }
                 onChange={handleSelectAll}/>
-                 
-          <CommonHeading>{data.topicName}</CommonHeading>
+          <SerialNumber>S.No</SerialNumber>
+          <Content>{data.topicName}</Content>
           </SelectAllContainer>
           <Content>Question type</Content>
           {console.log("Topic Name inside question page",data.topicId)}
@@ -214,9 +214,16 @@ const confirmDelete = async () => {
         <CommonSection>
           <CommonTable>
           {(data.responseMessage === 'SUCCESS' && data.questionList.length > 0)
-            ? data.questionList.map((e) => <QuestionTable handleDelete={handleSingleDelete} data={e} name={data.topicName} key={e.questionId} selectedIds={selectedIds}
-                setSelectedIds={setSelectedIds}
-                change={SelectedQuestions}/>)
+            ? data.questionList.map((e,index) => 
+                  <QuestionTable 
+                      handleDelete={handleSingleDelete} 
+                      data={e} 
+                      name={data.topicName} 
+                      key={e.questionId} 
+                      index={(Number(data.pageNo-1)*(limit) + (index+1))} 
+                      selectedIds={selectedIds}
+                    setSelectedIds={setSelectedIds}
+                    change={SelectedQuestions}/>)
             : <Empty>No question available</Empty>
           }
           </CommonTable>

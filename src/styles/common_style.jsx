@@ -41,7 +41,7 @@ export const Title = styled.h2`
 export const CommonHeading = styled.h3`
   font-size: 13px;
   font-weight: 600;
-  width:200px;
+  width:250px;
   color: ${({theme})=>theme.colors.textPrimary};
   
 `;
@@ -237,6 +237,15 @@ export const Content = styled.p`
   font-weight: 500;
   font-size: 13px;
   color:${({theme})=>theme.colors.textSecondary};
+  
+`;
+
+export const ContentHeading = styled.p`
+  width:200px;
+  text-align:left;
+  font-weight: 600;
+  font-size: 14px;
+  color:${({theme})=>theme.colors.textPrimary};
   
 `;
 

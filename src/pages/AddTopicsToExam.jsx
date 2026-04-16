@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../component/Layout';
 import {
+  AddButton,
   Button, ButtonContainer, CommonContainer, CommonHeader, CommonHeading,
   CommonSection, Container, Content, DeleteButton, Dropdown, Outer, Required,
   RowContainer, TableHeading, TableRow
@@ -13,7 +14,7 @@ import Modal from '../component/Modal';
 import { validateAddTopicExam } from '../validation/ValidationUtil';
 import { apiDelete, apiGet, apiPost } from '../ApiServices/apiServices';
 import { toast } from 'sonner';
-import { FaTrash } from 'react-icons/fa';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 
 const AddTopicsToExam = () => {
   const navigate = useNavigate();
@@ -161,7 +162,7 @@ const AddTopicsToExam = () => {
           {console.log("examName",exam)
           }
           <CommonHeading>{exam}</CommonHeading>
-          <NavButton onClick={addRow}>Add topics</NavButton>
+          <AddButton onClick={addRow}><FaPlus/> Add topics</AddButton>
         </CommonHeader>
         <CommonSection>
           <Form>
@@ -224,10 +225,10 @@ const AddTopicsToExam = () => {
             }
 
             {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-            <ButtonContainer>
+            <Container>
               <NavButton to={`/getexamtopic/${id}`}>Back</NavButton>
-              <SubmitButton onClick={handleSubmit}>Generate Question</SubmitButton>
-            </ButtonContainer>
+              <NavButton onClick={handleSubmit}>Generate Question</NavButton>
+            </Container>
           </Form>
         </CommonSection>
       </CommonContainer>

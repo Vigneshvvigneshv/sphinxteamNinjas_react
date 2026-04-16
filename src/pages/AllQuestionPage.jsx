@@ -7,6 +7,7 @@ import {
   CommonHeader,
   CommonHeading,
   CommonSection,
+  CommonTable,
   Content,
   DeleteButton,
   Navlink,
@@ -18,7 +19,7 @@ import { apiDelete, apiGet } from "../ApiServices/apiServices";
 import AllQuestionsTable from "../component/AllQuestionsTable";
 import { toast } from "sonner";
 import { CheckBox } from "../styles/form_style";
-import { PageNo, PaginationContainer, SelectAllContainer } from "../styles/question_style";
+import { PageNo, PaginationContainer, SelectAllContainer, SerialNumber } from "../styles/question_style";
 import Modal from "../component/Modal";
 import { FaAd, FaFile, FaPlus, FaTrash } from "react-icons/fa";
 
@@ -29,7 +30,8 @@ const AllQuestionPage = () => {
     totalPages: 1,
     hasNext: false,
     hasPrevious: false,
-    responseMessage: "",  
+    responseMessage: "", 
+    totalCount:"", 
   });
   const [selectedIds, setSelectedIds] = useState([]);
     //pagination
@@ -52,7 +54,9 @@ const AllQuestionPage = () => {
         totalPages: response.totalPages,
         hasNext: response.hasNext,
         hasPrevious: response.hasPrevious,
-        responseMessage: response.responseMessage,   
+        totalCount:response.totalCount,
+        responseMessage: response.responseMessage, 
+        
       });
     
       setCurrentPage(response.pageNo);
@@ -166,7 +170,7 @@ const handleSelectAll = (e) => {
         <CommonHeader>
           <SelectAllContainer>
            <CheckBox
-             type="checkbox"
+            type="checkbox"
             checked={
             data.questionList.length > 0 &&
             data.questionList.every((q) =>
@@ -175,7 +179,8 @@ const handleSelectAll = (e) => {
               }
            onChange={handleSelectAll}
           />
-          <CommonHeading>Questions</CommonHeading>
+          <SerialNumber>S.No</SerialNumber>
+          <Content>Questions</Content>
           </SelectAllContainer>
           <Content>Topic</Content>
           <Content>QuestionType</Content>
@@ -193,17 +198,19 @@ const handleSelectAll = (e) => {
           </ButtonContainer>
         </CommonHeader>
         <CommonSection>
+        <CommonTable>
           {/* {console.log("Data", data.questionList)}
           {console.log("TopicName", data.questionList)} */}
 
           {data.responseMessage === "success" &&
           data.questionList.length > 0 ? (
-            data.questionList.map((e) => (
-              <AllQuestionsTable
+            data.questionList.map((e,index) => (
+              <AllQuestionsTable 
                 handleSingleDelete={handleSingleDelete}
                 data={e}
                 name={e.topicName}
                 key={e.questionId}
+                index={(Number(data.pageNo-1)*(limit) + (index+1))}
                 selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
                 change={selectedQuestions}/>
@@ -212,6 +219,7 @@ const handleSelectAll = (e) => {
           ) : (
             <Empty>No question available</Empty>
           )}
+          </CommonTable>
         </CommonSection>
 
 

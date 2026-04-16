@@ -96,7 +96,7 @@ export const FormInput = styled.input`
 `;
 
 export const FileInput = styled.input`
-  padding: 11px 13px;
+  padding: 11px 15px;
   border-radius: ${({ theme }) => theme.radius};
   border: 1.5px dashed ${({ theme }) => theme.colors.border};
   background: ${({ theme }) => theme.colors.cream};

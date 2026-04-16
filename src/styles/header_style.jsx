@@ -89,7 +89,7 @@ export const NavButton = styled(NavLink)`
   cursor: pointer;
   transition: background 0.18s ease, transform 0.18s ease;
   &:hover {
-    background: ${({ theme }) => theme.colors.hoverBackground};
+    background: ${({ theme }) => theme.colors.borderHover};
     transform: translateY(-1px);
   }
   &:active { transform: translateY(0); }
