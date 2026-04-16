@@ -42,7 +42,17 @@ const AssignExamPage = () => {
   //get the state from the navigate the when click the assign in the adminDashboard
   //location is used to get the useLocation
    const location=useLocation();
-  const [examName,setExamName]=useState(location.state?.examName);
+  const [examName,setExamName]=useState();
+
+    useEffect(()=>{
+    if(location.state!==undefined){
+      setExamName(location.state?.examName);
+    }
+  },[])
+ if(examName===undefined){
+  navigate('/admin-dashboard');
+ }
+
   //this is used to show the edit modal
     const [showEdit,setShowEdit]=useState(false);
     //this is used to store the user object from the UserAssignedTable component
@@ -147,11 +157,7 @@ const changeShowEdit=(partyExamData)=>{
     }
     
   }
-  useEffect(()=>{
-    if(location.state?.examName===undefined){
-      setExamName(location.state?.examName);
-    }
-  },[])
+
   useEffect(() => {
     fetchUnassignedUsers();
   }, []);
