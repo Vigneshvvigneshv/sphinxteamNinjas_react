@@ -112,11 +112,6 @@ const changeShowEdit=(partyExamData)=>{
   };
 
   const viewAssignedUser=()=>{
-     if(!showAssignedUser){
-        fetchAssignedUsers();
-      }else{
-        setData();
-      }
       setShowAssignedUser(!showAssignedUser);
      
   }
@@ -155,12 +150,14 @@ const changeShowEdit=(partyExamData)=>{
     }else if(response.successMessage!==undefined){
       toast.success(response.successMessage, { position: 'top-center' });
       fetchUnassignedUsers();
+      fetchAssignedUsers();
     }
     
   }
 
   useEffect(() => {
     fetchUnassignedUsers();
+    fetchAssignedUsers();
   }, []);
 
   console.log("unAssing Exam Page", unassignedUser);
@@ -176,7 +173,7 @@ const changeShowEdit=(partyExamData)=>{
         </CommonHeader>
         <CommonSection>
           {/* Assign exam form — placeholder for future implementation */}
-{showAssignedUser &&
+{showAssignedUser && (
           data?.assignedUsers !== undefined &&
           data?.assignedUsers?.length <= 0 ? (
             <Empty>No user assigned</Empty>
@@ -184,7 +181,7 @@ const changeShowEdit=(partyExamData)=>{
             data?.assignedUsers?.map((data) => (
               <UserAssignedTable data={data} key={data.partyId}  changeShowDelete={changeShowDelete}   changeShowEdit={changeShowEdit}></UserAssignedTable>
             ))
-          )}
+          ))}
           </CommonSection>
           <CommonSection>
             
@@ -215,7 +212,7 @@ const changeShowEdit=(partyExamData)=>{
               onCancel={changeShowDelete}
               type='delete'
               showConfirmButton={true}>
-                Are you sure you want to remove this user?
+                Are you sure want to remove this user?
               </Modal>
               }  
 

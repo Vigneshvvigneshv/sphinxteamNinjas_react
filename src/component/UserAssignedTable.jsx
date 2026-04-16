@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, ButtonContainer, CommonTable, Content, DeleteButton, ExamHeader, TableRow } from "../styles/common_style";
+import { Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, ExamHeader, TableRow } from "../styles/common_style";
 import { FaPen } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import BackDrop from "./BackDrop";
@@ -20,7 +20,7 @@ const UserAssignedTable = ({data,changeShowDelete,changeShowEdit}) => {
            <ExamHeader>Allowed attempts:<Content>{data.allowedAttempts}</Content></ExamHeader>
             <ExamHeader>Timeout Days:<Content>{data.timeoutDays}</Content></ExamHeader>
             <ButtonContainer>
-            <Button onClick={()=>changeShowEdit(data)}><FaPen/></Button>
+            <EditButton onClick={()=>changeShowEdit(data)}><FaPen/></EditButton>
             <DeleteButton onClick={()=>changeShowDelete(data.partyId)}><FaX/></DeleteButton>
             </ButtonContainer>
         </TableRow>
