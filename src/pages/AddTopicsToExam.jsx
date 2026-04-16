@@ -71,8 +71,8 @@ const AddTopicsToExam = () => {
   const removeRow = (topicId,index) => {
     console.log('length', rows.length);
     console.log("TopicId",topicId);
-
-    
+   
+  
     if (rows.length >= 1) {
       const deleteTopic=async()=>{
         {console.log("ExamId ",examId)}
