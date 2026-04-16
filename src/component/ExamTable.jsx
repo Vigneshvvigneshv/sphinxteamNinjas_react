@@ -33,7 +33,7 @@ const ExamTable = ({ data }) => {
         <Content>{data.noOfQuestions}</Content>
         <Content>{data.passPercentage}</Content>
         <ButtonContainer>
-          <Navlink to={`/assignexam/${data.examId}`}><FaUser/>Assign</Navlink>
+          <Navlink to={`/assignexam/${data.examId}`} state={{examName:data.examName}}><FaUser/>Assign</Navlink>
           <Navlink to={`/getexamtopic/${data.examId}`}><FaArrowUpRightFromSquare />  Topics</Navlink>
           <EditButton to={`/getexam/${data.examId}`}><FaPen/></EditButton>
           <DeleteButton onClick={deleteExam} title='Delete'><FaTrash/></DeleteButton>
