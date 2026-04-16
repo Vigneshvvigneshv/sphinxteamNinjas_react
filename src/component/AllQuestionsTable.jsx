@@ -1,37 +1,38 @@
 import React, { useState } from 'react'
 import { AnswerContainer, AnswerOption, Button, ButtonContainer, CommonTable, Content, DeleteButton, EditButton, TableRow } from '../styles/common_style';
 import { NavButton } from '../styles/header_style';
-import { Answer, AnswerHeader, Option, SelectAllContainer } from '../styles/question_style';
+import { Answer, AnswerHeader, Option, SelectAllContainer, SerialNumber } from '../styles/question_style';
 import { useNavigate } from 'react-router-dom';
 import { CheckBox } from '../styles/form_style';
 import { apiDelete } from '../ApiServices/apiServices';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { toast } from 'sonner';
 
-const AllQuestionsTable = ({handleSingleDelete, data, name, change, selectedIds = [], setSelectedIds }) => {
+const AllQuestionsTable = ({handleSingleDelete, data, name, change, selectedIds = [],index }) => {
 
 const [answer, setAnswer] = useState();
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
-    console.log('handle submit called');
-
-    const idsToDelete =
-    selectedIds.length > 0
-      ? selectedIds
-      : [data.questionId];
+//   const handleSubmit = async () => {
+//     console.log('handle submit called');
+    
+    
+//     const idsToDelete =
+//     selectedIds.length > 0
+//       ? selectedIds
+//       : [data.questionId];
 
      
-  try {
-  const response = await apiDelete('/question/delete-question', { questionIds: idsToDelete });
-  console.log(response);
-  navigate(0); 
-} catch (error) {
-  console.error("Failed to delete:", error);
-  toast.error("Failed to delete question" ,{position:"top-center"})
-}
+//   try {
+//   const response = await apiDelete('/question/delete-question', { questionIds: idsToDelete });
+//   console.log(response);
+//   navigate(0); 
+// } catch (error) {
+//   console.error("Failed to delete:", error);
+//   toast.error("Failed to delete question" ,{position:"top-center"})
+// }
 
-  }
+//   }
 
   const showAnswer = () => {
     setAnswer(data)
@@ -44,6 +45,8 @@ const [answer, setAnswer] = useState();
                       checked={selectedIds.includes(Number(data.questionId))} 
                       onChange={(e)=> change && change(e,data.questionId)}
                       ></CheckBox>
+                      {console.log("key",index)}
+            <SerialNumber>{index}</SerialNumber>
             <Content>{data.questionDetail}</Content>
             </SelectAllContainer>
             <Content>{data.topicName}</Content>

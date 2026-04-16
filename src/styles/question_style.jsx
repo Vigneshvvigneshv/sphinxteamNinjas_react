@@ -411,3 +411,14 @@ export const QuestionInputBox = styled.textarea`
     background: #fff;
   }
 `;
+
+export const SerialNumber = styled.p`
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 30px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin: 0;
+  line-height: 1.5;
+  padding-right: 10px;
+`;
+  
