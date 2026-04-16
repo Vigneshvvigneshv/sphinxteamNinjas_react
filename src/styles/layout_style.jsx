@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MainContainer = styled.div`
   margin: 0 auto;
-  padding: 30px 44px;
+  padding: 40px 44px 40px 44px;
   background: ${({ theme }) => theme.colors.background};
   min-height: calc(100vh - 60px - 58px);
   @media (max-width: 768px) { padding: 18px 16px; }

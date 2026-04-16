@@ -8,7 +8,9 @@ export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
+  position: sticky;
+  top:0;
+  z-index:100;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 `;
