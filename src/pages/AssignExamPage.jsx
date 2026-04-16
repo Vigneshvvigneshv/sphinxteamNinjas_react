@@ -141,6 +141,7 @@ const changeShowEdit=(partyExamData)=>{
       toast.success(response.successMessage, { position: 'top-center' });
       setRows([]);
       fetchUnassignedUsers();
+      fetchAssignedUsers();
     }
   };
 
