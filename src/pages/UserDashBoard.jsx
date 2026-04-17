@@ -1,6 +1,8 @@
 import React from 'react'
 import Layout from '../component/Layout'
-import { CommonContainer, CommonHeading } from '../styles/common_style'
+import { CommonContainer, CommonHeading, CommonSection } from '../styles/common_style'
+import { UserCard } from '../component/UserCard'
+
 
 
 const UserDashBoard = () => {
@@ -9,6 +11,9 @@ const UserDashBoard = () => {
     <Layout>
       <CommonContainer>
         <CommonHeading>Welcome to the User Dashboard</CommonHeading>
+        <CommonSection>
+         <UserCard/>
+        </CommonSection>
       </CommonContainer>
     </Layout>
     

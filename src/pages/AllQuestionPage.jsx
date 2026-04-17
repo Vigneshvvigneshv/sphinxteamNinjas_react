@@ -40,6 +40,8 @@ const AllQuestionPage = () => {
     const [show,setShow]=useState(false);
     const [deleteQuestion, setDeleteQuestion] = useState(null);
     const[showDeleteModal,setShowDeleteModal]=useState(false);
+    const [showModal,setShowModal]=useState(false);
+  
   
     //fetch all questions
     const fetchData = async (page, customLimit = limit) => {
@@ -275,6 +277,9 @@ const handleSelectAll = (e) => {
         </Modal>
       )}
 
+       {showModal && (
+        <Modal title="Confirm Bulk Delete" > {}     </Modal>
+      )}
       {showDeleteModal && (
         <Modal 
           type="delete"

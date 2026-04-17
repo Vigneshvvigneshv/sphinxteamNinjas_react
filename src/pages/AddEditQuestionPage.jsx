@@ -178,9 +178,9 @@ useEffect(() => {
       } else if (response.successMessage!== undefined) {
         setFormData({ ...formData, [e.target.name]: "" })
         setError(response);
-        toast.success(`${response.message}`,{
-          position:"top-center"
-        })
+        // toast.success(`${response.message}`,{
+        //   position:"top-center"
+        // })
         changeShow();
       }
     } else {
@@ -362,6 +362,7 @@ useEffect(() => {
         </CommonContainer>
         
       </QuestionContainer>
+      {show && <Modal>{error.message}</Modal>}
     </Layout>
   )
 }

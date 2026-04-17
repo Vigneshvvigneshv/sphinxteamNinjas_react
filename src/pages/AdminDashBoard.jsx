@@ -4,7 +4,7 @@ import { NavButton } from '../styles/header_style'
 import { AddButton, CommonContainer, CommonHeader, CommonHeading, CommonSection, CommonTable, Content, ContentHeading, ExamCommonHeader } from '../styles/common_style'
 import ExamTable from '../component/ExamTable'
 import Empty from '../component/Empty'
-import { apiGet, apiPost } from '../ApiServices/apiServices'
+import { apiDelete, apiGet, apiPost } from '../ApiServices/apiServices'
 import { useLocation } from 'react-router-dom'
 import { SuccessMessage } from '../styles/form_style'
 import Modal from '../component/Modal'
@@ -18,19 +18,37 @@ const AdminDashBoard = () => {
   const location=useLocation();
   const message=location.state?.msg;
   const[show,setShow]=useState(false);
+  const [examId,setExamId]=useState();
 
-  const changeShow=()=>{
+  const changeShow=(examId)=>{
+    setShow(!show);
+    setExamId(examId);
+  }
+  const onDelete=()=>{
+    deleteExam(examId);
     setShow(!show);
   }
-  
+   const deleteExam = async (examId) => {
+      const response = await apiDelete('/exam/delete-exam', {'deleteList':examId,'partyId': user[0] });
+      console.log(response);
+      if(response.successMessage!==undefined){
+        toast.success(response.successMessage,{position:'top-center'});
+        fetchData();
+      }else if(response.errorMessage!==undefined){
+        toast.error(response.errorMessage,{position:'top-center'});
+      }
+    }
+
+
   useEffect(()=>{
-    const fetchData = async () => {
+    fetchData()
+  },[]);
+
+  const fetchData = async () => {
       const response= await apiPost('/exam/getall-exam',{partyId:user[0]});
       setData(response);
     
     }
-    fetchData()
-  },[]);
 
   console.log(data);
   
@@ -51,14 +69,15 @@ const AdminDashBoard = () => {
 
           {message && <SuccessMessage>{message}</SuccessMessage>}
           {(data.responseMessage === 'success') && (data.examList.length > 0)
-            ? data.examList.map((e) => <ExamTable data={e} key={e.examId} />)
+            ? data.examList.map((e) => <ExamTable data={e} key={e.examId} change={changeShow}/>)
             : <Empty>No exam available</Empty>
           }
           </CommonTable>
         </CommonSection>
       </CommonContainer>
+      {show && <Modal type='delete' title='Delete Exam' onCancel={changeShow} onConfirm={onDelete} showConfirmButton={true}>Are you sure want to delete exam?</Modal> }
     </Layout>
   )
 }
 
-export default AdminDashBoard
+export default AdminDashBoard;
