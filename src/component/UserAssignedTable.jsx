@@ -7,14 +7,9 @@ import { FileInput } from "../styles/form_style";
 import Modal from "../component/Modal";
 
 const UserAssignedTable = ({data,changeShowDelete,changeShowEdit}) => {
-
-
-
-  
-
   return (
     <>
-      <CommonTable>
+    
         <TableRow>
             <Content>{data.userLoginId}</Content>
            <ExamHeader>Allowed attempts:<Content>{data.allowedAttempts}</Content></ExamHeader>
@@ -24,7 +19,7 @@ const UserAssignedTable = ({data,changeShowDelete,changeShowEdit}) => {
             <DeleteButton onClick={()=>changeShowDelete(data.partyId)}><FaX/></DeleteButton>
             </ButtonContainer>
         </TableRow>
-        </CommonTable>
+       
         
       
     </>
