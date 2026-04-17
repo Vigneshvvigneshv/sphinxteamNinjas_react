@@ -12,6 +12,7 @@ import {
   Content,
   DeleteButton,
   EditButton,
+  ExamContainer,
   ExamHeader,
 } from "../styles/common_style";
 import { apiDelete, apiGet, apiPost, apiPut } from "../ApiServices/apiServices";
@@ -184,9 +185,11 @@ const AssignExamPage = () => {
         </CommonHeader>
         <CommonSection>
           {/* Assign exam form — placeholder for future implementation */}
+          
           <CommonTable>
             {showAssignedUser &&
-              (data?.assignedUsers !== undefined &&
+            <ExamContainer style={{display:"block"}}>
+              {data?.assignedUsers !== undefined &&
               data?.assignedUsers?.length <= 0 ? (
                 <Empty>No user assigned</Empty>
               ) : (
@@ -197,9 +200,11 @@ const AssignExamPage = () => {
                     changeShowDelete={changeShowDelete}
                     changeShowEdit={changeShowEdit}
                   ></UserAssignedTable>
-                ))
-              ))}
+                  
+                )))}</ExamContainer>
+              }
           </CommonTable>
+          
         </CommonSection>
         <CommonSection>
           <CommonHeader>

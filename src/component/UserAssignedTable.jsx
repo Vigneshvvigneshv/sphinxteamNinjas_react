@@ -7,11 +7,6 @@ import { FileInput } from "../styles/form_style";
 import Modal from "../component/Modal";
 
 const UserAssignedTable = ({data,changeShowDelete,changeShowEdit}) => {
-
-
-
-  
-
   return (
     <>
     
