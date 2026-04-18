@@ -41,7 +41,8 @@ export const Title = styled.h2`
 export const CommonHeading = styled.h3`
   font-size: 13px;
   font-weight: 600;
-  width:250px;
+  // width:250px;
+  width:fit-content;
   color: ${({theme})=>theme.colors.textPrimary};
   
 `;
@@ -251,7 +252,7 @@ export const ContentHeading = styled.p`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 10px;
   width:250px;
   justify-content:end;
 `;
@@ -428,7 +429,7 @@ export const ExamHeader=styled.p`
 export const ExamContent=styled.span`
   font-weight: 600;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 
