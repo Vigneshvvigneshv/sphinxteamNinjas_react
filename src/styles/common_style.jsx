@@ -242,7 +242,7 @@ export const Content = styled.p`
 `;
 
 export const ContentHeading = styled.p`
-  width:200px;
+  // width:200px;
   text-align:left;
   font-weight: 600;
   font-size: 14px;

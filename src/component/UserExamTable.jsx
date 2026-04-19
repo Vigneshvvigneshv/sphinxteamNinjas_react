@@ -1,39 +1,66 @@
 import { useState } from "react";
-import { ButtonContainer, Content, TableRow,ExamContainer, ContentHeading, ExamContent, AddButton } from "../styles/common_style";
+import {
+  ButtonContainer,
+  Content,
+  TableRow,
+  ExamContainer,
+  ContentHeading,
+  ExamContent,
+  AddButton,
+  ExamHeader,
+  DeleteButton,
+} from "../styles/common_style";
 import { Button } from "flowbite-react";
-import { FaAngleDoubleDown, FaAngleDoubleUp, FaArrowAltCircleRight } from "react-icons/fa";
+import {
+  FaAngleDoubleDown,
+  FaAngleDoubleUp,
+  FaArrowAltCircleRight,
+} from "react-icons/fa";
+import BackDrop from "./BackDrop";
+import { FileInput } from "../styles/form_style";
+import { FaX } from "react-icons/fa6";
 
-export const UserExamTable=({data})=>{
+export const UserExamTable = ({ data, handleStartExam }) => {
+  const [show, setShow] = useState(false);
+  return (
+    <>
+      <TableRow>
+        <Content>{data.examName}</Content>
+        <ButtonContainer>
+          <Button
+            onClick={() => {
+              setShow(!show);
+            }}
+          >
+            {show ? <FaAngleDoubleUp /> : <FaAngleDoubleDown />}
 
-      const [show, setShow] = useState(false);
-    return(
-        <>
-        <TableRow>
-           <Content>{data.examName}</Content>
-                      <ButtonContainer>
-                        <Button onClick={()=>{setShow(!show);}}>
-                          {show ? <FaAngleDoubleUp/> : <FaAngleDoubleDown />}
-
-                          {show ? "Hide" : "View details"}
-                        </Button>
-                        <AddButton>Start<FaArrowAltCircleRight/></AddButton>
-                      </ButtonContainer>
-        </TableRow>
-         {show && (
-                      <ExamContainer style={{ display: "block" }}>
-                          <ContentHeading>
-                            Description:
-                            <ExamContent>{data.description}</ExamContent>
-                          </ContentHeading>
-                          <ContentHeading>
-                            Duration:<ExamContent>{data.duration} min</ExamContent>
-                          </ContentHeading>
-                          <ContentHeading>
-                            Total Questions:
-                            <ExamContent>{data.noOfQuestions}</ExamContent>
-                          </ContentHeading>
-                      </ExamContainer>
-                    )}
-        </>
-    )   
-}
+            {show ? "Hide" : "View details"}
+          </Button>
+          <AddButton
+            onClick={() => {
+              handleStartExam(data.examId);
+            }}
+          >
+            Start
+            <FaArrowAltCircleRight />
+          </AddButton>
+        </ButtonContainer>
+      </TableRow>
+      {show && (
+        <ExamContainer style={{ display: "block" }}>
+          <ContentHeading>
+            Description:
+            <ExamContent>{data.description}</ExamContent>
+          </ContentHeading>
+          <ContentHeading>
+            Duration:<ExamContent>{data.duration} min</ExamContent>
+          </ContentHeading>
+          <ContentHeading>
+            Total Questions:
+            <ExamContent>{data.noOfQuestions}</ExamContent>
+          </ContentHeading>
+        </ExamContainer>
+      )}
+    </>
+  );
+};
