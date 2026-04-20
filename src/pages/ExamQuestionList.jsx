@@ -1,19 +1,21 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../component/Layout'
-import { apiGet } from '../ApiServices/apiServices'
+import { apiGet, apiPost } from '../ApiServices/apiServices'
 import { useParams } from 'react-router-dom'
 import { CommonContainer } from '../styles/common_style'
-import { ButtonContainer, Container, OptionBox, Question, Timer, TopBar } from '../styles/ExamQuestionList_style'
+import { Button, ButtonContainer, Container, OptionBox, Question, SubmitButtonTop, Timer, TopBar } from '../styles/ExamQuestionList_style'
+import { toast } from 'sonner'
+import Modal from '../component/Modal'
 
 const ExamQuestionList = () => {
     const {examId}=useParams();
-
+    const{partyId}=useParams();
   const [data, setData] = useState(null);
   const [pageNo, setPageNo] = useState(1);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(600);
-
+  const [showSubmitModal,setShowSubmitModal]=useState(false);
   const timerRef = useRef(null);
 
   //fetching questions
@@ -21,9 +23,9 @@ const ExamQuestionList = () => {
         try{
             const response= await apiGet(`/exam-question/get-exam-questions?examId=${examId}&pageNo=${page}`);
               {console.log("response",response)}
-              setData(res);
+              setData(response);
         }catch(error){
-            console.error(err);
+            console.error(error);
         }
       }
     
@@ -109,12 +111,10 @@ const ExamQuestionList = () => {
   // ---------- Final Submit ----------
   const handleFinalSubmit = async () => {
     try {
-      await apiPost("/submit-exam", {
-        examId,
-        partyId,
+      await apiPost("/submit-exam/submit-exam", {
+        examId:examId,
+        partyId:partyId,
       });
-
-      alert("Exam Submitted!");
     } catch (err) {
       console.error(err);
     }
@@ -127,7 +127,7 @@ const ExamQuestionList = () => {
         <Container>
         <TopBar>
             <Timer>⏱ {formatTime(timeLeft)}</Timer>
-            <SubmitButtonTop onClick={handleFinalSubmit}>
+            <SubmitButtonTop onClick={()=>{setShowSubmitModal(!showSubmitModal)}}>
           Submit Exam
         </SubmitButtonTop>
         </TopBar>
@@ -162,6 +162,17 @@ const ExamQuestionList = () => {
         </Button>
       </ButtonContainer>
         </Container>
+
+        {showSubmitModal && (
+        <Modal
+          title="Confirm Submit"
+          onConfirm={handleFinalSubmit}
+          onCancel={() => setShowSubmitModal(!showSubmitModal)}
+          showConfirmButton={true}
+        >
+      Are you sure you want to submit the exam?
+        </Modal>
+      )}
     </Layout>
   )
 }
