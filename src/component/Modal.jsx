@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Backdrop, ModalContainer, ModalIconWrap, ModalTitle, Message, ModalButtons, ModalGhostBtn, ModalPrimaryBtn } from '../styles/modal_style'
 import { TiTick } from 'react-icons/ti';
-import { FaTrash } from 'react-icons/fa';
+import { FaPen, FaTrash } from 'react-icons/fa';
 
 
 
@@ -34,7 +34,7 @@ const Modal = ({ children, title,type='success', onConfirm, onCancel, showConfir
           <ModalTitle>{title}</ModalTitle>
           <Message>{children}</Message>
           <ModalButtons>
-            {showConfirmButton && <ModalPrimaryBtn onClick={onConfirm} style={{ background: '#e11d48' }}>Delete</ModalPrimaryBtn>}
+            {showConfirmButton && <ModalPrimaryBtn onClick={onConfirm} style={{ background: `${type==='delete'?"#e11d48":"blue"}` }}>{type==='delete'?'Delete':'Save'}</ModalPrimaryBtn>}
             <ModalGhostBtn onClick={handleCancel}>{showConfirmButton ? "Cancel" : "Ok"}</ModalGhostBtn>
           </ModalButtons>
         </ModalContainer>

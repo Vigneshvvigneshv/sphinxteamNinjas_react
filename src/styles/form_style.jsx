@@ -51,6 +51,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-top:10px;
 `;
 
 export const FieldContainer = styled.div`

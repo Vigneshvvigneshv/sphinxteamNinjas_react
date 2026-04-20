@@ -18,6 +18,7 @@ import AssignExamPage from "./pages/AssignExamPage";
 import ErrorPage from "./pages/ErrorPage";
 import AllQuestionPage from "./pages/AllQuestionPage";
 import { UnAuthorisedPage } from "./pages/UnAuthorisedPage";
+import ExamQuestionList from "./pages/ExamQuestionList";
 
 const App = () => {
   const { user, role } = useSelector((state) => state.userReducer);
@@ -194,7 +195,7 @@ const App = () => {
           }
         />
         <Route
-          path="/getexamtopic/:id"
+          path="/getexamtopic/:id/:examName"
           element={
             <ProtectedRoute>
               <AdminAuthentication>
@@ -230,6 +231,17 @@ const App = () => {
               <AdminAuthentication>
                 <AllQuestionPage></AllQuestionPage>
               </AdminAuthentication>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/examquestionlist/:examId/:partyId"
+          element={
+            <ProtectedRoute>
+              <UserAuthentication>
+                <ExamQuestionList></ExamQuestionList>
+              </UserAuthentication>
             </ProtectedRoute>
           }
         />
