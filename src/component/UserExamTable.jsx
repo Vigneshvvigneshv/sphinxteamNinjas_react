@@ -59,6 +59,14 @@ export const UserExamTable = ({ data, handleStartExam }) => {
             Total Questions:
             <ExamContent>{data.noOfQuestions}</ExamContent>
           </ContentHeading>
+          <ContentHeading>
+            Attempt count:
+            <ExamContent>{data.noOfAttempts}</ExamContent>
+          </ContentHeading>
+          <ContentHeading>
+            No of Attempts left:
+            <ExamContent>{data.allowedAttempts-data.noOfAttempts}</ExamContent>
+          </ContentHeading>
         </ExamContainer>
       )}
     </>
