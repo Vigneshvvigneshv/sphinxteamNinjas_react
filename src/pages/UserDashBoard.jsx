@@ -26,10 +26,11 @@ import { FaX } from "react-icons/fa6";
 import { toast } from "sonner";
 import BackDrop from "../component/BackDrop";
 import { FileInput } from "../styles/form_style";
+import { useNavigate } from 'react-router-dom';
 
 const UserDashBoard = () => {
   const [examList, setExamList] = useState([]);
-
+  const navigate=useNavigate();
     const [showBackDrop,setShowBackDrop]=useState(false);
         const [userData,setUserData]=useState({
           password:""
@@ -60,6 +61,11 @@ const UserDashBoard = () => {
     console.log(response);
     setUserData({password:""});
     setShowBackDrop(!showBackDrop);
+
+    if(response.successMessage!==undefined){
+      toast.success(response.successMessage,{position:"top-center"})
+      navigate(`/examquestionlist/${examId}/${partyId}`)
+    }
     if(response.errorMessage!==undefined){
       toast.error(response.errorMessage,{position:"top-center"})
     }
