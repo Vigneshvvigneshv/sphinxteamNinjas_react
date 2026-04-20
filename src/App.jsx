@@ -195,7 +195,7 @@ const App = () => {
           }
         />
         <Route
-          path="/getexamtopic/:id"
+          path="/getexamtopic/:id/:examName"
           element={
             <ProtectedRoute>
               <AdminAuthentication>

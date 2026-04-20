@@ -9,7 +9,7 @@ import Modal from "../component/Modal";
 const UserAssignedTable = ({data,changeShowDelete,changeShowEdit}) => {
   return (
     <>
-    
+        
         <TableRow>
             <Content>{data.userLoginId}</Content>
            <ExamHeader>Allowed attempts:<Content>{data.allowedAttempts}</Content></ExamHeader>
