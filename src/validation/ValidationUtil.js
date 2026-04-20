@@ -113,8 +113,10 @@ export const validateQuestion=(formData)=>{
 
 export const validateAddTopicExam=(formData)=>{
      let newErrors={};
-
-   
+  
+    if(formData.topicId===""){
+      newErrors.topicId="Topic is required";
+    }
 
      if(formData.percentage===""){
        newErrors.percentage="percentage is required";
