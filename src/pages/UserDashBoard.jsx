@@ -15,6 +15,7 @@ import {
   ExamHeader,
   AddButton,
   DeleteButton,
+  ContentHeading
 } from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet, apiPost } from "../ApiServices/apiServices";
@@ -89,8 +90,16 @@ const UserDashBoard = () => {
         </CommonSection>
       </CommonContainer>
        {showBackDrop && <BackDrop>
+                      <CommonHeading>Instructions & Conditions</CommonHeading>
+                      <ExamContainer style={{ display: "block", textAlign: "left", maxHeight: "none", marginBottom: "15px", padding: "15px" }}>
+                        <ContentHeading style={{ marginBottom: "8px" }}>1. Do not refresh or navigate away from the page.</ContentHeading>
+                        <ContentHeading style={{ marginBottom: "8px" }}>2. Ensure you have a stable internet connection.</ContentHeading>
+                        <ContentHeading style={{ marginBottom: "8px" }}>3. The exam will be auto-submitted when the time is up.</ContentHeading>
+                        <ContentHeading>4. Once started, the exam cannot be paused.</ContentHeading>
+                      </ExamContainer>
+                      <Content>Enter security code to start exam</Content>
                       <ExamHeader>
-                        Exam password:<FileInput type="text" name="examPassword" value={userData.password} onChange={(e)=>{handleChange("password",e.target.value)}}></FileInput>
+                        Security code:<FileInput type="text" name="examPassword" value={userData.password} onChange={(e)=>{handleChange("password",e.target.value)}}></FileInput>
                       </ExamHeader>
                       <ButtonContainer>
                         <AddButton onClick={()=>{handleSubmit()}}>Start<FaArrowAltCircleRight/></AddButton>
