@@ -144,6 +144,13 @@ const AssignExamPage = () => {
       toast.error(`${response.errorMessage}`, { position: "top-center" });
     } else if (response.successMessage !== undefined) {
       toast.success(response.successMessage, { position: "top-center" });
+
+      const list=rows.map((data)=>{ return data.partyId});
+      const mailResponse=await apiPost("/email/send-email",{
+      examId: id,
+      partyIdList: list,
+    });
+    console.log(mailResponse);
       setRows([]);
       fetchUnassignedUsers();
       fetchAssignedUsers();
@@ -246,7 +253,10 @@ const AssignExamPage = () => {
       {showEdit && (
         <BackDrop>
           <ExamHeader>
-            Username : {userObj.userLoginId} <Content>{examName}</Content>
+            Exam name: <Content>{examName}</Content>
+          </ExamHeader>
+          <ExamHeader>
+            Username : {userObj.userLoginId} 
           </ExamHeader>
           <ExamHeader>
             Allowed attempts:
