@@ -51,7 +51,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-top:10px;
+  margin-top: 10px;
 `;
 
 export const FieldContainer = styled.div`
@@ -85,35 +85,48 @@ export const FormInput = styled.input`
   font-size: 14px;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  &::placeholder { color: ${({ theme }) => theme.colors.textHint}; }
-  &:hover { border-color: ${({ theme }) => theme.colors.borderHover}; }
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textHint};
+  }
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderHover};
+  }
   &:focus {
     border-color: ${({ theme }) => theme.colors.borderHover};
     box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.boxShadow};
     background: ${({ theme }) => theme.colors.surface};
   }
-  &:disabled { opacity: 0.42; cursor: not-allowed; }
+  &:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+  }
 `;
 
 export const FileInput = styled.input`
   padding: 11px 15px;
   border-radius: ${({ theme }) => theme.radius};
-  border: 1.5px dashed ${({ theme }) => theme.colors.border};
+  border: 1.5px dashed ${({ theme }) => theme.colors.borderHover};
   background: ${({ theme }) => theme.colors.cream};
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: 13px;
   font-family: inherit;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderHover};
-    background: ${({ theme }) => theme.colors.surface};
+    background: ${({ theme }) => theme.colors.border};
   }
   &:focus {
     border-color: ${({ theme }) => theme.colors.borderHover};
     box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.boxShadow};
+    background: ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -130,9 +143,16 @@ export const FormText = styled.textarea`
   resize: vertical;
   min-height: 100px;
   line-height: 1.6;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  &::placeholder { color: ${({ theme }) => theme.colors.textHint}; }
-  &:hover { border-color: ${({ theme }) => theme.colors.borderHover}; }
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textHint};
+  }
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderHover};
+  }
   &:focus {
     border-color: ${({ theme }) => theme.colors.borderHover};
     box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.boxShadow};
@@ -146,21 +166,33 @@ export const SubmitButton = styled.button`
   padding: 13px;
   border: none;
   border-radius: ${({ theme }) => theme.radius};
-  background:${({ theme }) => theme.colors.headerBackground};
+  background: ${({ theme }) => theme.colors.headerBackground};
   color: #fff;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.01em;
   font-family: inherit;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.18s ease, box-shadow 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.18s ease,
+    box-shadow 0.2s ease;
   &:hover {
     opacity: 0.88;
     transform: translateY(-2px);
     box-shadow: 0 8px 22px ${({ theme }) => theme.colors.boxShadow};
   }
-  &:active  { transform: translateY(0); opacity: 1; box-shadow: none; }
-  &:disabled { opacity: 0.38; cursor: not-allowed; transform: none; box-shadow: none; }
+  &:active {
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: none;
+  }
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 `;
 
 export const ErrorMessage = styled.p`

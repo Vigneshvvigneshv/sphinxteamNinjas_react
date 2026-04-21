@@ -1,109 +1,73 @@
-import { UserCard } from '../component/UserCard'
-import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
-import {
-  ButtonContainer,
-  Button,
-  CommonContainer,
-  CommonHeading,
-  CommonSection,
-  CommonTable,
-  Content,
-  ExamContainer,
-  ExamContent,
-  TableRow,
-  ExamHeader,
-  AddButton,
-  DeleteButton,
-} from "../styles/common_style";
-import { useSelector } from "react-redux";
-import { apiGet, apiPost } from "../ApiServices/apiServices";
-import ExamCard from "../component/ExamCard";
-import { UserExamTable } from "../component/UserExamTable";
-import Empty from "../component/Empty";
-import { FaAngleDoubleDown, FaArrowAltCircleRight } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
-import { toast } from "sonner";
-import BackDrop from "../component/BackDrop";
-import { FileInput } from "../styles/form_style";
-import { useNavigate } from 'react-router-dom';
+import { CommonContainer, CommonHeading } from "../styles/common_style";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { FaClipboardList, FaCheckCircle } from "react-icons/fa";
+
+const Container = styled.div`
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  width: 100%;
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  background-color: ${({theme})=>theme.colors.surface};
+  padding: 40px 20px;
+  border-radius: ${({theme})=>theme.radius};
+  box-shadow: ${({theme})=>theme.shadowSm};
+  border: 1px solid ${({theme})=>theme.colors.border};
+  cursor: pointer;
+  flex: 1;
+  min-width: 250px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px ${({theme})=>theme.colors.boxShadow};
+    border-color: ${({theme})=>theme.colors.borderHover};
+  }
+`;
+
+const CardTitle = styled.h3`
+  font-size: 20px;
+  font-weight: 600;
+  color: ${({theme})=>theme.colors.textPrimary};
+  margin: 0;
+`;
+
+const IconWrapper = styled.div`
+  font-size: 20px;
+`;
 
 const UserDashBoard = () => {
-  const [examList, setExamList] = useState([]);
-  const navigate=useNavigate();
-    const [showBackDrop,setShowBackDrop]=useState(false);
-        const [userData,setUserData]=useState({
-          password:""
-        })
-        const [examId,setExamId]=useState("")
-        const handleChange=(key,value)=>{
-          setUserData({...userData,[key]:value})
-        }
-        const handleStartExam=(examId)=>{
-          setExamId(examId)
-          setShowBackDrop(!showBackDrop)
-        }
+  const navigate = useNavigate();
 
-  const partyId = useSelector((state) => state.userReducer.user[0]);
-  console.log(partyId);
-
-  const fetchPartyDetails = async () => {
-    const response = await apiGet(`/exam/getexam-by-partyId/${partyId}`);
-    console.log(response);
-    setExamList(response.examList);
-  };
-  useEffect(() => {
-    fetchPartyDetails();
-  }, []);
-
-  const handleSubmit=async()=>{
-    const response=await apiPost(`/start-exam/exam-start`,{...userData,examId:examId,partyId:partyId})
-    console.log(response);
-    setUserData({password:""});
-    setShowBackDrop(!showBackDrop);
-
-    if(response.successMessage!==undefined){
-      toast.success(response.successMessage,{position:"top-center"})
-      navigate(`/examquestionlist/${examId}/${partyId}`)
-    }
-    if(response.errorMessage!==undefined){
-      toast.error(response.errorMessage,{position:"top-center"})
-    }
-  } 
-  
   return (
     <Layout>
-      <CommonContainer>
-
-        <CommonHeading>Welcome to Sphinx</CommonHeading>
-        <CommonSection>
-          <CommonTable>
-            {examList?.length === 0 ? (
-              <Empty>No exam available</Empty>
-            ) : (
-              examList.map((exam, index) => {
-                return (
-                  <>
-                    <UserExamTable data={exam} key={index} handleStartExam={handleStartExam}>
-                      
-                    </UserExamTable>
-                  </>
-                );
-              })
-            )}
-          </CommonTable>
-        </CommonSection>
+      <CommonContainer style={{ alignItems: 'flex-start' }}>
+        <CommonHeading style={{ fontSize: "24px", marginBottom: "10px" }}>Welcome to Sphinx</CommonHeading>
+        <Container>
+          <CardContainer onClick={() => navigate('/assignedexam')}>
+            <IconWrapper style={{ color: "#3498db" }}>
+              <FaClipboardList />
+            </IconWrapper>
+            <CardTitle>Assigned Exam</CardTitle>
+          </CardContainer>
+          <CardContainer onClick={() => navigate('/completedexam')}>
+            <IconWrapper style={{ color: "#2ecc71" }}>
+              <FaCheckCircle />
+            </IconWrapper>
+            <CardTitle>Completed Exam</CardTitle>
+          </CardContainer>
+        </Container>
       </CommonContainer>
-       {showBackDrop && <BackDrop>
-                      <ExamHeader>
-                        Exam password:<FileInput type="text" name="examPassword" value={userData.password} onChange={(e)=>{handleChange("password",e.target.value)}}></FileInput>
-                      </ExamHeader>
-                      <ButtonContainer>
-                        <AddButton onClick={()=>{handleSubmit()}}>Start<FaArrowAltCircleRight/></AddButton>
-                        <DeleteButton onClick={()=>{setShowBackDrop(!showBackDrop)}}><FaX/>Cancel</DeleteButton>
-                      </ButtonContainer>
-                      </BackDrop>
-        }
     </Layout>
   );
 };
