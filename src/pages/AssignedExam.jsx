@@ -18,7 +18,8 @@ import {
   ExamHeader,
   AddButton,
   DeleteButton,
-  ContentHeading
+  ContentHeading,
+  CommonHeader
 } from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet, apiPost } from "../ApiServices/apiServices";
@@ -31,6 +32,7 @@ import { toast } from "sonner";
 import BackDrop from "../component/BackDrop";
 import { FileInput } from "../styles/form_style";
 import { useNavigate } from 'react-router-dom';
+import { CancelButton, StartButton } from '../styles/header_style';
 
 export default function AssignedExam(){
 
@@ -60,7 +62,10 @@ export default function AssignedExam(){
       useEffect(() => {
         fetchPartyDetails();
       }, []);
-    
+      
+      const generateQuestion=async()=>{
+        const response=await apiPost('/generate-questions/generate-question')
+      }
       const handleSubmit=async()=>{
         const response=await apiPost(`/start-exam/exam-start`,{...userData,examId:examId,partyId:partyId})
         console.log(response);
@@ -76,11 +81,13 @@ export default function AssignedExam(){
         }
       } 
     return(
-        <>
+        
          <Layout>
               <CommonContainer>
-        <CommonHeading>Assigned Exam</CommonHeading>
-                               <CommonSection>
+                <CommonHeader>
+                  <CommonHeading>Assigned Exam</CommonHeading>
+                </CommonHeader>
+              <CommonSection>
                   <CommonTable>
                     {examList?.length === 0 ? (
                       <Empty>No exam available</Empty>
@@ -112,13 +119,13 @@ export default function AssignedExam(){
                               </ExamHeader>
                               <FileInput type="text" name="examPassword" value={userData.password} onChange={(e)=>{handleChange("password",e.target.value)}}></FileInput>
                               <ButtonContainer>
-                                <AddButton onClick={()=>{handleSubmit()}}>Start<FaArrowAltCircleRight/></AddButton>
-                                <DeleteButton onClick={()=>{setShowBackDrop(!showBackDrop)}}><FaX/>Cancel</DeleteButton>
+                                <StartButton onClick={()=>{handleSubmit()}}>Start<FaArrowAltCircleRight/></StartButton>
+                                <CancelButton onClick={()=>{setShowBackDrop(!showBackDrop)}}><FaX/>Cancel</CancelButton>
                               </ButtonContainer>
                               </BackDrop>
                 }
             </Layout>
         
-        </>
+        
     )
 }

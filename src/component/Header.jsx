@@ -30,10 +30,10 @@ const Header = () => {
         }
          {(role==='SPHINX_USER') &&  
         <>
-        <HeaderButton to="/userlist">Users</HeaderButton>
-        <HeaderButton to="/questionList">Questions</HeaderButton>
-        <HeaderButton to="/topic">Assinged exam</HeaderButton>
-        <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
+        <HeaderButton to="/userlist">Reports</HeaderButton>
+        <HeaderButton to="/completedexam">Completed exam</HeaderButton>
+        <HeaderButton to="/assignedexam">Assinged exam</HeaderButton>
+        <HeaderButton to={'/user-dashboard'}>Home</HeaderButton>
         </>
         }
 

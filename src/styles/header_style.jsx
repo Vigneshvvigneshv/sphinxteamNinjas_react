@@ -97,3 +97,52 @@ export const NavButton = styled(NavLink)`
   &:active { transform: translateY(0); }
   &:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
 `;
+
+export const StartButton = styled(NavLink)`
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: green;
+  color: ${({ theme }) => theme.colors.cream};
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+  &:hover {
+    background: ${({ theme }) => theme.colors.success};
+    transform: translateY(-1px);
+  }
+  &:active { transform: translateY(0); }
+  &:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+`;
+
+export const CancelButton = styled(NavLink)`
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: red;
+  color: ${({ theme }) => theme.colors.cream};
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+  &:hover {
+    background: ${({ theme }) => theme.colors.error};
+    transform: translateY(-1px);
+  }
+  &:active { transform: translateY(0); }
+  &:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+`;
+

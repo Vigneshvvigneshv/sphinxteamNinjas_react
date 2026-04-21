@@ -29,7 +29,7 @@ const App = () => {
   const ProtectedRoute = ({ children }) => {
     console.log("inside if protected");
 
-    if (role!==null) {
+    if (partyId!==null) {
       console.log("inside if ", partyId);
 
       return children;
@@ -47,7 +47,7 @@ const App = () => {
   };
 
   const UserAuthentication = ({ children }) => {
-    if (role[0] === "SPHINX_USER") {
+    if (role=== "SPHINX_USER") {
       return children;
     } else {
       return <ErrorPage></ErrorPage>;

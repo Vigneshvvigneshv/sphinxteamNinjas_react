@@ -48,7 +48,7 @@ const LoginPage = () => {
     const response=await apiPost('/user/login',formData);
     if(response.errorMessage!==undefined){
         setError(response);
-        toast.error(`${response.errorMessage}`,{position:'top-center'})
+        toast.error(`Invalid credentials`,{position:'top-center'})
     }else if(response.successMessage!==undefined){
       toast.success("Login Sucessfully!", {position: "top-center"});
       console.log("partyId:", response.partyId);  // 👈 check this

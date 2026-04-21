@@ -19,6 +19,7 @@ import {
 import BackDrop from "./BackDrop";
 import { FileInput } from "../styles/form_style";
 import { FaX } from "react-icons/fa6";
+import { NavButton, StartButton } from "../styles/header_style";
 
 export const UserExamTable = ({ data, handleStartExam }) => {
   const [show, setShow] = useState(false);
@@ -36,14 +37,14 @@ export const UserExamTable = ({ data, handleStartExam }) => {
 
             {show ? "Hide" : "View details"}
           </Button>
-          <AddButton
+          <StartButton
             onClick={() => {
               handleStartExam(data.examId);
             }}
           >
             Start
             <FaArrowAltCircleRight />
-          </AddButton>
+          </StartButton>
         </ButtonContainer>
       </TableRow>
       {show && (
