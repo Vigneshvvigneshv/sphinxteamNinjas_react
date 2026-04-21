@@ -64,7 +64,14 @@ export default function AssignedExam(){
       }, []);
       
       const generateQuestion=async()=>{
-        const response=await apiPost('/generate-questions/generate-question')
+        const response=await apiPost('/generate-question/generate-questions',{examId:examId,partyId:partyId})
+        console.log('Question Generation',response);
+        if(response.responseMessage==='success'){
+          // toast.success('Exam started',{position:'top-center'});
+          handleSubmit();
+        }else if(response.errorMessage==='error'){
+          toast.error('Please try again later',{position:'top-center'});
+        }
       }
       const handleSubmit=async()=>{
         const response=await apiPost(`/start-exam/exam-start`,{...userData,examId:examId,partyId:partyId})
