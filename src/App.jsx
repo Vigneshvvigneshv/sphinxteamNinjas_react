@@ -21,6 +21,7 @@ import { UnAuthorisedPage } from "./pages/UnAuthorisedPage";
 import ExamQuestionList from "./pages/ExamQuestionList";
 import CompletedExam from "./pages/CompletedExam";
 import AssignedExam from "./pages/AssignedExam";
+import ResultPage from "./pages/ResultPage";
 
 const App = () => {
   const { partyId, role } = useSelector((state) => state.userReducer);
@@ -265,6 +266,17 @@ const App = () => {
             <ProtectedRoute>
               <UserAuthentication>
                 <CompletedExam></CompletedExam>
+              </UserAuthentication>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/exam-result/:examId/:partyId"
+          element={
+            <ProtectedRoute>
+              <UserAuthentication>
+                <ResultPage></ResultPage>
               </UserAuthentication>
             </ProtectedRoute>
           }
