@@ -23,14 +23,14 @@ import CompletedExam from "./pages/CompletedExam";
 import AssignedExam from "./pages/AssignedExam";
 
 const App = () => {
-  const { user, role } = useSelector((state) => state.userReducer);
-  console.log("user ", user);
+  const { partyId, role } = useSelector((state) => state.userReducer);
+  console.log("user ", partyId);
 
   const ProtectedRoute = ({ children }) => {
     console.log("inside if protected");
 
-    if (user.length > 0) {
-      console.log("inside if ", user);
+    if (role!==null) {
+      console.log("inside if ", partyId);
 
       return children;
     } else {
@@ -39,7 +39,7 @@ const App = () => {
   };
 
   const AdminAuthentication = ({ children }) => {
-    if (role[0] === "SPHINX_ADMIN") {
+    if (role=== "SPHINX_ADMIN") {
       return children;
     } else {
       return <UnAuthorisedPage></UnAuthorisedPage>;

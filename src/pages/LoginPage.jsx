@@ -51,6 +51,8 @@ const LoginPage = () => {
         toast.error(`${response.errorMessage}`,{position:'top-center'})
     }else if(response.successMessage!==undefined){
       toast.success("Login Sucessfully!", {position: "top-center"});
+      console.log("partyId:", response.partyId);  // 👈 check this
+       console.log("role:", response.role); 
        dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role}));
       if (response.role === "SPHINX_ADMIN") {
           console.log(response.role); 

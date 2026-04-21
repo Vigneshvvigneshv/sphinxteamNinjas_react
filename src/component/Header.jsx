@@ -4,11 +4,11 @@ import { userAction } from '../store/userSlice';
 import { FaKey, FaUserPlus } from "react-icons/fa";
 
 const Header = () => {
-  const { user, role } = useSelector((state) => state.userReducer);
+  const { partyId, role } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
   const removeUser = () => {
-    dispatch(userAction.removeFromUserLogin({ partyId: user[0], role: role[0] }));
+    dispatch(userAction.removeFromUserLogin());
   }
 
   return (
@@ -17,18 +17,29 @@ const Header = () => {
         <HeaderLogoIcon><FaKey style={{"color":"white"}}></FaKey></HeaderLogoIcon>
         <HeaderAppName>Sphinx</HeaderAppName>
       </HeaderLogo>
-      {(user.length!==0) &&
+      {(partyId!==null) &&
       <HeaderNav>
-        {(role[0]==="SPHINX_ADMIN") &&<><HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
+        {(role==='SPHINX_ADMIN') &&  
+        <>
+        <HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
         <HeaderButton to="/questionList">Questions</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
-        </> 
+        </>
         }
+         {(role==='SPHINX_USER') &&  
+        <>
+        <HeaderButton to="/userlist">Users</HeaderButton>
+        <HeaderButton to="/questionList">Questions</HeaderButton>
+        <HeaderButton to="/topic">Assinged exam</HeaderButton>
+        <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
+        </>
+        }
+
         <NavButton style={{color:`white`}} to={'/'} onClick={removeUser}>Logout</NavButton>
       </HeaderNav>
-}
+      }
     </HeaderContainer>
   )
 }

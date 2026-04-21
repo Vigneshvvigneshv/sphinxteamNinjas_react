@@ -16,7 +16,7 @@ import Empty from "../component/Empty";
 
 export default function CompletedExam() {
 const [examList, setExamList] = useState([]);
-const partyId = useSelector((state) => state.userReducer.user[0]);
+const partyId = useSelector((state) => state.userReducer.partyId);
 
     const fetchPartyDetails = async () => {
             const response = await apiGet(`/exam/getcompletedexam-by-partyId/${partyId}`);

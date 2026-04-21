@@ -49,7 +49,7 @@ export default function AssignedExam(){
               setShowBackDrop(!showBackDrop)
             }
     
-      const partyId = useSelector((state) => state.userReducer.user[0]);
+      const partyId = useSelector((state) => state.userReducer.partyId);
       console.log(partyId);
     
       const fetchPartyDetails = async () => {

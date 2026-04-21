@@ -21,14 +21,14 @@ const AddExam = () => {
     setShow(!show);
   }
 
-  const {user} = useSelector((state) => state.userReducer)
+  const {partyId} = useSelector((state) => state.userReducer)
   const [formData, setFormData] = useState({
     examName: "",
     description: "",
     noOfQuestions: "",
     duration: "",
     passPercentage: "",
-    partyId: user[0]
+    partyId: partyId
   });
 
   useEffect(() => {

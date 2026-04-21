@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux'
 
 const AdminDashBoard = () => {
   const[data,setData]=useState("");
-  const {user} = useSelector((state) => state.userReducer)
+  const {partyId} = useSelector((state) => state.userReducer)
   const location=useLocation();
   const message=location.state?.msg;
   const[show,setShow]=useState(false);
@@ -29,7 +29,7 @@ const AdminDashBoard = () => {
     setShow(!show);
   }
    const deleteExam = async (examId) => {
-      const response = await apiDelete('/exam/delete-exam', {'deleteList':examId,'partyId': user[0] });
+      const response = await apiDelete('/exam/delete-exam', {'deleteList':examId,'partyId':partyId });
       console.log(response);
       if(response.successMessage!==undefined){
         toast.success(response.successMessage,{position:'top-center'});
@@ -45,7 +45,7 @@ const AdminDashBoard = () => {
   },[]);
 
   const fetchData = async () => {
-      const response= await apiPost('/exam/getall-exam',{partyId:user[0]});
+      const response= await apiPost('/exam/getall-exam',{partyId:partyId});
       setData(response);
     
     }
