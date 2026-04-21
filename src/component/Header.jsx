@@ -30,7 +30,6 @@ const Header = () => {
         }
          {(role==='SPHINX_USER') &&  
         <>
-        <HeaderButton to="/userlist">Reports</HeaderButton>
         <HeaderButton to="/completedexam">Completed exam</HeaderButton>
         <HeaderButton to="/assignedexam">Assinged exam</HeaderButton>
         <HeaderButton to={'/user-dashboard'}>Home</HeaderButton>

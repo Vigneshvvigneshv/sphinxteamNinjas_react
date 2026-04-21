@@ -1,138 +1,165 @@
-
-
-
-import { UserCard } from '../component/UserCard'
 import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
-import {
-  ButtonContainer,
-  Button,
-  CommonContainer,
-  CommonHeading,
-  CommonSection,
-  CommonTable,
-  Content,
-  ExamContainer,
-  ExamContent,
-  TableRow,
-  ExamHeader,
-  AddButton,
-  DeleteButton,
-  ContentHeading,
-  CommonHeader
-} from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet, apiPost } from "../ApiServices/apiServices";
-import ExamCard from "../component/ExamCard";
-import { UserExamTable } from "../component/UserExamTable";
-import Empty from "../component/Empty";
-import { FaAngleDoubleDown, FaArrowAltCircleRight } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import BackDrop from "../component/BackDrop";
+import { FaSearch, FaPlay } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+
+
+
+import { StartButton, CancelButton } from "../styles/header_style";
 import { FileInput } from "../styles/form_style";
-import { useNavigate } from 'react-router-dom';
-import { CancelButton, StartButton } from '../styles/header_style';
+import { EmptyDesc, EmptyTitle, EmptyWrap, HeaderLeft, ListWrap, PageHeader, PageLabel, PageSubtitle, PageWrapper, Panel, PanelBadge, PanelHeader, PanelTitle, ResultCount, RowCard, RowLeft, RowSub, RowTitle, SearchInput, SearchWrap, StatCard, StatIcon, StatInfo, StatsRow, Toolbar } from "../styles/AsignedExam_style";
 
-export default function AssignedExam(){
 
-    const [examList, setExamList] = useState([]);
-      const navigate=useNavigate();
-        const [showBackDrop,setShowBackDrop]=useState(false);
-            const [userData,setUserData]=useState({
-              password:""
-            })
-            const [examId,setExamId]=useState("")
-            const handleChange=(key,value)=>{
-              setUserData({...userData,[key]:value})
-            }
-            const handleStartExam=(examId)=>{
-              generateQuestion(examId);
-              setExamId(examId)
-              setShowBackDrop(!showBackDrop)
-            }
-    
-      const partyId = useSelector((state) => state.userReducer.partyId);
-      console.log(partyId);
-    
-      const fetchPartyDetails = async () => {
-        const response = await apiGet(`/exam/getexam-by-partyId/${partyId}`);
-        console.log(response);
-        setExamList(response.examList);
-      };
-      useEffect(() => {
-        fetchPartyDetails();
-      }, []);
-      
-      const generateQuestion=async(examId)=>{
-        const response=await apiPost('/generate-question/generate-questions',{examId:examId})
-        console.log('Question Generation',response);
-        if(response.responseMessage==='success'){
-          // toast.success('Exam started',{position:'top-center'});
-        }else if(response.errorMessage==='error'){
-          toast.error('Please try again later',{position:'top-center'});
-        }
-      }
-      const handleSubmit=async()=>{
-        const response=await apiPost(`/start-exam/exam-start`,{...userData,examId:examId,partyId:partyId})
-        console.log(response);
-        setUserData({password:""});
-        setShowBackDrop(!showBackDrop);
-    
-        if(response.successMessage!==undefined){
-          toast.success(response.successMessage,{position:"top-center"})
-          navigate(`/examquestionlist/${examId}/${partyId}`)
-        }
-        if(response.errorMessage!==undefined){
-          toast.error(response.errorMessage,{position:"top-center"})
-        }
-      } 
-    return(
-        
-         <Layout>
-              <CommonContainer>
-                <CommonHeader>
-                  <CommonHeading>Assigned Exam</CommonHeading>
-                </CommonHeader>
-              <CommonSection>
-                  <CommonTable>
-                    {examList?.length === 0 ? (
-                      <Empty>No exam available</Empty>
-                    ) : (
-                      examList.map((exam, index) => {
-                        return (
-                          <>
-                            <UserExamTable data={exam} key={index} handleStartExam={handleStartExam}>
-                              
-                            </UserExamTable>
-                          </>
-                        );
-                      })
-                    )}
-                  </CommonTable>
-                </CommonSection>
-              </CommonContainer>
-               {showBackDrop && <BackDrop>
-                              <CommonHeading>Instructions & Conditions</CommonHeading>
-                              <ExamContainer style={{ display: "block", textAlign: "left", maxHeight: "none", marginBottom: "15px", padding: "15px" }}>
-                                <ContentHeading style={{ marginBottom: "8px" }}>1. Do not refresh or navigate away from the page.</ContentHeading>
-                                <ContentHeading style={{ marginBottom: "8px" }}>2. Ensure you have a stable internet connection.</ContentHeading>
-                                <ContentHeading style={{ marginBottom: "8px" }}>3. The exam will be auto-submitted when the time is up.</ContentHeading>
-                                <ContentHeading>4. Once started, the exam cannot be paused.</ContentHeading>
-                              </ExamContainer>
-                              <Content>Enter security code to start exam</Content>
-                              <ExamHeader>
-                                Security code:
-                              </ExamHeader>
-                              <FileInput type="text" name="examPassword" value={userData.password} onChange={(e)=>{handleChange("password",e.target.value)}}></FileInput>
-                              <ButtonContainer>
-                                <StartButton onClick={()=>{handleSubmit()}}>Start<FaArrowAltCircleRight/></StartButton>
-                                <CancelButton onClick={()=>{setShowBackDrop(!showBackDrop)}}><FaX/>Cancel</CancelButton>
-                              </ButtonContainer>
-                              </BackDrop>
-                }
-            </Layout>
-        
-        
-    )
+/* ───────── Component ───────── */
+export default function AssignedExam() {
+  const [examList, setExamList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [showBackDrop, setShowBackDrop] = useState(false);
+  const [examId, setExamId] = useState("");
+  const [userData, setUserData] = useState({ password: "" });
+
+  const partyId = useSelector((state) => state.userReducer.partyId);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchExams();
+  }, []);
+
+  const fetchExams = async () => {
+    setLoading(true);
+    try {
+      const res = await apiGet(`/exam/getexam-by-partyId/${partyId}`);
+      setExamList(res.examList || []);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtered = examList.filter(e =>
+    !search ||
+    e.examName?.toLowerCase().includes(search.toLowerCase()) ||
+    e.examId?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleStartExam = async (id) => {
+    await apiPost('/generate-question/generate-questions', { examId: id });
+    setExamId(id);
+    setShowBackDrop(true);
+  };
+
+  const handleSubmit = async () => {
+    const res = await apiPost(`/start-exam/exam-start`, {
+      ...userData,
+      examId,
+      partyId
+    });
+
+    setShowBackDrop(false);
+
+    if (res.successMessage) {
+      toast.success(res.successMessage);
+      navigate(`/examquestionlist/${examId}/${partyId}`);
+    } else {
+      toast.error(res.errorMessage);
+    }
+  };
+
+  return (
+    <Layout>
+      <PageWrapper>
+
+        {/* Header */}
+        <PageHeader>
+          <HeaderLeft>
+            <PageLabel>Assigned</PageLabel>
+            <PageSubtitle>Available Exams</PageSubtitle>
+          </HeaderLeft>
+        </PageHeader>
+
+        {/* Stats */}
+        <StatsRow>
+          <StatCard>
+            <StatIcon>📘</StatIcon>
+            <StatInfo>
+              <div className="val">{loading ? "—" : examList.length}</div>
+              <div className="lbl">Total Exams</div>
+            </StatInfo>
+          </StatCard>
+        </StatsRow>
+
+        {/* Search */}
+        <Toolbar>
+          <SearchWrap>
+            <FaSearch />
+            <SearchInput
+              placeholder="Search exam..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </SearchWrap>
+
+          <ResultCount>
+            {filtered.length} results
+          </ResultCount>
+        </Toolbar>
+
+        {/* List */}
+        <Panel>
+          <PanelHeader>
+            <PanelTitle>Assigned Exams</PanelTitle>
+            <PanelBadge>{filtered.length}</PanelBadge>
+          </PanelHeader>
+
+          <ListWrap>
+            {filtered.length === 0 ? (
+              <EmptyWrap>
+                <EmptyTitle>No Exams</EmptyTitle>
+                <EmptyDesc>No assigned exams available</EmptyDesc>
+              </EmptyWrap>
+            ) : (
+              filtered.map((exam, i) => (
+                <RowCard key={i}>
+                  <RowLeft>
+                    <RowTitle>{exam.examName}</RowTitle>
+                    <RowSub>{exam.examId}</RowSub>
+                  </RowLeft>
+
+                  <StartButton onClick={() => handleStartExam(exam.examId)}>
+                    Start <FaPlay />
+                  </StartButton>
+                </RowCard>
+              ))
+            )}
+          </ListWrap>
+        </Panel>
+
+        {/* Modal */}
+        {showBackDrop && (
+          <Backdrop>
+            <h3>Enter Password</h3>
+            <FileInput
+              value={userData.password}
+              onChange={(e) => setUserData({ password: e.target.value })}
+            />
+
+            <div style={{ display: "flex", gap: 10 }}>
+              <StartButton onClick={handleSubmit}>Start</StartButton>
+              <CancelButton onClick={() => setShowBackDrop(false)}>
+                <FaX />
+              </CancelButton>
+            </div>
+          </Backdrop>
+        )}
+
+      </PageWrapper>
+    </Layout>
+  );
 }

@@ -50,11 +50,10 @@ export const UserExamTable = ({ data, handleStartExam }) => {
       {show && (
         <ExamContainer style={{ display: "block" }}>
           <ContentHeading>
-            Description:
-            <ExamContent>{data.description}</ExamContent>
+            Description : <ExamContent>{data.description}</ExamContent>
           </ContentHeading>
           <ContentHeading>
-            Duration:<ExamContent>{data.duration} min</ExamContent>
+            Duration : <ExamContent>{data.duration} min</ExamContent>
           </ContentHeading>
           <ContentHeading>
             Total Questions:
