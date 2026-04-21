@@ -157,18 +157,21 @@ const ExamQuestionList = () => {
 
   // ---------- Final Submit ----------
   const handleFinalSubmit = async () => {
-    try {
+    
      const response= await apiPost("/submit-exam/submit-exam", {
         examId:examId,
         partyId:partyId,
       });
 
-      if(response.successMessage!=undefined){
+      if(response.responseMessage=="SUCCESS"){
+        setShowSubmitModal(false);
         navigate(`/exam-result/${examId}/${partyId}`);
       }
-    } catch (err) {
-      console.error(err);
-    }
+      if(response.responseMessage=="ERROR"){
+        setShowSubmitModal(false);
+
+        toast.error("Error submitting exam",{position:"top-center"})
+      }
   };
   if (!data) return <p>Loading...</p>;
 
