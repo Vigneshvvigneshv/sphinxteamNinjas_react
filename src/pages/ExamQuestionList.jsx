@@ -83,9 +83,9 @@ const ExamQuestionList = () => {
      try {
       await apiPost("/answer/save-answer", {
         examId:examId,
-        partyId,
-        questionId,
-        answer,
+        partyId:partyId,
+       questionId: questionId,
+       answer: answer,
       });
     } catch (err) {
       console.error("Save failed", err);
