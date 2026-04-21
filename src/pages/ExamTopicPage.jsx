@@ -175,7 +175,7 @@ const ExamTopicPage = () => {
     if (response.errorMessage !== undefined) {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage !== undefined) {
-      toast.success(response.successMessage, { position: "top-center" });
+      toast.success("Topic added successfully", { position: "top-center" });
 
       // Re-fetch assigned topics and update percentage simultaneously
       const updated = await apiGet(
@@ -256,7 +256,7 @@ const ExamTopicPage = () => {
     if (response.errorMessage !== undefined) {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage !== undefined) {
-      toast.success(response.successMessage, { position: "top-center" });
+      toast.success("Topic update successfully", { position: "top-center" });
       const updated = await apiGet(`/exam-topic/get-topicby-examid?examId=${id}`);
       if (updated.message === "success") {
         setAssignedTopics(updated.topicList);

@@ -47,6 +47,7 @@ export default function AssignedExam(){
               setUserData({...userData,[key]:value})
             }
             const handleStartExam=(examId)=>{
+              generateQuestion();
               setExamId(examId)
               setShowBackDrop(!showBackDrop)
             }
@@ -64,11 +65,10 @@ export default function AssignedExam(){
       }, []);
       
       const generateQuestion=async()=>{
-        const response=await apiPost('/generate-question/generate-questions',{examId:examId,partyId:partyId})
+        const response=await apiPost('/generate-question/generate-questions',{examId:examId})
         console.log('Question Generation',response);
         if(response.responseMessage==='success'){
           // toast.success('Exam started',{position:'top-center'});
-          handleSubmit();
         }else if(response.errorMessage==='error'){
           toast.error('Please try again later',{position:'top-center'});
         }
