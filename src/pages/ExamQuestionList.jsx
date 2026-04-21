@@ -2,10 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../component/Layout'
 import { apiGet, apiPost } from '../ApiServices/apiServices'
-import { useParams } from 'react-router-dom'
-import { CommonContainer } from '../styles/common_style'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button, ButtonContainer, Container, OptionBox, Question, SubmitButtonTop, Timer, TopBar, MainContent, QuestionNumber, OptionsGrid, RightControls, FreeTextInput, FreeTextArea } from '../styles/ExamQuestionList_style'
-import { toast } from 'sonner'
+
 import Modal from '../component/Modal'
 
 const ExamQuestionList = () => {
@@ -20,6 +19,7 @@ const ExamQuestionList = () => {
   const [showSubmitModal,setShowSubmitModal]=useState(false);
   const timerRef = useRef(null);
 
+  const navigate= useNavigate();
   //fetching questions
     const fecthQuestion=async(page)=>{
         try{
@@ -158,10 +158,14 @@ const ExamQuestionList = () => {
   // ---------- Final Submit ----------
   const handleFinalSubmit = async () => {
     try {
-      await apiPost("/submit-exam/submit-exam", {
+     const response= await apiPost("/submit-exam/submit-exam", {
         examId:examId,
         partyId:partyId,
       });
+
+      if(response.successMessage!=undefined){
+        navigate(`/exam-result/${examId}/${partyId}`);
+      }
     } catch (err) {
       console.error(err);
     }
