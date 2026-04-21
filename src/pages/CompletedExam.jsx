@@ -12,6 +12,7 @@ import { apiGet } from "../ApiServices/apiServices";
 
 import { UserExamTable } from "../component/UserExamTable";
 import Empty from "../component/Empty";
+import CompletedExamTable from "../component/CompletedExamTable";
 
 
 export default function CompletedExam() {
@@ -38,9 +39,9 @@ const partyId = useSelector((state) => state.userReducer.user[0]);
                       examList?.map((exam, index) => {
                         return (
                           <>
-                            <UserExamTable data={exam} key={index}>
+                            <CompletedExamTable data={exam} key={index}>
                               
-                            </UserExamTable>
+                            </CompletedExamTable>
                           </>
                         );
                       })
