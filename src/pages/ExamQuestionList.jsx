@@ -4,7 +4,7 @@ import Layout from '../component/Layout'
 import { apiGet, apiPost } from '../ApiServices/apiServices'
 import { useParams } from 'react-router-dom'
 import { CommonContainer } from '../styles/common_style'
-import { Button, ButtonContainer, Container, OptionBox, Question, SubmitButtonTop, Timer, TopBar } from '../styles/ExamQuestionList_style'
+import { Button, ButtonContainer, Container, OptionBox, Question, SubmitButtonTop, Timer, TopBar, MainContent, QuestionNumber, OptionsGrid, RightControls, FreeTextInput, FreeTextArea } from '../styles/ExamQuestionList_style'
 import { toast } from 'sonner'
 import Modal from '../component/Modal'
 
@@ -14,7 +14,9 @@ const ExamQuestionList = () => {
   const [data, setData] = useState(null);
   const [pageNo, setPageNo] = useState(1);
   const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(600);
+  const [timeLeft, setTimeLeft] = useState(null);
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [examName, setExamName] = useState("");
   const [showSubmitModal,setShowSubmitModal]=useState(false);
   const timerRef = useRef(null);
 
@@ -33,9 +35,30 @@ const ExamQuestionList = () => {
         fecthQuestion(pageNo);
     },[pageNo])
 
+    useEffect(() => {
+        const fetchExamDetails = async () => {
+            try {
+                const response = await apiGet(`/exam/getexam/${examId}`);
+                if (response?.examList) {
+                    if (response.examList.duration) {
+                        setTimeLeft(response.examList.duration * 60);
+                        setTimerStarted(true);
+                    }
+                    if (response.examList.examName) {
+                        setExamName(response.examList.examName);
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchExamDetails();
+    }, [examId]);
 
      // ---------- Timer ----------
   useEffect(() => {
+    if (!timerStarted) return;
+
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -46,10 +69,8 @@ const ExamQuestionList = () => {
       });
     }, 1000);
 
-
-    
  return () => clearInterval(timerRef.current);
-  }, []);
+  }, [timerStarted]);
 
 
    const formatTime = (time) => {
@@ -81,13 +102,38 @@ const ExamQuestionList = () => {
     }));
   };
 
+  const handleMultiChoiceChange = (option, checked) => {
+    const qId = data.question.questionId;
+    setAnswers((prev) => {
+      let currentAnswers = Array.isArray(prev[qId]) ? [...prev[qId]] : [];
+      if (checked) {
+         currentAnswers.push(option);
+      } else {
+         currentAnswers = currentAnswers.filter(ans => ans !== option);
+      }
+      return {
+        ...prev,
+        [qId]: currentAnswers
+      };
+    });
+  };
+
+  const handleTextChange = (text) => {
+    const qId = data.question.questionId;
+    setAnswers((prev) => ({
+      ...prev,
+      [qId]: text,
+    }));
+  };
+
     // ---------- Navigation ----------
   const handleNext = async () => {
     const qId = data.question.questionId;
     const selected = answers[qId];
 
-    if (selected) {
-      await saveAnswer(qId, selected);
+    if (selected !== undefined) {
+      const formattedAnswer = Array.isArray(selected) ? selected.join(",") : selected;
+      await saveAnswer(qId, formattedAnswer);
     }
 
     if (data.hasNext){
@@ -99,8 +145,9 @@ const ExamQuestionList = () => {
     const qId = data.question.questionId;
     const selected = answers[qId];
 
-    if (selected) {
-      await saveAnswer(qId, selected);
+    if (selected !== undefined) {
+      const formattedAnswer = Array.isArray(selected) ? selected.join(",") : selected;
+      await saveAnswer(qId, formattedAnswer);
     }
 
     if (data.hasPrevious){ 
@@ -126,41 +173,92 @@ const ExamQuestionList = () => {
     <Layout>
         <Container>
         <TopBar>
-            <Timer>⏱ {formatTime(timeLeft)}</Timer>
-            <SubmitButtonTop onClick={()=>{setShowSubmitModal(!showSubmitModal)}}>
-          Submit Exam
-        </SubmitButtonTop>
+            <h3>{examName || "Loading..."}</h3>
+            <RightControls>
+                <Timer>⏱ {timeLeft !== null ? formatTime(timeLeft) : 'Loading...'}</Timer>
+                <SubmitButtonTop onClick={()=>{setShowSubmitModal(!showSubmitModal)}}>
+                  Submit Exam
+                </SubmitButtonTop>
+            </RightControls>
         </TopBar>
         
-        <Question>{q.questionDetail}</Question>
+        <MainContent>
+            <QuestionNumber>Question {pageNo}</QuestionNumber>
+            <Question>{q.questionDetail}</Question>
+            
+            {(!q.questionTypeId || q.questionTypeId === 'SINGLE_CHOICE' || q.questionTypeId === 'TRUE_FALSE') && (
+            <OptionsGrid>
+             {["A", "B", "C", "D"].map((opt) => {
+                const optText = q[`option${opt}`];
+                if (!optText) return null;
+                return (
+                <OptionBox
+                  key={opt}
+                  selected={answers[q.questionId] === opt}
+                >
+                  <input
+                    type="radio"
+                    checked={answers[q.questionId] === opt}
+                    onChange={() => handleOptionChange(opt)}
+                  />
+                  <span>{optText}</span>
+                </OptionBox>
+                );
+             })}
+            </OptionsGrid>
+            )}
 
-         {["A", "B", "C", "D"].map((opt) => (
-        <OptionBox
-          key={opt}
-          selected={answers[q.questionId] === opt}
-        >
-          <input
-            type="radio"
-            checked={answers[q.questionId] === opt}
-            onChange={() => handleOptionChange(opt)}
-          />
-          {opt === "A" && q.optionA}
-          {opt === "B" && q.optionB}
-          {opt === "C" && q.optionC}
-          {opt === "D" && q.optionD}
-        </OptionBox>
-      ))}
+            {q.questionTypeId === 'MULTI_CHOICE' && (
+            <OptionsGrid>
+             {["A", "B", "C", "D"].map((opt) => {
+                const optText = q[`option${opt}`];
+                if (!optText) return null;
+                const isChecked = Array.isArray(answers[q.questionId]) && answers[q.questionId].includes(opt);
+                return (
+                <OptionBox
+                  key={opt}
+                  selected={isChecked}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={(e) => handleMultiChoiceChange(opt, e.target.checked)}
+                  />
+                  <span>{optText}</span>
+                </OptionBox>
+                );
+             })}
+            </OptionsGrid>
+            )}
+
+            {q.questionTypeId === 'FILL_BLANKS' && (
+               <FreeTextInput 
+                  type="text" 
+                  placeholder="Type your answer here..."
+                  value={answers[q.questionId] || ""}
+                  onChange={(e) => handleTextChange(e.target.value)}
+               />
+            )}
+
+            {q.questionTypeId === 'DETAILED_ANSWER' && (
+               <FreeTextArea 
+                  placeholder="Type your detailed answer here..."
+                  value={answers[q.questionId] || ""}
+                  onChange={(e) => handleTextChange(e.target.value)}
+               />
+            )}
+        </MainContent>
 
        {/* Navigation */}
-      <ButtonContainer>
-        <Button onClick={handlePrevious} disabled={!data.hasPrevious}>
-          Previous
-        </Button>
+       <ButtonContainer>
+         <Button onClick={handlePrevious} disabled={!data.hasPrevious}>
+           Previous
+         </Button>
 
-        <Button primary onClick={handleNext} disabled={!data.hasNext}>
-          Next
-        </Button>
-      </ButtonContainer>
+         <Button primary onClick={handleNext} disabled={!data.hasNext}>
+           Next
+         </Button>
+       </ButtonContainer>
         </Container>
 
         {showSubmitModal && (
