@@ -114,47 +114,53 @@ const CreateQuestionPage = () => {
 
   
 
- const handleChange = (e) => {
-  const { name, value,checked } = e.target;
-  if (name === "answer" && questionType === "MULTI_CHOICE") {
-    setFormData((prev) => {
-      let updatedAnswers = Array.isArray(prev.answer) ? [...prev.answer] : [];
-      if (checked) {
-        updatedAnswers.push(value);
-      } else {
-        updatedAnswers = updatedAnswers.filter((ans) => ans !== value);
-      }
-
-      return {
+  const handleChange = (e) => {
+    const { name, value, checked } = e.target;
+    if (name === "answer" && questionType === "MULTI_CHOICE") {
+      setFormData((prev) => {
+        let updatedAnswers = Array.isArray(prev.answer) ? [...prev.answer] : [];
+        if (checked) {
+          updatedAnswers.push(value);
+        } else {
+          updatedAnswers = updatedAnswers.filter((ans) => ans !== value);
+        }
+        return {
+          ...prev,
+          answer: updatedAnswers
+        };
+      });
+    } else {
+      // FIX: Removed hardcoded questionTypeId and difficultyLevel overrides.
+      // These are now kept in sync via their own dedicated useEffect hooks below.
+      setFormData((prev) => ({
         ...prev,
-        answer: updatedAnswers
-      };
-    });
-  } else {
+        [name]: value,
+      }));
+    }
+
+    setError((prev) => ({
+      ...prev,
+      [name]: ""
+    }));
+  };
+
+
+  // Whenever Question Type changes, reset answer and sync questionTypeId into formData
+  useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      answer: questionType === "MULTI_CHOICE" ? [] : "",
       questionTypeId: questionType,
-      difficultyLevel: difficultyLevel, 
     }));
-  }
+  }, [questionType]);
 
-  setError((prev) => ({
-    ...prev,
-    [name]: ""
-  }));
-};
-
-
-//Whenever Question Type change answer value will be empty
-useEffect(() => {
-  setFormData((prev) => ({
-    ...prev,
-    answer: questionType === "MULTI_CHOICE" ? [] : "",
-    questionTypeId: questionType
-
-  }));
-}, [questionType]);
+  // FIX: Whenever difficultyLevel state changes, sync it into formData
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      difficultyLevel: difficultyLevel,
+    }));
+  }, [difficultyLevel]);
 
 
 
@@ -350,7 +356,8 @@ useEffect(() => {
                 {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>} */}
                 
                 <ActionBottomWrapper>
-                  <ActionButton type="submit" >{id !== undefined ? 'Save Changes' : 'Add Question'}</ActionButton>
+                  <NavButton>Cancel</NavButton>
+                  <NavButton type="submit" >{id !== undefined ? 'Save Changes' : 'Add Question'}</NavButton>
                 </ActionBottomWrapper>
               </ScoringSidebar>
             </QuestionUpperContainer>
@@ -358,7 +365,7 @@ useEffect(() => {
         </FormMainContainer>
 
         <CommonContainer>
-          <NavButton to={`/question/${topicId}`} state={{topicId: topicId}}>Back to Question page</NavButton>
+          <NavButton to={`/question/${topicId}`}>Back to Question page</NavButton>
         </CommonContainer>
         
       </QuestionContainer>

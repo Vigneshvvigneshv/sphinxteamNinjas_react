@@ -274,12 +274,9 @@ const ExamTopicPage = () => {
 
 
 
-  // ─────────────────────────────────────────────────────────────────────────
   return (
     <Layout>
       <CommonContainer>
-
-        {/* ══ Section 1: Assigned Topics ══════════════════════════════════ */}
         <CommonHeader>
           <CommonHeading>{examName} - Assigned Topics</CommonHeading>
           <ButtonContainer>
@@ -322,11 +319,9 @@ const ExamTopicPage = () => {
           </CommonTable>
         </CommonSection>
 
-        {/* ══ Section 2: Add Topics Form ══════════════════════════════════ */}
         <CommonSection>
           <CommonHeader>
             <CommonHeading>Add Topics to Exam</CommonHeading>
-            {/* FIX 8: Hide Add Row button when percentage is at 100 */}
             {percentage < 100 && (
               <AddButton type="button" onClick={addRow}>
                 <FaPlus /> Add Row
@@ -434,7 +429,7 @@ const ExamTopicPage = () => {
 
       </CommonContainer>
 
-      {/* ── Delete Confirm Modal ─────────────────────────────────────────── */}
+      {/*Delete Confirm Modal*/}
       {showDelete && (
         <Modal
           title="Remove Topic"
@@ -447,7 +442,7 @@ const ExamTopicPage = () => {
         </Modal>
       )}
 
-      {/* ── Edit Topic Modal ─────────────────────────────────────────────── */}
+      {/*  Edit Topic Modal */}
       {showEdit && (
         <Modal
           title="Edit Topic"

@@ -100,7 +100,7 @@ const AddTopic = () => {
               />
               {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
             </FieldContainer>
-            <SubmitButton>{id === undefined ? 'Add' : 'Edit'}</SubmitButton>
+            <SubmitButton>{id === undefined ? 'Add' : 'Save'}</SubmitButton>
           </Form>
         </FormContainer>
         <NavButton to={'/topic'}>Back to topic</NavButton>

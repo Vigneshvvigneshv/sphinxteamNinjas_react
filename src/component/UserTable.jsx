@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, ButtonContainer, CommonTable, Content, DeleteButton, TableRow, ExamContainer, ExamContent } from "../styles/common_style";
-import { FaAngellist, FaAngleDoubleDown, FaTrash } from "react-icons/fa";
+import { FaAngellist, FaAngleDoubleDown, FaAngleDoubleUp, FaTrash } from "react-icons/fa";
 import Modal from "./Modal";
 import { apiDelete, apiGet } from "../ApiServices/apiServices";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ const UserTable = ({data,onDelete}) => {
             <TableRow>
                 <Content>{data.userLoginId}</Content>
                 <ButtonContainer>
-                    <Button onClick={()=>{setShow(!show);show?"":getExams()}}> {show?<FaX/>:<FaAngleDoubleDown/>} {show?"Hide":"View exam"}</Button>
+                    <Button onClick={()=>{setShow(!show);show?"":getExams()}}> {show?<FaAngleDoubleUp/>:<FaAngleDoubleDown/>} {show?"Hide":"View exam"}</Button>
                     <DeleteButton onClick={()=>onDelete(data.partyId)}><FaTrash></FaTrash></DeleteButton>
                 </ButtonContainer>
             </TableRow>

@@ -368,6 +368,8 @@ export const ScoringFieldWrapper = styled(FieldWrapper)`
 export const ActionBottomWrapper = styled.div`
   margin-top: auto;
   padding-top: 20px;
+  display:flex;
+  gap:20px;
 `;
 
 export const ActionButton = styled.button`
