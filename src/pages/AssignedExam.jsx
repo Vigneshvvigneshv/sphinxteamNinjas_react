@@ -47,7 +47,7 @@ export default function AssignedExam(){
               setUserData({...userData,[key]:value})
             }
             const handleStartExam=(examId)=>{
-              generateQuestion();
+              generateQuestion(examId);
               setExamId(examId)
               setShowBackDrop(!showBackDrop)
             }
@@ -64,7 +64,7 @@ export default function AssignedExam(){
         fetchPartyDetails();
       }, []);
       
-      const generateQuestion=async()=>{
+      const generateQuestion=async(examId)=>{
         const response=await apiPost('/generate-question/generate-questions',{examId:examId})
         console.log('Question Generation',response);
         if(response.responseMessage==='success'){
