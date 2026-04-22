@@ -26,7 +26,7 @@ import ResultPage from "./pages/ResultPage";
 const App = () => {
   const { partyId, role } = useSelector((state) => state.userReducer);
   console.log("user ", partyId);
-
+  
   const ProtectedRoute = ({ children }) => {
     console.log("inside if protected");
 
@@ -152,7 +152,7 @@ const App = () => {
           element={
             <ProtectedRoute>
               <AdminAuthentication>
-                <QuestionPage />
+                <AllQuestionPage />
               </AdminAuthentication>
             </ProtectedRoute>
           }

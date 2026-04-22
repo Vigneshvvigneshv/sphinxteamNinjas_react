@@ -7,6 +7,7 @@ import { apiPost } from '../ApiServices/apiServices';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Modal from '../component/Modal';
 import { SiPayloadcms } from 'react-icons/si';
+import { toast } from 'sonner';
 
 const SignUp = () => {
   const[error,setError]=useState({});
@@ -47,9 +48,13 @@ const SignUp = () => {
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     const response = await apiPost('/user/signup',formData);
-    console.log(response);
-    setError(response);
-    showPop();
+    if(response.responseMessage==='success'){
+      console.log(response);
+      setError(response);
+      showPop();
+    }else if(response.responseMessage==='error'){
+      toast.error(`Singup failed`,{position:'top-center'})
+    }
   };
 
   return (
@@ -134,11 +139,11 @@ const SignUp = () => {
               </Dropdown>
             </FieldContainer>
 
-            {show && <Modal>{error.successMessage}</Modal>}
             <SubmitButton>Submit</SubmitButton>
           </Form>
         </FormContainer>
       </CommonContainer>
+            {show && <Modal>{error.successMessage}</Modal>}
     </Layout>
   )
 }

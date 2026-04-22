@@ -1,22 +1,38 @@
-import { HeaderButton, HeaderContainer, HeaderLogo, HeaderLogoIcon, HeaderAppName, HeaderNav, NavButton } from '../styles/header_style'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react';
+import { 
+  HeaderButton, 
+  HeaderContainer, 
+  HeaderLogo, 
+  HeaderLogoIcon, 
+  HeaderAppName, 
+  HeaderNav, 
+  NavButton, 
+  MobileMenuToggle 
+} from '../styles/header_style';
+import { useDispatch, useSelector } from 'react-redux';
 import { userAction } from '../store/userSlice';
-import { FaKey, FaUserPlus } from "react-icons/fa";
+import { FaKey, FaUserPlus, FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { partyId, role } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const closeMenu = () => setIsOpen(false);
+
   const removeUser = () => {
     dispatch(userAction.removeFromUserLogin());
-  }
+    closeMenu();
+  };
 
   return (
     <HeaderContainer>
       <HeaderLogo>
-        <HeaderLogoIcon><FaKey style={{"color":"white"}}></FaKey></HeaderLogoIcon>
+        <HeaderLogoIcon><FaKey style={{ "color": "white" }} /></HeaderLogoIcon>
         <HeaderAppName>Sphinx</HeaderAppName>
       </HeaderLogo>
+
       {(partyId!==null) &&
       <HeaderNav>
         {(role==='SPHINX_ADMIN') &&  
@@ -36,11 +52,14 @@ const Header = () => {
         </>
         }
 
-        <NavButton style={{color:`white`}} to={'/'} onClick={removeUser}>Logout</NavButton>
-      </HeaderNav>
+           <NavButton style={{ color: `white` }} to={'/'} onClick={removeUser}>
+              Logout
+            </NavButton>
+          </HeaderNav>
+      
       }
     </HeaderContainer>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

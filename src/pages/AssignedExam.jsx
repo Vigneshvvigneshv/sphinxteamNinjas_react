@@ -1,5 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
+
+import {
+  ButtonContainer,
+  Button,
+  CommonContainer,
+  CommonHeading,
+  CommonSection,
+  CommonTable,
+  Content,
+  ExamContainer,
+  ExamContent,
+  TableRow,
+  ExamHeader,
+  AddButton,
+  DeleteButton,
+  ContentHeading,
+  CommonHeader,
+  CancelButton, StartButton
+} from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet, apiPost } from "../ApiServices/apiServices";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +29,7 @@ import { FaX } from "react-icons/fa6";
 
 
 import { UserExamTable } from "../component/UserExamTable";
-import { StartButton, CancelButton } from "../styles/header_style";
+
 import { FileInput } from "../styles/form_style";
 import { AttemptsBar,
          AttemptsBarFill, 

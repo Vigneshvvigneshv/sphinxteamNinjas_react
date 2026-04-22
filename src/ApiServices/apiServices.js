@@ -11,6 +11,7 @@ export async function apiPost(endpoint, data) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials:"include",
     });
 
     const result = await response.json();
@@ -47,6 +48,7 @@ export async function apiDelete(endpoint, data) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials:"include",
     });
 
     const result = await response.json();
@@ -66,6 +68,7 @@ export async function apiPut(endpoint, data) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials:"include",
     });
 
     const result = await response.json();

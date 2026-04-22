@@ -1,168 +1,128 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../component/Layout'
-import {
-  ErrorMessage, FieldContainer, Form, FormContainer, FormHeading,
-  FormInput, FormLabel, FormText, LabelContainer, SubmitButton, SuccessMessage
-} from '../styles/form_style';
-import {
-  ButtonContainer, CommonContainer, CommonHeading,
-  Container, Content, Dropdown, Title
-} from '../styles/common_style';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
-import SingleChoice from '../component/SingleChoice';
-import MultiChoice from '../component/MultiChoice';
-import {
-  QuestionContainer, QuestionFieldContainer, QuestionFormContainer,
-  QuestionHeaderContainer, QuestionTypeBadge, ProgressLabel,
-  LeftSideContainer,
-  RightSideContainer,
-  QuestionUpperContainer,
-  Option,
-  ProfessionalHeaderContainer, ConfigGroup, FieldWrapper, TopicBadge, ConfigDropdown, FormMainContainer, MainFieldContainer, OptionsWrapper, OptionsSection, OptionsDisclaimer, ScoringSidebar, ScoringHeading, ScoringRow, ScoringFieldWrapper, ActionBottomWrapper, ActionButton,
-  QuestionInputWrapper,
-  QuestionInputBox
-} from '../styles/question_style';
-import { validateQuestion } from '../validation/ValidationUtil';
-import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
-import { NavButton } from '../styles/header_style';
-import TrueOrFalse from '../component/TrueOrFalse';
-import Modal from '../component/Modal';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'sonner';
 
-const CreateQuestionPage = () => {
-  //questionId
-  const {id} = useParams();
-  console.log("Id ",id);
-  const navigate=useNavigate();
-  const location = useLocation();
-  const topicId = location.state?.topicId;
-  console.log("TopicId ",topicId)
+import Layout from '../component/Layout';
+import Modal from '../component/Modal';
+import SingleChoice from '../component/SingleChoice';
+import MultiChoice from '../component/MultiChoice';
+import TrueOrFalse from '../component/TrueOrFalse';
+import { validateQuestion } from '../validation/ValidationUtil';
+import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
+import { ErrorMessage } from '../styles/form_style';
+import { LabelContainer, FormLabel, FormInput, FieldContainer } from '../styles/form_style';
+
+import {
+  QFormWrap, QFormConfigPanel, QFormConfigGroup, QFormConfigLabel,
+  QFormConfigSelect, QFormTopicBadge, QFormBody, QFormLeft, QFormRight,
+  QFormSectionLabel, QFormOptionsBox, QFormOptionsSectionLabel,
+  QFormDisclaimer, QFormTextarea, QFormActions, QFormSubmitBtn, QFormCancelBtn,
+  FBackBtn, FRow, FField, FLabel, FInput, FError,
+} from '../styles/formPage_style';
+
+const AddEditQuestionPage = () => {
+  const { theme }  = useSelector((state) => state.themeReducer);
+  const { id }     = useParams();           // questionId (edit mode)
+  const location   = useLocation();
+  const navigate   = useNavigate();
+  const isEdit     = id !== undefined;
+
+  const topicId   = location.state?.topicId;
   const topicName = location.state?.topicName;
-  console.log('create question page topic id', topicId);
-  console.log('create question page topic Name', topicName)
 
-  const [error, setError] = useState("");
-  const [questionType, setQuestionType] = useState('SINGLE_CHOICE');
+  const [questionType,    setQuestionType]    = useState('SINGLE_CHOICE');
   const [difficultyLevel, setDifficultyLevel] = useState('1');
-  const [show, setShow] = useState(false);
-  const[topic,setTopic]=useState([]);
-  
+  const [topicList,       setTopicList]       = useState([]);
+  const [show,            setShow]            = useState(false);
+  const [error,           setError]           = useState({});
 
-  const changeShow = () => {
-    setShow(!show);
-  }
-
-  console.log(error);
   const [formData, setFormData] = useState({
-    topicId: topicId || "",
-    questionDetail: "",
-    optionA: "",
-    optionB: "",
-    optionC: "",
-    optionD: "",
-    answer: "",
-    numAnswers: 1,
-    questionTypeId: questionType,
-    difficultyLevel: difficultyLevel,
-    answerValue: 1,
-    negativeMarkValue: 0
+    topicId:          topicId || '',
+    questionDetail:   '',
+    optionA: '', optionB: '', optionC: '', optionD: '',
+    answer:           '',
+    numAnswers:       1,
+    questionTypeId:   'SINGLE_CHOICE',
+    difficultyLevel:  '1',
+    answerValue:      1,
+    negativeMarkValue: 0,
   });
 
-  useEffect(() => {
-    console.log(id);
-    if (id !== undefined) {
-
-      const fetchData = async () => {
-        const response = await apiGet('/question/getquestion-by-id?questionId=' + id);
-        console.log('create question page', response);
-
-        setFormData({
-          questionDetail: response.question.questionDetail,
-          optionA: response.question.optionA,
-          optionB: response.question.optionB,
-          optionC: response.question.optionC,
-          optionD: response.question.optionD,
-          answer: response.question.answer,
-          numAnswers: response.question.numAnswers,
-          answerValue: response.question.answerValue,
-          negativeMarkValue: response.question.negativeMarkValue,
-          questionTypeId: response.question.questionTypeId,
-          difficultyLevel: response.question.difficultyLevel
-          
-        })
-        setQuestionType(response.question.questionTypeId);
-        setDifficultyLevel(response.question.difficultyLevel);
-      }
-      fetchData()
-    }
-  }, [])
-
-
-//fetching all topics
-  const getTopic=async()=>{
-      const response = await apiGet('/topic/getall-topic');
-        console.log("AllTopic ",response)
-        setTopic(response.topicList);
-  }
-
- useEffect(()=>{
-    if(!topicName){
-      getTopic();
-    }
-  },[])
-
-
+  console.log('AddEditQuestion',formData);
   
 
-  const handleChange = (e) => {
-    const { name, value, checked } = e.target;
-    if (name === "answer" && questionType === "MULTI_CHOICE") {
-      setFormData((prev) => {
-        let updatedAnswers = Array.isArray(prev.answer) ? [...prev.answer] : [];
-        if (checked) {
-          updatedAnswers.push(value);
-        } else {
-          updatedAnswers = updatedAnswers.filter((ans) => ans !== value);
-        }
-        return {
-          ...prev,
-          answer: updatedAnswers
-        };
+  // ── Fetch question data (edit mode) ──────────────────────────────────────
+  useEffect(() => {
+    if (!isEdit) return;
+    const fetch = async () => {
+      const res = await apiGet('/question/getquestion-by-id?questionId=' + id);
+      const q   = res.question;
+      console.log('Question',q.answer);
+      
+      setFormData({
+        questionDetail:   q.questionDetail,
+        optionA: q.optionA, optionB: q.optionB,
+        optionC: q.optionC, optionD: q.optionD,
+        answer:           q.answer,
+        numAnswers:       q.numAnswers,
+        answerValue:      q.answerValue,
+        negativeMarkValue: q.negativeMarkValue,
+        questionTypeId:   q.questionTypeId,
+        difficultyLevel:  q.difficultyLevel,
       });
-    } else {
-      // FIX: Removed hardcoded questionTypeId and difficultyLevel overrides.
-      // These are now kept in sync via their own dedicated useEffect hooks below.
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+      setQuestionType(q.questionTypeId);
+      setDifficultyLevel(q.difficultyLevel);
+    };
+    fetch();
+  }, []);
 
-    setError((prev) => ({
-      ...prev,
-      [name]: ""
-    }));
-  };
+  // ── Fetch topic list (when no topicName passed) ──────────────────────────
+  useEffect(() => {
+    if (topicName) return;
+    const fetch = async () => {
+      const res = await apiGet('/topic/getall-topic');
+      setTopicList(res.topicList || []);
+    };
+    fetch();
+  }, []);
 
-
-  // Whenever Question Type changes, reset answer and sync questionTypeId into formData
+  // ── Sync questionType → formData ─────────────────────────────────────────
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      answer: questionType === "MULTI_CHOICE" ? [] : "",
+      answer:         questionType === 'MULTI_CHOICE' ? [] : '',
       questionTypeId: questionType,
     }));
   }, [questionType]);
 
-  // FIX: Whenever difficultyLevel state changes, sync it into formData
+  // ── Sync difficultyLevel → formData ──────────────────────────────────────
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      difficultyLevel: difficultyLevel,
-    }));
+    setFormData((prev) => ({ ...prev, difficultyLevel }));
   }, [difficultyLevel]);
 
+  // ── Handlers ──────────────────────────────────────────────────────────────
+  const handleChange = (e) => {
+    const { name, value, checked } = e.target;
+    if (name === 'answer' && questionType === 'MULTI_CHOICE') {
+      setFormData((prev) => {
+        const prev_ans = Array.isArray(prev.answer) ? [...prev.answer] : [];
+        return {
+          ...prev,
+          answer: checked
+            ? [...prev_ans, value]
+            : prev_ans.filter((a) => a !== value),
+        };
+      });
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+    setError((prev) => ({ ...prev, [name]: '' }));
+  };
 
+  const handleTopic = (value) => setFormData((prev) => ({ ...prev, topicId: value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,208 +130,195 @@ const CreateQuestionPage = () => {
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-
-    // console.log("formData => ", formData);
-    // return;
-    if (id!== undefined) {
-      const response = await apiPut('/question/update-question', {...formData, questionId: id,topicId:topicId});
-      console.log(response);
-      if (response.errorMessage !== undefined) {
-        setError(response);
-        toast.error(`${response.errorMessage}`,{
-          position:"top-center"
-        })
-      } else if (response.successMessage!== undefined) {
-        setFormData({ ...formData, [e.target.name]: "" })
-        setError(response);
-        // toast.success(`${response.message}`,{
-        //   position:"top-center"
-        // })
-        changeShow();
-      }
+    if (isEdit) {
+      const res = await apiPut('/question/update-question', { ...formData, questionId: id, topicId });
+      if (res.errorMessage)   { setError(res); toast.error(res.errorMessage, { position: 'top-center' }); }
+      if (res.successMessage) { setError(res); setShow(true); }
     } else {
-      const response = await apiPost('/question/create-question', formData);
-      console.log(response);
-      if (response.errorMessage !== undefined) {
-        setError(response);
-        toast.error(`${response.errorMessage}`,{
-          position:"top-center"
-        })
-      } else if (response.successMessage !== undefined) {
-        setFormData({ ...formData, [e.target.name]: "" })
-        setError(response);
-        toast.success(`${response.successMessage}`,{
-          position:"top-center"
-        })
-      }
+      const res = await apiPost('/question/create-question', formData);
+      if (res.errorMessage)   { setError(res); toast.error(res.errorMessage, { position: 'top-center' }); }
+      if (res.successMessage) { setError(res); setShow(true) }
     }
-  }
+  };
 
-  useEffect(()=>{
-    console.log("topicName => ",topicName)
-    console.log("topicList => ",topic)
-  }, [topic])
+  // ── Back destination ──────────────────────────────────────────────────────
+  const backTo = topicId ? `/question/${topicId}` : '/questionList';
 
-
-  const handleTopic=(value)=>{
-    const newObj = {...formData, topicId:value}
-    setFormData(newObj);
-  }
   return (
-    <Layout>
-      <QuestionContainer>
-        
-        <ProfessionalHeaderContainer>
-          <ConfigGroup>
-            <FieldWrapper>
-              <LabelContainer>
-                <FormLabel>Topic</FormLabel>
-              </LabelContainer>
-              {topicName ? (
-                 <TopicBadge>
-                   {topicName}
-                 </TopicBadge>
-              ) : (
-                 <ConfigDropdown name="" value={topicId} onChange={(e)=>handleTopic(e.target.value)} $minWidth="200px">
-                   <option value="">Select Topic</option>
-                   {topic.map((e)=>(
-                     <option key={e.topicId} value={e.topicId}>{e.topicName}</option>       
-                   ))}
-                 </ConfigDropdown>
-              )}
-            </FieldWrapper>
+    
+      <Layout>
+        <QFormWrap>
 
-            <FieldWrapper>
-              <LabelContainer>
-                <FormLabel>Question Type</FormLabel>
-              </LabelContainer>
-              <ConfigDropdown
+          {/* ── Config bar ─────────────────────────────────────────────── */}
+          <QFormConfigPanel>
+
+            {/* Topic */}
+            <QFormConfigGroup>
+              <QFormConfigLabel>Topic</QFormConfigLabel>
+              {topicName
+                ? <QFormTopicBadge>{topicName}</QFormTopicBadge>
+                : (
+                  <QFormConfigSelect
+                    value={formData.topicId}
+                    onChange={(e) => handleTopic(e.target.value)}
+                    $minWidth="200px"
+                  >
+                    <option value="">Select topic</option>
+                    {topicList.map((t) => (
+                      <option key={t.topicId} value={t.topicId}>{t.topicName}</option>
+                    ))}
+                  </QFormConfigSelect>
+                )}
+            </QFormConfigGroup>
+
+            {/* Question type */}
+            <QFormConfigGroup>
+              <QFormConfigLabel>Question Type</QFormConfigLabel>
+              <QFormConfigSelect
                 value={questionType}
-                onChange={(e) => { setQuestionType(e.target.value); setError("") }}
-                $minWidth="200px"
+                onChange={(e) => { setQuestionType(e.target.value); setError({}); }}
+                $minWidth="190px"
               >
-                <option value='SINGLE_CHOICE'>Single choice</option>
-                <option value='MULTI_CHOICE'>Multiple choice</option>
-                <option value='TRUE_FALSE'>True or false</option>
-                <option value='FILL_BLANKS'>Fill in the blanks</option>
-                <option value='DETAILED_ANSWER'>Detailed answer</option>
-              </ConfigDropdown>
-            </FieldWrapper>
-            
-            <FieldWrapper>
-              <LabelContainer>
-                <FormLabel>Difficulty Level</FormLabel>
-              </LabelContainer>
-              <ConfigDropdown value={difficultyLevel} onChange={(e) => setDifficultyLevel(e.target.value)} $minWidth="140px">
-                <option value='1'>Easy</option>
-                <option value='2'>Medium</option>
-                <option value='3'>Hard</option>
-              </ConfigDropdown>
-            </FieldWrapper>
-          </ConfigGroup>
-        </ProfessionalHeaderContainer>
-  
-        <FormMainContainer>
-          <Form onSubmit={handleSubmit}>
-            <QuestionUpperContainer>
-              <LeftSideContainer>
-                <FieldContainer>
-                  <LabelContainer>
-                    <FormLabel>Question Content</FormLabel>
-                  </LabelContainer>
-                  <QuestionInputWrapper>
-                    <QuestionInputBox
-                      name='questionDetail'
-                      placeholder='Enter the full question text here...'
-                      type='text'
-                      value={formData.questionDetail}
+                <option value="SINGLE_CHOICE">Single Choice</option>
+                <option value="MULTI_CHOICE">Multiple Choice</option>
+                <option value="TRUE_FALSE">True / False</option>
+                <option value="FILL_BLANKS">Fill in the Blanks</option>
+                <option value="DETAILED_ANSWER">Detailed Answer</option>
+              </QFormConfigSelect>
+            </QFormConfigGroup>
+
+            {/* Difficulty */}
+            <QFormConfigGroup>
+              <QFormConfigLabel>Difficulty</QFormConfigLabel>
+              <QFormConfigSelect
+                value={difficultyLevel}
+                onChange={(e) => setDifficultyLevel(e.target.value)}
+                $minWidth="130px"
+              >
+                <option value="1">Easy</option>
+                <option value="2">Medium</option>
+                <option value="3">Hard</option>
+              </QFormConfigSelect>
+            </QFormConfigGroup>
+
+          </QFormConfigPanel>
+
+          {/* ── Main body ──────────────────────────────────────────────── */}
+          <form onSubmit={handleSubmit}>
+            <QFormBody>
+
+              {/* Left — question + options */}
+              <QFormLeft>
+                <QFormSectionLabel>
+                  {isEdit ? 'Edit Question' : 'New Question'}
+                </QFormSectionLabel>
+
+                <FField>
+                  <FLabel htmlFor="questionDetail">Question Content</FLabel>
+                  <QFormTextarea
+                    id="questionDetail"
+                    name="questionDetail"
+                    placeholder="Enter the full question text here…"
+                    value={formData.questionDetail}
+                    onChange={handleChange}
+                  />
+                  {error.questionDetail && <FError>{error.questionDetail}</FError>}
+                </FField>
+
+                <QFormOptionsBox>
+                  <QFormOptionsSectionLabel>Answer Options</QFormOptionsSectionLabel>
+                  {questionType === 'SINGLE_CHOICE' && (
+                    <SingleChoice change={handleChange} error={error} data={formData} />
+                  )}
+                  {questionType === 'MULTI_CHOICE' && (
+                    <MultiChoice change={handleChange} error={error} data={formData} />
+                  )}
+                  {questionType === 'TRUE_FALSE' && (
+                    <TrueOrFalse
+                      change={handleChange} error={error}
+                      data={{ ...formData, optionA: 'TRUE', optionB: 'FALSE' }}
+                    />
+                  )}
+                  {(questionType === 'FILL_BLANKS' || questionType === 'DETAILED_ANSWER') && (
+                    <QFormDisclaimer>
+                      No predefined options required for this question type.
+                      Enter the correct answer in the scoring panel on the right.
+                    </QFormDisclaimer>
+                  )}
+                </QFormOptionsBox>
+              </QFormLeft>
+
+              {/* Right — scoring */}
+              <QFormRight>
+                <QFormSectionLabel>Scoring &amp; Answer</QFormSectionLabel>
+
+                <FField>
+                  <FLabel>Correct Answer</FLabel>
+                  <FInput
+                    name="answer"
+                    type="text"
+                    placeholder="Enter correct answer"
+                    value={formData.answer}
+                    onChange={handleChange}
+                    disabled={
+                      questionType !== 'FILL_BLANKS' &&
+                      questionType !== 'DETAILED_ANSWER'
+                    }
+                  />
+                  {error.answer && <FError>{error.answer}</FError>}
+                </FField>
+
+                <FRow>
+                  <FField>
+                    <FLabel>Mark (+)</FLabel>
+                    <FInput
+                      name="answerValue"
+                      type="number"
+                      placeholder="1"
+                      value={formData.answerValue}
                       onChange={handleChange}
                     />
-                  </QuestionInputWrapper>
-                  {error.questionDetail && <ErrorMessage>{error.questionDetail}</ErrorMessage>}
-                </FieldContainer>
+                    {error.answerValue && <FError>{error.answerValue}</FError>}
+                  </FField>
 
-                <OptionsWrapper>
-                  <FormLabel>Options</FormLabel>
-                  <OptionsSection>
-                    {questionType === 'SINGLE_CHOICE' && <SingleChoice change={handleChange} error={error} data={formData} />}
-                    {questionType === 'MULTI_CHOICE' && <MultiChoice change={handleChange} error={error} data={formData} />}
-                    {questionType === 'TRUE_FALSE' && <TrueOrFalse change={handleChange} error={error} data={{...formData, optionA: "TRUE", optionB: "FALSE"}} />}
-                    {questionType === 'FILL_BLANKS' && <OptionsDisclaimer>No predefined options required for Fill in the Blanks. Configure the answer directly on the right panel.</OptionsDisclaimer>}
-                    {questionType === 'DETAILED_ANSWER' && <OptionsDisclaimer>No predefined options required for Detailed Answer. Configure the answer directly on the right panel.</OptionsDisclaimer>}
-                  </OptionsSection>
-                </OptionsWrapper>
-              </LeftSideContainer>
-
-              <ScoringSidebar>
-                <div>
-                  <ScoringHeading>Scoring & Answers</ScoringHeading>
-                  
-                  <ScoringFieldWrapper>
-                    <LabelContainer>
-                      <FormLabel>Correct Answer</FormLabel>
-                    </LabelContainer>
-                    <FormInput
-                      name='answer'
-                      placeholder='Enter the correct answer'
-                      type='text' disabled={questionType !== 'FILL_BLANKS' && questionType !== 'DETAILED_ANSWER'} 
-                      value={formData.answer}
+                  {/* <FField>
+                    <FLabel>Negative (−)</FLabel>
+                    <FInput
+                      name="negativeMarkValue"
+                      type="number"
+                      placeholder="0"
+                      value={formData.negativeMarkValue}
                       onChange={handleChange}
                     />
-                    {error.answer && <ErrorMessage>{error.answer}</ErrorMessage>}
-                  </ScoringFieldWrapper>
+                    {error.negativeMarkValue && <FError>{error.negativeMarkValue}</FError>}
+                  </FField> */}
+                </FRow>
 
-                  <ScoringRow>
-                    <ScoringFieldWrapper>
-                      <LabelContainer>
-                        <FormLabel>Mark (+)</FormLabel>
-                      </LabelContainer>
-                      <FormInput
-                        name='answerValue'
-                        placeholder='0'
-                        type='number'
-                        value={formData.answerValue}
-                        onChange={handleChange}
-                      />
-                      {error.answerValue && <ErrorMessage>{error.answerValue}</ErrorMessage>}
-                    </ScoringFieldWrapper>
-                    
-                    <ScoringFieldWrapper>
-                      <LabelContainer>
-                        <FormLabel>Negative Mark (-)</FormLabel>
-                      </LabelContainer>
-                      <FormInput
-                        name='negativeMarkValue'
-                        placeholder='0'
-                        type='number'
-                        value={formData.negativeMarkValue}
-                        onChange={handleChange}
-                      />
-                      {error.negativeMarkValue && <ErrorMessage>{error.negativeMarkValue}</ErrorMessage>}
-                    </ScoringFieldWrapper>
-                  </ScoringRow>
-                </div>
+                {error.errorMessage && <FError>{error.errorMessage}</FError>}
 
-                {/* {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-                {error.successMessage && <SuccessMessage>{error.successMessage}</SuccessMessage>} */}
-                
-                <ActionBottomWrapper>
-                  <NavButton>Cancel</NavButton>
-                  <NavButton type="submit" >{id !== undefined ? 'Save Changes' : 'Add Question'}</NavButton>
-                </ActionBottomWrapper>
-              </ScoringSidebar>
-            </QuestionUpperContainer>
-          </Form>
-        </FormMainContainer>
+                <QFormActions>
+                  <QFormCancelBtn to={backTo}>
+                    <FaArrowLeft size={10} /> Cancel
+                  </QFormCancelBtn>
+                  <QFormSubmitBtn type="submit">
+                    {isEdit ? 'Save Changes' : 'Add Question'}
+                  </QFormSubmitBtn>
+                </QFormActions>
+              </QFormRight>
 
-        <CommonContainer>
-          <NavButton to={`/question/${topicId}`}>Back to Question page</NavButton>
-        </CommonContainer>
-        
-      </QuestionContainer>
-      {show && <Modal>{error.message}</Modal>}
-    </Layout>
-  )
-}
+            </QFormBody>
+          </form>
 
-export default CreateQuestionPage
+        </QFormWrap>
+
+        {show && (
+          <Modal type={isEdit?'edit':'success'}>
+            {error.successMessage}
+          </Modal>
+        )}
+      </Layout>
+   
+  );
+};
+
+export default AddEditQuestionPage;
