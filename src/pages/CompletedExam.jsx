@@ -16,6 +16,7 @@ import Empty from "../component/Empty";
 import CompletedExamTable from "../component/CompletedExamTable";
 import { EmptyDesc, EmptyIcon, EmptyTitle, EmptyWrap, HeaderLeft, ListWrap, PageHeader, PageLabel, PageSubtitle, PageWrapper, Panel, PanelBadge, PanelHeader, PanelTitle, ResultCount, SearchInput, SearchWrap, SkeletonBar, SkeletonRow, StatCard, StatIcon, StatInfo, StatsRow, Toolbar } from "../styles/CompletedExam_style";
 import { FaCheckCircle, FaFileAlt, FaSearch, FaTrophy } from "react-icons/fa";
+import { CardGrid } from "../styles/AsignedExam_style";
 
 
 
@@ -76,7 +77,7 @@ const [examList, setExamList]   = useState([]);
         <PageHeader>
           <HeaderLeft>
             <PageLabel><FaCheckCircle size={10} /> Completed</PageLabel>
-            <PageSubtitle>Completed Exams</PageSubtitle>
+            <PageSubtitle>Completed Assessment</PageSubtitle>
             <PageSubtitle>Review your past exam history, scores, and results.</PageSubtitle>
           </HeaderLeft>
         </PageHeader>
@@ -134,7 +135,7 @@ const [examList, setExamList]   = useState([]);
         {/* Panel */}
         <Panel>
           <PanelHeader>
-            <PanelTitle>Exam History</PanelTitle>
+            <PanelTitle>Assessment History</PanelTitle>
             {!loading && <PanelBadge>{filtered.length} exams</PanelBadge>}
           </PanelHeader>
  
@@ -153,7 +154,7 @@ const [examList, setExamList]   = useState([]);
                     : "Once you complete an exam, your results will appear here."}
                 </EmptyDesc>
               </EmptyWrap>
-            ) : (
+            ) : (<CardGrid style={{flexDirection:"column"}}>{
               filtered.map((exam, index) => (
                 <CompletedExamTable
                   data={exam}
@@ -161,7 +162,7 @@ const [examList, setExamList]   = useState([]);
                   index={index}
                   total={filtered.length}
                 />
-              ))
+              ))}</CardGrid>
             )}
           </ListWrap>
         </Panel>
