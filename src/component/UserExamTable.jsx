@@ -20,13 +20,17 @@ import BackDrop from "./BackDrop";
 import { FileInput } from "../styles/form_style";
 import { FaX } from "react-icons/fa6";
 import { NavButton, StartButton } from "../styles/header_style";
+import { FileX } from "lucide-react";
 
 export const UserExamTable = ({ data, handleStartExam }) => {
   const [show, setShow] = useState(false);
   return (
     <>
       <TableRow>
+       <div style={{display:"flex"}}>
         <Content>{data.examName}</Content>
+        <Content>No of Attempts remaining:{data.noOfAttempts}</Content>
+        </div>
         <ButtonContainer>
           <Button
             onClick={() => {
