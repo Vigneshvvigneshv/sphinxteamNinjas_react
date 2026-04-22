@@ -33,39 +33,31 @@ const Header = () => {
         <HeaderAppName>Sphinx</HeaderAppName>
       </HeaderLogo>
 
-      {partyId !== null && (
+      {(partyId!==null) &&
+      <HeaderNav>
+        {(role==='SPHINX_ADMIN') &&  
         <>
-          {/* Hamburger Icon for Mobile */}
-          <MobileMenuToggle onClick={toggleMenu}>
-            {isOpen ? <FaTimes /> : <FaBars />}
-          </MobileMenuToggle>
+        <HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
+        <HeaderButton to="/userlist">Users</HeaderButton>
+        <HeaderButton to="/questionList">Questions</HeaderButton>
+        <HeaderButton to="/topic">Topics</HeaderButton>
+        <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
+        </>
+        }
+         {(role==='SPHINX_USER') &&  
+        <>
+        <HeaderButton to="/completedexam">Completed exam</HeaderButton>
+        <HeaderButton to="/assignedexam">Assinged exam</HeaderButton>
+        <HeaderButton to={'/user-dashboard'}>Home</HeaderButton>
+        </>
+        }
 
-          {/* Pass $isOpen to the styled nav */}
-          <HeaderNav $isOpen={isOpen}>
-            {role === 'SPHINX_ADMIN' && (
-              <>
-                <HeaderButton to="/adduser" onClick={closeMenu}><FaUserPlus /> user / admin</HeaderButton>
-                <HeaderButton to="/userlist" onClick={closeMenu}>Users</HeaderButton>
-                <HeaderButton to="/questionList" onClick={closeMenu}>Questions</HeaderButton>
-                <HeaderButton to="/topic" onClick={closeMenu}>Topics</HeaderButton>
-                <HeaderButton to={'/admin-dashboard'} onClick={closeMenu}>Home</HeaderButton>
-              </>
-            )}
-            {role === 'SPHINX_USER' && (
-              <>
-                <HeaderButton to="/userlist" onClick={closeMenu}>Reports</HeaderButton>
-                <HeaderButton to="/completedexam" onClick={closeMenu}>Completed exam</HeaderButton>
-                <HeaderButton to="/assignedexam" onClick={closeMenu}>Assigned exam</HeaderButton>
-                <HeaderButton to={'/user-dashboard'} onClick={closeMenu}>Home</HeaderButton>
-              </>
-            )}
-
-            <NavButton style={{ color: `white` }} to={'/'} onClick={removeUser}>
+           <NavButton style={{ color: `white` }} to={'/'} onClick={removeUser}>
               Logout
             </NavButton>
           </HeaderNav>
-        </>
-      )}
+      
+      }
     </HeaderContainer>
   );
 };

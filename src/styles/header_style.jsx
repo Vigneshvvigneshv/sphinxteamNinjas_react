@@ -10,7 +10,8 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   position: sticky;
   top:0;
-  z-index:1000; /* Increased for mobile overlay */
+  z-index:1000;
+  overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 
   @media (max-width: 768px) {
