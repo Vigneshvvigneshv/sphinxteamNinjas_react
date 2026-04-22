@@ -1,174 +1,177 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../component/Layout';
-import { CommonContainer } from '../styles/common_style';
-import {
-  ErrorMessage, FieldContainer, Form, FormContainer, FormHeading,
-  FormInput, FormLabel, SubmitButton, FormEyebrow, FormSubtitle
-} from '../styles/form_style';
-import { NavButton } from '../styles/header_style';
-import { validateEmpty, validateExam } from '../validation/ValidationUtil';
-import { useNavigate, useParams } from 'react-router-dom';
-import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
+
+import Layout from '../component/Layout';
 import Modal from '../component/Modal';
+import { validateExam } from '../validation/ValidationUtil';
+import { apiGet, apiPost, apiPut } from '../ApiServices/apiServices';
 
-const AddExam = () => {
-  const {id} = useParams();
-  const [error, setError] = useState("");
-  const [show, setShow] = useState(false);
+import {
+  FormPageWrap, FormCard, FormCardEyebrow, FormCardTitle,
+  FormCardSubtitle, FormDivider, FField, FLabel, FLabelOptional,
+  FInput, FTextarea, FError, FSubmitBtn, FBackBtn, FRow,
+} from '../styles/formPage_style';
 
-  const changeShow = () => {
-    setShow(!show);
-  }
+const AddEditExam = () => {
+  const { theme }   = useSelector((state) => state.themeReducer);
+  const { partyId } = useSelector((state) => state.userReducer);
+  const { id }      = useParams();
+  const navigate    = useNavigate();
+  const isEdit      = id !== undefined;
 
-  const {partyId} = useSelector((state) => state.userReducer)
   const [formData, setFormData] = useState({
-    examName: "",
-    description: "",
-    noOfQuestions: "",
-    duration: "",
-    passPercentage: "",
-    partyId: partyId
+    examName: '', description: '', noOfQuestions: '',
+    duration: '', passPercentage: '', partyId,
   });
+  const [error, setError] = useState({});
+  const [show,  setShow]  = useState(false);
 
+  // ── Prefill on edit ───────────────────────────────────────────────────────
   useEffect(() => {
-    console.log(id);
-    if (id !== undefined) {
-      const fetchData = async () => {
-        const response = await apiGet('/exam/getexam/' + id);
-        console.log(response);
-        setFormData({
-          ...formData,
-          examName: response.examList.examName,
-          description: response.examList.description,
-          noOfQuestions: response.examList.noOfQuestions,
-          duration: response.examList.duration,
-          passPercentage: response.examList.passPercentage
-        })
-      }
-      fetchData()
-    }
-  }, [])
+    if (!isEdit) return;
+    const fetch = async () => {
+      const res = await apiGet('/exam/getexam/' + id);
+      const e   = res.examList;
+      setFormData((prev) => ({
+        ...prev,
+        examName:       e.examName,
+        description:    e.description,
+        noOfQuestions:  e.noOfQuestions,
+        duration:       e.duration,
+        passPercentage: e.passPercentage,
+      }));
+    };
+    fetch();
+  }, []);
 
+  // ── Handlers ──────────────────────────────────────────────────────────────
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError({
-      ...error,
-      [e.target.name]: ""
-    });
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError({ ...error, [e.target.name]: '' });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     const validationErrors = validateExam(formData);
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-    if (id === undefined) {
-      const response = await apiPost('/exam/create-exam', formData)
-      console.log(response);
-      if (response.errorMessage !== undefined) {
-        setError(response);
-      } else if (response.successMessage !== undefined) {
-        setFormData({ ...formData, topicName: "" });
-        setError(response);
-        changeShow()
-      }
+    if (!isEdit) {
+      const res = await apiPost('/exam/create-exam', formData);
+      if (res.errorMessage)   { setError(res); return; }
+      if (res.successMessage) { setError(res); setShow(true); }
     } else {
-      const response = await apiPut('/exam/update-exam', {...formData, "examId": id});
-      console.log(response);
-      if (response.errorMessage !== undefined) {
-        setError(response);
-      } else if (response.successMessage !== undefined) {
-        setFormData({ ...formData, topicName: "" });
-        setError(response);
-        changeShow()
-      }
+      const res = await apiPut('/exam/update-exam', { ...formData, examId: id });
+      if (res.errorMessage)   { setError(res); return; }
+      if (res.successMessage) { setError(res); setShow(true); }
     }
-  }
+  };
 
   return (
-    <Layout>
-      <CommonContainer>
-        <FormContainer>
-          <FormHeading>{id === undefined ? 'Add Assessment' : 'Edit Assessment'}</FormHeading>
-          <FormSubtitle>Fill in the details below to {id === undefined ? 'create a new' : 'update the'} assessment</FormSubtitle>
-          <Form onSubmit={handleSubmit}>
-            <FieldContainer>
-              <FormLabel>Exam name</FormLabel>
-              <FormInput
-                name='examName'
-                placeholder='Enter the name'
-                type='text'
-                value={formData.examName}
-                onChange={handleChange}
-              />
-              {error.examName && <ErrorMessage>{error.examName}</ErrorMessage>}
-            </FieldContainer>
+    <ThemeProvider theme={theme}>
+      <Layout>
+        <FormPageWrap>
+          <FormCard>
+            <FormCardEyebrow>{isEdit ? 'Edit assessment' : 'New assessment'}</FormCardEyebrow>
+            <FormCardTitle>{isEdit ? 'Edit Assessment' : 'Add Assessment'}</FormCardTitle>
+            <FormCardSubtitle>
+              {isEdit
+                ? 'Update the assessment details below.'
+                : 'Fill in the details below to create a new assessment.'}
+            </FormCardSubtitle>
+            <FormDivider />
 
-            <FieldContainer>
-              <FormLabel>Description</FormLabel>
-              <FormInput
-                name='description'
-                placeholder='Enter the description'
-                type='text'
-                value={formData.description}
-                onChange={handleChange}
-              />
-              {error.description && <ErrorMessage>{error.description}</ErrorMessage>}
-            </FieldContainer>
+            <form onSubmit={handleSubmit}>
+              <FField>
+                <FLabel htmlFor="examName">Assessment Name</FLabel>
+                <FInput
+                  id="examName"
+                  name="examName"
+                  type="text"
+                  placeholder="e.g. Java Fundamentals"
+                  value={formData.examName}
+                  onChange={handleChange}
+                />
+                {error.examName && <FError>{error.examName}</FError>}
+              </FField>
 
-            <FieldContainer>
-              <FormLabel>Number of questions</FormLabel>
-              <FormInput
-                name='noOfQuestions'
-                placeholder='Enter the number of questions'
-                type='text'
-                value={formData.noOfQuestions}
-                onChange={handleChange}
-              />
-              {error.noOfQuestions && <ErrorMessage>{error.noOfQuestions}</ErrorMessage>}
-            </FieldContainer>
+              <FField>
+                <FLabelOptional htmlFor="description">Description</FLabelOptional>
+                <FTextarea
+                  id="description"
+                  name="description"
+                  placeholder="Brief description of the exam…"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+                {error.description && <FError>{error.description}</FError>}
+              </FField>
 
-            <FieldContainer>
-              <FormLabel>Duration</FormLabel>
-              <FormInput
-                name='duration'
-                placeholder='Enter the duration (in minutes)'
-                type='text'
-                value={formData.duration}
-                onChange={handleChange}
-              />
-              {error.duration && <ErrorMessage>{error.duration}</ErrorMessage>}
-            </FieldContainer>
+              <FRow>
+                <FField>
+                  <FLabel htmlFor="noOfQuestions">Number of Questions</FLabel>
+                  <FInput
+                    id="noOfQuestions"
+                    name="noOfQuestions"
+                    type="text"
+                    placeholder="e.g. 20"
+                    value={formData.noOfQuestions}
+                    onChange={handleChange}
+                  />
+                  {error.noOfQuestions && <FError>{error.noOfQuestions}</FError>}
+                </FField>
 
-            <FieldContainer>
-              <FormLabel>Pass percentage</FormLabel>
-              <FormInput
-                name='passPercentage'
-                placeholder='Enter the pass percentage (20 to 100)'
-                type='text'
-                value={formData.passPercentage}
-                onChange={handleChange}
-              />
-              {error.passPercentage && <ErrorMessage>{error.passPercentage}</ErrorMessage>}
-            </FieldContainer>
+                <FField>
+                  <FLabel htmlFor="duration">Duration (minutes)</FLabel>
+                  <FInput
+                    id="duration"
+                    name="duration"
+                    type="text"
+                    placeholder="e.g. 60"
+                    value={formData.duration}
+                    onChange={handleChange}
+                  />
+                  {error.duration && <FError>{error.duration}</FError>}
+                </FField>
+              </FRow>
 
-            {error.errorMessage && <ErrorMessage>{error.errorMessage}</ErrorMessage>}
-            
-            <SubmitButton>{id !== undefined ? 'Save changes' : 'Add'}</SubmitButton>
-          </Form>
-        </FormContainer>
+              <FField>
+                <FLabel htmlFor="passPercentage">Pass Percentage (20–100)</FLabel>
+                <FInput
+                  id="passPercentage"
+                  name="passPercentage"
+                  type="text"
+                  placeholder="e.g. 60"
+                  value={formData.passPercentage}
+                  onChange={handleChange}
+                />
+                {error.passPercentage && <FError>{error.passPercentage}</FError>}
+              </FField>
 
-        <NavButton to={'/admin-dashboard'} state={{error: error.successMessage}}>Back to home</NavButton>
-      </CommonContainer>
-      {show && <Modal>{error.successMessage}</Modal>}
-    </Layout>
-  )
-}
+              {error.errorMessage && <FError>{error.errorMessage}</FError>}
 
-export default AddExam
+              <FSubmitBtn type="submit">
+                {isEdit ? 'Save Changes' : 'Add Assessment'}
+              </FSubmitBtn>
+            </form>
+
+            <FBackBtn to="/admin-dashboard">
+              <FaArrowLeft size={11} /> Back to Dashboard
+            </FBackBtn>
+          </FormCard>
+        </FormPageWrap>
+
+        {show && (
+          <Modal onCancel={() => { setShow(false); navigate('/admin-dashboard'); }}>
+            {error.successMessage}
+          </Modal>
+        )}
+      </Layout>
+    </ThemeProvider>
+  );
+};
+
+export default AddEditExam;

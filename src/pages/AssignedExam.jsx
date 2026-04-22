@@ -19,7 +19,8 @@ import {
   AddButton,
   DeleteButton,
   ContentHeading,
-  CommonHeader
+  CommonHeader,
+  CancelButton, StartButton
 } from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet, apiPost } from "../ApiServices/apiServices";
@@ -32,7 +33,6 @@ import { toast } from "sonner";
 import BackDrop from "../component/BackDrop";
 import { FileInput } from "../styles/form_style";
 import { useNavigate } from 'react-router-dom';
-import { CancelButton, StartButton } from '../styles/header_style';
 
 export default function AssignedExam(){
 

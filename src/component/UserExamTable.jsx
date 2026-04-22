@@ -9,6 +9,7 @@ import {
   AddButton,
   ExamHeader,
   DeleteButton,
+  StartButton,
 } from "../styles/common_style";
 import { Button } from "flowbite-react";
 import {
@@ -19,7 +20,7 @@ import {
 import BackDrop from "./BackDrop";
 import { FileInput } from "../styles/form_style";
 import { FaX } from "react-icons/fa6";
-import { NavButton, StartButton } from "../styles/header_style";
+import { NavButton  } from "../styles/header_style";
 
 export const UserExamTable = ({ data, handleStartExam }) => {
   const [show, setShow] = useState(false);

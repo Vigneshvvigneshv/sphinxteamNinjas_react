@@ -72,7 +72,7 @@ const LoginPage = () => {
         <FormHeading>Login</FormHeading>
         <Form onSubmit={handleSubmit}>
           <FieldContainer>
-            <FormLabel htmlFor='UserName'>Username</FormLabel>
+            <FormLabel htmlFor='UserName'>User name</FormLabel>
             <FormInput 
               type="text"  
               name='userName'
