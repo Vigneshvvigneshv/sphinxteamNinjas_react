@@ -62,9 +62,9 @@ const UserDashBoard = () => {
       iconColor: "#4F46E5",
       accent: "linear-gradient(90deg,#4F46E5,#3B82F6)",
       accentBg: "rgba(79,70,229,0.05)",
-      title: "Assigned Exams",
-      desc: "View and start your pending exams. Track deadlines and attempt your scheduled assessments.",
-      action: "Start Exam",
+      title: "Assigned Assessment",
+      desc: "View and start your pending assessment. Track deadlines and attempt your scheduled assessments.",
+      action: "Start Assessment",
       actionColor: "#4F46E5",
       stat: "Tap to view all",
       route: "/assignedexam",
@@ -81,8 +81,8 @@ const UserDashBoard = () => {
       iconColor: "#10B981",
       accent: "linear-gradient(90deg,#10B981,#059669)",
       accentBg: "rgba(16,185,129,0.05)",
-      title: "Completed Exams",
-      desc: "Review your past exam results, scores, and detailed performance breakdowns.",
+      title: "Completed Assessment",
+      desc: "Review your past assessment results, scores, and detailed performance breakdowns.",
       action: "View Results",
       actionColor: "#10B981",
       stat: "Tap to view all",
@@ -163,7 +163,7 @@ const UserDashBoard = () => {
         <InfoBanner>
           <InfoDot />
           <InfoText>
-            <strong>Tip:</strong> Your exam timer starts as soon as you open an assigned exam.
+            <strong>Tip:</strong> Your assessment timer starts as soon as you open an assigned exam.
             Make sure you have a stable internet connection before beginning.
           </InfoText>
         </InfoBanner>

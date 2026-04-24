@@ -35,6 +35,7 @@ import { AttemptsBar,
          AttemptsBarFill, 
          BtnSpinner, 
          CancelBtn, 
+         CardGrid, 
          CloseBtn, 
          EmptyDesc, 
          EmptyIcon, 
@@ -162,7 +163,7 @@ export default function AssignedExam() {
         <PageHeader>
           <div>
             <PageLabel><FaClipboardList size={10} /> Assigned</PageLabel>
-            <PageTitle>Assigned Exams</PageTitle>
+            <PageTitle>Assigned Assessment</PageTitle>
             <PageSubtitle>View and start your scheduled exams below.</PageSubtitle>
           </div>
         </PageHeader>
@@ -171,8 +172,8 @@ export default function AssignedExam() {
         <StatsRow>
           {[
             { icon: <FaClipboardList />, bg: "rgba(79,70,229,0.08)",  color: "#4F46E5", val: loading ? "—" : examList.length,  lbl: "Total Assigned" },
-            { icon: <FaClock />,         bg: "rgba(245,158,11,0.1)",  color: "#F59E0B", val: loading ? "—" : filtered.length,  lbl: "Pending" },
-            { icon: <FaShieldAlt />,     bg: "rgba(16,185,129,0.08)", color: "#10B981", val: "Live",                            lbl: "Status" },
+            // { icon: <FaClock />,         bg: "rgba(245,158,11,0.1)",  color: "#F59E0B", val: loading ? "—" : filtered.length,  lbl: "Pending" },
+             { icon: <FaShieldAlt />,     bg: "rgba(16,185,129,0.08)", color: "#10B981", val: "Live",                            lbl: "Status" },
           ].map((s, i) => (
             <StatCard key={i}>
               <StatIcon $bg={s.bg} $color={s.color}>{s.icon}</StatIcon>
@@ -182,36 +183,6 @@ export default function AssignedExam() {
               </StatInfo>
             </StatCard>
           ))}
-
-          {/* Attempts Remaining card */}
-          {/* {!loading && (() => {
-            const totalAllowed   = examList.reduce((sum, e) => sum + (e.numAttempts ?? e.maxAttempts ?? e.allowedAttempts ?? 1), 0);
-            const totalUsed      = examList.reduce((sum, e) => sum + (e.usedAttempts ?? e.attemptsMade ?? 0), 0);
-            const totalRemaining = Math.max(0, totalAllowed - totalUsed);
-            const pct            = totalAllowed > 0 ? Math.round((totalRemaining / totalAllowed) * 100) : 100;
-            const color          = pct > 60 ? "#10B981" : pct > 30 ? "#F59E0B" : "#EF4444";
-            const bg             = pct > 60 ? "rgba(16,185,129,0.08)" : pct > 30 ? "rgba(245,158,11,0.1)" : "rgba(239,68,68,0.08)";
-            return (
-              <StatCard key="attempts" style={{ flexDirection: "column", alignItems: "flex-start", gap: 10, minWidth: 190 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, width: "100%" }}>
-                  <StatIcon $bg={bg} $color={color}><FaRedo /></StatIcon>
-                  <StatInfo>
-                    <div className="val" style={{ color }}>{totalRemaining}</div>
-                    <div className="lbl">Attempts Remaining</div>
-                  </StatInfo>
-                </div>
-                <div style={{ width: "100%", paddingLeft: 2, paddingRight: 2 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#94A3B8", marginBottom: 5 }}>
-                    <span>{totalUsed} used</span>
-                    <span>{totalAllowed} total</span>
-                  </div>
-                  <AttemptsBar>
-                    <AttemptsBarFill $pct={pct} />
-                  </AttemptsBar>
-                </div>
-              </StatCard> */}
-            {/* );
-          })()} */}
         </StatsRow>
 
         {/* ── Toolbar ── */}
@@ -232,7 +203,7 @@ export default function AssignedExam() {
         {/* ── Panel ── */}
         <Panel>
           <PanelHeader>
-            <PanelTitle>Exam List</PanelTitle>
+            <PanelTitle>Assessment List</PanelTitle>
             {!loading && <PanelBadge>{filtered.length} assigned</PanelBadge>}
           </PanelHeader>
 
@@ -249,13 +220,14 @@ export default function AssignedExam() {
               </EmptyDesc>
             </EmptyWrap>
           ) : (
+            <CardGrid>{
             filtered.map((exam, index) => (
               <UserExamTable
                 data={exam}
                 key={exam?.examId || index}
                 handleStartExam={handleStartExam}
               />
-            ))
+            ))}</CardGrid>
           )}
         </Panel>
       </PageWrapper>

@@ -408,4 +408,9 @@ export const AttemptsBarFill = styled.div`
   transition: width 0.5s ease;
 `;
 
+export const CardGrid = styled.div`
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+`;
 
