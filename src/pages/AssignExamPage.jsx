@@ -1,297 +1,451 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import Layout from "../component/Layout";
-import {
-  AssignButton,
-  Button,
-  ButtonContainer,
-  CommonContainer,
-  CommonHeader,
-  CommonHeading,
-  CommonSection,
-  CommonTable,
-  Content,
-  DeleteButton,
-  EditButton,
-  ExamContainer,
-  ExamHeader,
-} from "../styles/common_style";
 import { apiDelete, apiGet, apiPost, apiPut } from "../ApiServices/apiServices";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import Modal from "../component/Modal";
 import {
   FaAngleDoubleDown,
   FaAngleDoubleUp,
-  FaPlus,
-  FaSave,
+  FaUserCheck,
   FaUserPlus,
+  FaUsers,
+  FaUserSlash,
+  FaPen,
+  FaTrash,
+  FaSave,
+  FaClock,
+  FaRedo,
 } from "react-icons/fa";
-import UserAssignedTable from "../component/UserAssignedTable";
-import UserUnassignedTable from "../component/UserUnassignedTable";
-import { toast } from "sonner";
-import Empty from "../component/Empty";
-import Modal from "../component/Modal";
-import BackDrop from "../component/BackDrop";
-import { FileInput } from "../styles/form_style";
 import { FaX } from "react-icons/fa6";
 
-const AssignExamPage = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [data, setData] = useState();
-  const [unassignedUser, setUnassignedUser] = useState();
-  const [showDelete, setShowDelete] = useState(false);
-  const [showAssignedUser, setShowAssignedUser] = useState(false);
-  const [rows, setRows] = useState([]);
-  const [partyId, setPartyId] = useState();
+import {
+  AssignPageWrap,
+  AssignPageHeader,
+  AssignPageTitle,
+  AssignPageActions,
+  HeaderBtn,
+  AssignBtn,
+  SectionPanel,
+  SectionPanelHeader,
+  SectionTitleGroup,
+  SectionIconBox,
+  SectionTitle,
+  SectionCount,
+  CollapsibleBody,
+  SectionBody,
+  SectionEmpty,
+  UserRow,
+  UnassignedRow,
+  UserCheckbox,
+  UserAvatar,
+  UserInfo,
+  UserFullName,
+  UserLoginId,
+  InlineFields,
+  InlineFieldWrap,
+  InlineFieldLabel,
+  InlineFieldInput,
+  MetaChip,
+  RowActions,
+  TooltipWrapper,
+  TooltipChip,
+  RowIconBtn,
+  SelectionBar,
+  SelectionText,
+  EditBackdrop,
+  EditModal,
+  EditModalHeader,
+  EditModalTitle,
+  EditModalClose,
+  EditModalBody,
+  EditFieldGroup,
+  EditLabel,
+  EditInfoRow,
+  EditInput,
+  EditModalFooter,
+  CancelBtn,
+  SaveBtn,
+} from "../styles/assignExamPage_style";
 
-  //get the state from the navigate the when click the assign in the adminDashboard
-  //location is used to get the useLocation
-  const location = useLocation();
-  const [examName, setExamName] = useState();
+// ── Avatar palette ────────────────────────────────────────────────────────────
+const PALETTE = [
+  { bg: "#EFF6FF", color: "#2563EB", border: "#DBEAFE" },
+  { bg: "#ECFDF5", color: "#059669", border: "#A7F3D0" },
+  { bg: "#FFFBEB", color: "#D97706", border: "#FDE68A" },
+  { bg: "#F5F3FF", color: "#7C3AED", border: "#DDD6FE" },
+  { bg: "#FEF2F2", color: "#DC2626", border: "#FECACA" },
+  { bg: "#ECFEFF", color: "#0891B2", border: "#A5F3FC" },
+];
+
+const getInitials = (name) => {
+  if (!name) return "U";
+  const parts = name.trim().split(" ");
+  return parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0].slice(0, 2);
+};
+
+const AssignExamPage = () => {
+  const { theme }  = useSelector((state) => state.themeReducer);
+  const navigate   = useNavigate();
+  const { id }     = useParams();
+  const location   = useLocation();
+
+  const [examName, setExamName]             = useState();
+  const [data, setData]                     = useState();
+  const [unassignedUser, setUnassignedUser] = useState();
+  const [showAssigned, setShowAssigned]     = useState(false);
+
+  // rows: array of { partyId, allowedAttempts, timeoutDays, ...user }
+  const [rows, setRows]       = useState([]);
+  const [partyId, setPartyId] = useState();
+  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit]     = useState(false);
+  const [userObj, setUserObj]       = useState({
+    partyId: "", allowedAttempts: "", timeoutDays: "",
+  });
 
   useEffect(() => {
-    if (location.state !== undefined) {
-      setExamName(location.state?.examName);
-    }
+    if (location.state !== undefined) setExamName(location.state?.examName);
   }, []);
-  if (examName === undefined) {
-    navigate("/admin-dashboard");
-  }
 
-  //this is used to show the edit modal
-  const [showEdit, setShowEdit] = useState(false);
-  //this is used to store the user object from the UserAssignedTable component
-  const [userObj, setUserObj] = useState({
-    partyId: "",
-    allowedAttempts: "",
-    timeoutDays: "",
-    userLoginId: "",
-  });
-  //this is used to handle the change in the edit modal
-  const handleChange = (key, value) => {
-    let newObj = { ...userObj, [key]: value };
-    setUserObj(newObj);
+  if (examName === undefined) navigate("/admin-dashboard");
+
+  // ── Fetch ──────────────────────────────────────────────────────────────────
+  const fetchAssignedUsers = async () => {
+    const res = await apiGet("/exam-assign/get-assigned-user/" + id);
+    setData(res);
   };
+  const fetchUnassignedUsers = async () => {
+    const res = await apiGet("/exam-assign/get-unassigned-user/" + id);
+    setUnassignedUser(res);
+  };
+  useEffect(() => {
+    fetchUnassignedUsers();
+    fetchAssignedUsers();
+  }, []);
 
-  //this is used to show the edit modal
+  // ── Edit assigned modal ───────────────────────────────────────────────────
+  const handleChange = (key, value) =>
+    setUserObj((prev) => ({ ...prev, [key]: value }));
+
   const changeShowEdit = (partyExamData) => {
     setShowEdit(!showEdit);
     setUserObj(partyExamData);
   };
 
-  //this delete is used to show th modal and set the partyId
-  const changeShowDelete = (partyId) => {
+  // ── Delete ────────────────────────────────────────────────────────────────
+  const changeShowDelete = (pid) => {
     setShowDelete(!showDelete);
-    setPartyId(partyId);
+    setPartyId(pid);
   };
-  //this is used to call the delete method
   const onDelete = () => {
     deleteUser(partyId);
     setShowDelete(!showDelete);
   };
-  //this method is used to delete the user from the backend by passing the partyId and examId
-  const deleteUser = async (partyId) => {
-    const response = await apiDelete("/exam-assign/remove-assigned-exam", {
-      examId: id,
-      partyId: partyId,
+  const deleteUser = async (pid) => {
+    const res = await apiDelete("/exam-assign/remove-assigned-exam", {
+      examId: id, partyId: pid,
     });
-    if (response.errorMessage !== undefined) {
-      toast.error(`${response.errorMessage}`, { position: "top-center" });
-    } else if (response.successMessage !== undefined) {
-      toast.success(response.successMessage, { position: "top-center" });
+    if (res.errorMessage) {
+      toast.error(res.errorMessage, { position: "top-center" });
+    } else if (res.successMessage) {
+      toast.success(res.successMessage, { position: "top-center" });
       fetchAssignedUsers();
       fetchUnassignedUsers();
     }
   };
 
-  //this is used to add the user to the rows array
-  const addUser = (state, object) => {
-    setRows((prevRows) => {
-      if (state) {
-        const filtered = prevRows.filter(
-          (userData) => userData.partyId !== object.partyId,
-        );
-        return [...filtered, { ...object }];
-      } else {
-        return prevRows.filter(
-          (userData) => userData.partyId !== object.partyId,
-        );
+  // ── Checkbox toggle for unassigned rows ───────────────────────────────────
+  const toggleUser = (checked, user) => {
+    setRows((prev) => {
+      if (checked) {
+        // add with default values
+        return [...prev.filter((r) => r.partyId !== user.partyId),
+          { ...user, allowedAttempts: "", timeoutDays: "" }];
       }
+      return prev.filter((r) => r.partyId !== user.partyId);
     });
   };
 
-  const viewAssignedUser = () => {
-    setShowAssignedUser(!showAssignedUser);
+  // Update inline field value for a selected user
+  const updateRowField = (pid, field, value) => {
+    setRows((prev) =>
+      prev.map((r) => r.partyId === pid ? { ...r, [field]: value } : r)
+    );
   };
 
-  const fetchAssignedUsers = async () => {
-    const response = await apiGet("/exam-assign/get-assigned-user/" + id);
-    setData(response);
-    console.log("Assing Exam Page", response);
-  };
-
-  const fetchUnassignedUsers = async () => {
-    const response = await apiGet("/exam-assign/get-unassigned-user/" + id);
-    setUnassignedUser(response);
-    console.log("unassign Exam Page", response);
-  };
-
+  // ── Assign ────────────────────────────────────────────────────────────────
   const assignUser = async () => {
     const response = await apiPost("/exam-assign/assign-exam", {
-      examId: id,
-      assignedUserList: rows,
+      examId: id, assignedUserList: rows,
     });
-    if (response.errorMessage !== undefined) {
-      toast.error(`${response.errorMessage}`, { position: "top-center" });
-    } else if (response.successMessage !== undefined) {
+    if (response.errorMessage) {
+      toast.error(response.errorMessage, { position: "top-center" });
+    } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
-
-      const list=rows.map((data)=>{ return data.partyId});
-      const mailResponse=await apiPost("/email/send-email",{
-      examId: id,
-      partyIdList: list,
-    });
-    console.log(mailResponse);
+      const list = rows.map((d) => d.partyId);
+      await apiPost("/email/send-email", { examId: id, partyIdList: list });
       setRows([]);
       fetchUnassignedUsers();
       fetchAssignedUsers();
     }
   };
 
-  const updateExam = async (userObj) => {
+  // ── Update assigned ───────────────────────────────────────────────────────
+  const updateExam = async (obj) => {
     const response = await apiPut("/exam-assign/update-assigned-exam", {
-      ...userObj,
-      examId: id,
+      ...obj, examId: id,
     });
-    if (response.errorMessage !== undefined) {
-      toast.error(`${response.errorMessage}`, { position: "top-center" });
-    } else if (response.successMessage !== undefined) {
+    if (response.errorMessage) {
+      toast.error(response.errorMessage, { position: "top-center" });
+    } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
       fetchUnassignedUsers();
       fetchAssignedUsers();
     }
   };
 
-  useEffect(() => {
-    fetchUnassignedUsers();
-    fetchAssignedUsers();
-  }, []);
-
-  console.log("unAssing Exam Page", unassignedUser);
+  // ── Derived ───────────────────────────────────────────────────────────────
+  const assignedList   = data?.assignedUsers ?? [];
+  const unassignedList = unassignedUser?.unassignedUsers ?? [];
 
   return (
-    <Layout>
-      <CommonContainer>
-        <CommonHeader>
-          <CommonHeading>Assigned users - {examName}</CommonHeading>
-          <ButtonContainer>
-            <Button onClick={viewAssignedUser}>
-              {!showAssignedUser ? <FaAngleDoubleDown /> : <FaAngleDoubleUp />}{" "}
-              {showAssignedUser ? "Hide" : "View assigned User"}
-            </Button>
-          </ButtonContainer>
-        </CommonHeader>
-        <CommonSection>
-          {/* Assign exam form — placeholder for future implementation */}
-          
-          <CommonTable>
-            {showAssignedUser &&
-            <ExamContainer style={{display:"block"}}>
-              {data?.assignedUsers !== undefined &&
-              data?.assignedUsers?.length <= 0 ? (
-                <Empty>No user assigned</Empty>
-              ) : (
-                data?.assignedUsers?.map((data) => (
-                  <UserAssignedTable
-                    data={data}
-                    key={data.partyId}
-                    changeShowDelete={changeShowDelete}
-                    changeShowEdit={changeShowEdit}
-                  ></UserAssignedTable>
-                  
-                )))}</ExamContainer>
-              }
-          </CommonTable>
-          
-        </CommonSection>
-        <CommonSection>
-          <CommonHeader>
-            <CommonHeading>Unassigned users</CommonHeading>
-            <AssignButton onClick={assignUser} disabled={rows?.length <= 0}>
-              <FaUserPlus />
-              Assign
-            </AssignButton>
-          </CommonHeader>
-          <CommonTable>
-            {unassignedUser?.unassignedUsers !== undefined &&
-            unassignedUser?.unassignedUsers?.length <= 0 ? (
-              <Empty>No user Available</Empty>
-            ) : (
-              unassignedUser?.unassignedUsers?.map((data) => (
-                <UserUnassignedTable
-                  data={data}
-                  key={data.partyId}
-                  onCheck={addUser}
-                ></UserUnassignedTable>
-              ))
+    <ThemeProvider theme={theme}>
+      <Layout>
+        <AssignPageWrap>
+
+          {/* ── Header ────────────────────────────────────────────────── */}
+          <AssignPageHeader>
+            <AssignPageTitle>
+              Assign Assessment
+              <span>{examName}</span>
+            </AssignPageTitle>
+            <AssignPageActions>
+              <HeaderBtn onClick={() => setShowAssigned((v) => !v)}>
+                {showAssigned ? <FaAngleDoubleUp /> : <FaAngleDoubleDown />}
+                {showAssigned ? "Hide assigned" : "View assigned"}
+              </HeaderBtn>
+            </AssignPageActions>
+          </AssignPageHeader>
+
+          {/* ── Assigned Users Panel ──────────────────────────────────── */}
+          <SectionPanel $delay="0.05s">
+            <SectionPanelHeader>
+              <SectionTitleGroup>
+                <SectionIconBox $bg="#ECFDF5" $color="#059669">
+                  <FaUserCheck />
+                </SectionIconBox>
+                <SectionTitle>Assigned Users</SectionTitle>
+                <SectionCount>{assignedList.length}</SectionCount>
+              </SectionTitleGroup>
+            </SectionPanelHeader>
+
+            {showAssigned && (
+              <CollapsibleBody>
+                <SectionBody>
+                  {assignedList.length === 0 ? (
+                    <SectionEmpty>
+                      <FaUsers />
+                      <p>No users assigned yet.</p>
+                    </SectionEmpty>
+                  ) : (
+                    assignedList.map((user, index) => {
+                      const pal  = PALETTE[index % PALETTE.length];
+                      const name = user.userName || user.userLoginId || "User";
+                      return (
+                        <UserRow key={user.partyId} $delay={`${index * 0.03}s`}>
+                          <UserAvatar $bg={pal.bg} $color={pal.color} $border={pal.border}>
+                            {getInitials(name)}
+                          </UserAvatar>
+                          <UserInfo>
+                            <UserFullName>{name}</UserFullName>
+                            <UserLoginId>{user.userLoginId}</UserLoginId>
+                          </UserInfo>
+                          <MetaChip $bg="#EFF6FF" $color="#2563EB" $border="#DBEAFE">
+                            <FaRedo /> {user.allowedAttempts} attempts
+                          </MetaChip>
+                          <MetaChip $bg="#FFFBEB" $color="#D97706" $border="#FDE68A">
+                            <FaClock /> {user.timeoutDays}d
+                          </MetaChip>
+                          <RowActions>
+                            <TooltipWrapper>
+                              <TooltipChip>Edit</TooltipChip>
+                              <RowIconBtn className="edit" onClick={() => changeShowEdit(user)}>
+                                <FaPen />
+                              </RowIconBtn>
+                            </TooltipWrapper>
+                            <TooltipWrapper>
+                              <TooltipChip>Remove</TooltipChip>
+                              <RowIconBtn className="delete" onClick={() => changeShowDelete(user.partyId)}>
+                                <FaTrash />
+                              </RowIconBtn>
+                            </TooltipWrapper>
+                          </RowActions>
+                        </UserRow>
+                      );
+                    })
+                  )}
+                </SectionBody>
+              </CollapsibleBody>
             )}
-          </CommonTable>
-        </CommonSection>
-      </CommonContainer>
+          </SectionPanel>
+
+          {/* ── Unassigned Users Panel ────────────────────────────────── */}
+          <SectionPanel $delay="0.12s">
+            <SectionPanelHeader>
+              <SectionTitleGroup>
+                <SectionIconBox $bg="#FEF2F2" $color="#DC2626">
+                  <FaUserSlash />
+                </SectionIconBox>
+                <SectionTitle>Unassigned Users</SectionTitle>
+                <SectionCount>{unassignedList.length}</SectionCount>
+              </SectionTitleGroup>
+              <AssignBtn onClick={assignUser} disabled={rows.length === 0}>
+                <FaUserPlus /> Assign{rows.length > 0 ? ` (${rows.length})` : ""}
+              </AssignBtn>
+            </SectionPanelHeader>
+
+            <SectionBody>
+              {unassignedList.length === 0 ? (
+                <SectionEmpty>
+                  <FaUsers />
+                  <p>All users are already assigned.</p>
+                </SectionEmpty>
+              ) : (
+                <>
+                  {unassignedList.map((user, index) => {
+                    const pal     = PALETTE[index % PALETTE.length];
+                    const name    = user.userName || user.userLoginId || "User";
+                    const checked = rows.some((r) => r.partyId === user.partyId);
+                    const rowData = rows.find((r) => r.partyId === user.partyId);
+
+                    return (
+                      <UnassignedRow key={user.partyId} $delay={`${index * 0.03}s`}>
+                        <UserCheckbox
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => toggleUser(e.target.checked, user)}
+                        />
+                        <UserAvatar $bg={pal.bg} $color={pal.color} $border={pal.border}>
+                          {getInitials(name)}
+                        </UserAvatar>
+                        <UserInfo>
+                          <UserFullName>{name}</UserFullName>
+                          <UserLoginId>{user.userLoginId}</UserLoginId>
+                        </UserInfo>
+
+                        {/* Inline attempt + timeout fields — only visible when checked */}
+                        {checked && (
+                          <InlineFields>
+                            <InlineFieldWrap>
+                              <InlineFieldLabel>Attempts</InlineFieldLabel>
+                              <InlineFieldInput
+                                type="number"
+                                placeholder="e.g. 3"
+                                value={rowData?.allowedAttempts ?? ""}
+                                onChange={(e) =>
+                                  updateRowField(user.partyId, "allowedAttempts", e.target.value)
+                                }
+                              />
+                            </InlineFieldWrap>
+                            <InlineFieldWrap>
+                              <InlineFieldLabel>Timeout (days)</InlineFieldLabel>
+                              <InlineFieldInput
+                                type="number"
+                                placeholder="e.g. 30"
+                                value={rowData?.timeoutDays ?? ""}
+                                onChange={(e) =>
+                                  updateRowField(user.partyId, "timeoutDays", e.target.value)
+                                }
+                              />
+                            </InlineFieldWrap>
+                          </InlineFields>
+                        )}
+                      </UnassignedRow>
+                    );
+                  })}
+                  {rows.length > 0 && (
+                    <SelectionBar>
+                      <SelectionText>
+                        {rows.length} user{rows.length !== 1 ? "s" : ""} selected
+                      </SelectionText>
+                    </SelectionBar>
+                  )}
+                </>
+              )}
+            </SectionBody>
+          </SectionPanel>
+
+        </AssignPageWrap>
+      </Layout>
+
+      {/* ── Delete modal ────────────────────────────────────────────────── */}
       {showDelete && (
         <Modal
-          title="Remove user"
+          title="Remove User"
           onConfirm={onDelete}
           onCancel={changeShowDelete}
           type="delete"
           showConfirmButton={true}
         >
-          Are you sure want to remove this user?
+          Are you sure you want to remove this user from the assessment?
         </Modal>
       )}
 
-      {/**exam name bug is there */}
+      {/* ── Edit assigned modal ─────────────────────────────────────────── */}
       {showEdit && (
-        <BackDrop>
-          <ExamHeader>
-            Exam name: <Content>{examName}</Content>
-          </ExamHeader>
-          <ExamHeader>
-            Username : {userObj.userLoginId} 
-          </ExamHeader>
-          <ExamHeader>
-            Allowed attempts:
-            <FileInput
-              type="text"
-              value={userObj.allowedAttempts}
-              onChange={(e) => handleChange("allowedAttempts", e.target.value)}
-            ></FileInput>
-          </ExamHeader>
-          <ExamHeader>
-            Timeout Days:
-            <FileInput
-              type="text"
-              value={userObj.timeoutDays}
-              onChange={(e) => handleChange("timeoutDays", e.target.value)}
-            ></FileInput>
-          </ExamHeader>
-          <ButtonContainer style={{ width: "100%" }}>
-            <DeleteButton onClick={() => setShowEdit(!showEdit)}>
-              <FaX />
-              Cancel
-            </DeleteButton>
-            <EditButton
-              onClick={() => {
-                updateExam(userObj);
-                setShowEdit(!showEdit);
-              }}
-            >
-              <FaSave />
-              Save
-            </EditButton>
-          </ButtonContainer>
-        </BackDrop>
+        <EditBackdrop>
+          <EditModal>
+            <EditModalHeader>
+              <EditModalTitle>Edit Assignment</EditModalTitle>
+              <EditModalClose onClick={() => setShowEdit(false)}>
+                <FaX />
+              </EditModalClose>
+            </EditModalHeader>
+
+            <EditModalBody>
+              <EditFieldGroup>
+                <EditLabel>Assessment</EditLabel>
+                <EditInfoRow>{examName}</EditInfoRow>
+              </EditFieldGroup>
+              <EditFieldGroup>
+                <EditLabel>User</EditLabel>
+                <EditInfoRow>{userObj.userLoginId}</EditInfoRow>
+              </EditFieldGroup>
+              <EditFieldGroup>
+                <EditLabel>Allowed Attempts</EditLabel>
+                <EditInput
+                  type="number"
+                  value={userObj.allowedAttempts}
+                  onChange={(e) => handleChange("allowedAttempts", e.target.value)}
+                  placeholder="e.g. 3"
+                />
+              </EditFieldGroup>
+              <EditFieldGroup>
+                <EditLabel>Timeout Days</EditLabel>
+                <EditInput
+                  type="number"
+                  value={userObj.timeoutDays}
+                  onChange={(e) => handleChange("timeoutDays", e.target.value)}
+                  placeholder="e.g. 30"
+                />
+              </EditFieldGroup>
+            </EditModalBody>
+
+            <EditModalFooter>
+              <CancelBtn onClick={() => setShowEdit(false)}>
+                <FaX /> Cancel
+              </CancelBtn>
+              <SaveBtn onClick={() => { updateExam(userObj); setShowEdit(false); }}>
+                <FaSave /> Save changes
+              </SaveBtn>
+            </EditModalFooter>
+          </EditModal>
+        </EditBackdrop>
       )}
-    </Layout>
+    </ThemeProvider>
   );
 };
 

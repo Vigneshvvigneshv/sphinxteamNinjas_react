@@ -7,7 +7,6 @@ import Modal from '../component/Modal';
 import Empty from '../component/Empty';
 import {
   DashboardPage,
-  DashPageHeader,
   DashPageTitle,
   StatRow,
   StatCard,
@@ -36,6 +35,7 @@ import {
   PanelEmpty,
   TooltipWrapper,
   TooltipChip,
+  DashPageHeader,
 } from '../styles/adminDashboard_style';
 import {
   FaBook,
