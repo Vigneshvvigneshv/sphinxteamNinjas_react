@@ -44,11 +44,9 @@ const TopicPage = () => {
   const [data,   setData]   = useState(null);
   const [search, setSearch] = useState('');
 
-   const {partyId}=useSelector((state)=>state.userReducer);
-
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/topic/getall-topic/'+partyId);
+      const response = await apiGet('/topic/getall-topic');
       setData(response);
     };
     fetchData();
