@@ -60,7 +60,8 @@ const QuestionBulkUpload = () => {
     }
     const formData = new FormData();
     formData.append("file", file);
-    const response = await apiFilePost("/question/upload/"+partyId, formData);
+    formData.append("partyId",partyId);
+    const response = await apiFilePost("/question/upload/", formData);
     if (response.successMessage !== undefined) {
       setData(response);
       setError(null);
