@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Layout from "../component/Layout";
-import { apiDelete, apiGet, apiPost } from "../ApiServices/apiServices";
+import { apiDelete, apiGet, apiPost, apiPut } from "../ApiServices/apiServices";
 import Modal from "../component/Modal";
 import { toast } from "sonner";
 import {
   FaSearch, FaUsers, FaTrash, FaUser,
-  FaUserPlus, FaClipboardList, FaSave, FaRedo, FaClock,
+  FaUserPlus, FaClipboardList, FaSave, FaRedo, FaClock, FaPen,
 } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 
@@ -79,8 +79,27 @@ const getInitials = (name) => {
   return parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0].slice(0, 2);
 };
 
+// ── Small inline edit icon on the exam tag ────────────────────────────────────
+const ExamTagEditBtn = ({ onClick }) => (
+  <span
+    onClick={(e) => { e.stopPropagation(); onClick(); }}
+    title="Edit assignment"
+    style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: "16px", height: "16px", marginLeft: "5px",
+      background: "rgba(255,255,255,0.7)", borderRadius: "4px",
+      cursor: "pointer", fontSize: "9px", color: "inherit",
+      transition: "background 0.15s ease",
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,1)"}
+    onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.7)"}
+  >
+    <FaPen />
+  </span>
+);
+
 const UserPage = () => {
-  const { theme } = useSelector((state) => state.themeReducer);
+  const { theme }   = useSelector((state) => state.themeReducer);
   const { partyId } = useSelector((state) => state.userReducer);
 
   const [data, setData]                   = useState();
@@ -89,41 +108,35 @@ const UserPage = () => {
   const [showDelete, setShowDelete]       = useState(false);
   const [deletePartyId, setDeletePartyId] = useState();
 
-  // assign modal state
-  const [showAssign, setShowAssign]       = useState(false);
-  const [assignTarget, setAssignTarget]   = useState(null); // user object
-  const [assignForm, setAssignForm]       = useState({
-    examId: "", allowedAttempts: "", timeoutDays: "",
-  });
+  // ── Assign modal state ────────────────────────────────────────────────────
+  const [showAssign, setShowAssign]     = useState(false);
+  const [assignTarget, setAssignTarget] = useState(null);
+  const [assignForm, setAssignForm]     = useState({ examId: "", allowedAttempts: "", timeoutDays: "" });
+
+  // ── Edit assignment modal state ───────────────────────────────────────────
+  const [showEdit, setShowEdit]     = useState(false);
+  const [editTarget, setEditTarget] = useState(null);  // { user, exam }
+  const [editForm, setEditForm]     = useState({ allowedAttempts: "", timeoutDays: "" });
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
   const getUsers = async () => {
-    // 1. Fetch all users
     const userRes = await apiGet('/user/getall-user');
     const userList = userRes?.userList ?? [];
 
-    // 2. Fetch all available exams for the assign-modal dropdown
     const examRes = await apiPost('/exam/getall-exam', { partyId });
     setExamList(examRes?.examList ?? []);
 
-    // 3. For every user, fetch their assigned exams and attach to the user object
     const enriched = await Promise.all(
       userList.map(async (user) => {
         const assigned = await apiGet('/exam/getexam-by-partyId/' + user.partyId);
-        return {
-          ...user,
-          assignedExams: assigned?.examList ?? [],
-        };
+        return { ...user, assignedExams: assigned?.examList ?? [] };
       })
     );
 
     setData({ ...userRes, userList: enriched });
   };
 
-  useEffect(() => {
-    getUsers();
-  }, []);
-
+  useEffect(() => { getUsers(); }, []);
 
   // ── Delete ────────────────────────────────────────────────────────────────
   const changeShow = (partyId) => {
@@ -136,11 +149,8 @@ const UserPage = () => {
       userList: prev.userList.filter((u) => u.partyId !== deletedPartyId),
     }));
   };
-  const deleteParty = () => {
-    deleteUser(deletePartyId);
-    setShowDelete(!showDelete);
-  };
-  const deleteUser = async (partyId) => {
+  const deleteParty = () => { deleteUser(deletePartyId); setShowDelete(!showDelete); };
+  const deleteUser  = async (partyId) => {
     const response = await apiDelete("/user/delete-user", { partyId });
     if (response.errorMessage) {
       toast.error(`${response.errorMessage}`, { position: "top-center" });
@@ -159,6 +169,15 @@ const UserPage = () => {
   const handleAssignField = (key, value) =>
     setAssignForm((prev) => ({ ...prev, [key]: value }));
 
+  /**
+   * Returns exams NOT yet assigned to the given user.
+   * Used so already-assigned exams do not appear in the assign dropdown.
+   */
+  const getUnassignedExams = (user) => {
+    const assignedIds = new Set((user?.assignedExams ?? []).map((e) => e.examId));
+    return examList.filter((e) => !assignedIds.has(e.examId));
+  };
+
   const submitAssign = async () => {
     if (!assignForm.examId) {
       toast.error("Please select an exam.", { position: "top-center" });
@@ -167,30 +186,60 @@ const UserPage = () => {
     const response = await apiPost("/exam-assign/assign-exam", {
       examId: assignForm.examId,
       assignedUserList: [{
-        partyId: assignTarget.partyId,
+        partyId:         assignTarget.partyId,
         allowedAttempts: assignForm.allowedAttempts,
-        timeoutDays: assignForm.timeoutDays,
+        timeoutDays:     assignForm.timeoutDays,
       }],
     });
     if (response.errorMessage) {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
-      // send notification email
       await apiPost("/email/send-email", {
-        examId: assignForm.examId,
+        examId:     assignForm.examId,
         partyIdList: [assignTarget.partyId],
       });
       setShowAssign(false);
-      // refresh users + their assigned exams
       await getUsers();
     }
   };
 
-  // ── Filtering ──────────────────────────────────────────────────────────────
+  // ── Edit assignment modal ─────────────────────────────────────────────────
+  const openEditModal = (user, exam) => {
+    setEditTarget({ user, exam });
+    // Pre-fill with existing values if the API returns them; else empty
+    setEditForm({
+      allowedAttempts: exam.allowedAttempts ?? "",
+      timeoutDays:     exam.timeoutDays     ?? "",
+    });
+    setShowEdit(true);
+  };
+
+  const handleEditField = (key, value) =>
+    setEditForm((prev) => ({ ...prev, [key]: value }));
+
+  const submitEdit = async () => {
+    const response = await apiPost("/exam-assign/assign-exam", {
+      examId: editTarget.exam.examId,
+      assignedUserList: [{
+        partyId:         editTarget.user.partyId,
+        allowedAttempts: editForm.allowedAttempts,
+        timeoutDays:     editForm.timeoutDays,
+      }],
+    });
+    if (response.errorMessage) {
+      toast.error(response.errorMessage, { position: "top-center" });
+    } else if (response.successMessage) {
+      toast.success("Assignment updated successfully", { position: "top-center" });
+      setShowEdit(false);
+      await getUsers();
+    }
+  };
+
+  // ── Filtering ─────────────────────────────────────────────────────────────
   const userList = data?.userList ?? [];
   const filtered = userList.filter((u) => {
-    const name = (u.userName || u.userLoginId || "").toLowerCase();
+    const name  = (u.userName  || u.userLoginId || "").toLowerCase();
     const login = (u.userLoginId || "").toLowerCase();
     return name.includes(search.toLowerCase()) || login.includes(search.toLowerCase());
   });
@@ -222,29 +271,18 @@ const UserPage = () => {
             )}
           </UserStatStrip>
 
-          {/* ── Search ──────────────────────────────────────────────────── */}
-          {/* <UserSearchWrap>
-            <FaSearch />
-            <UserSearchInput
-              type="text"
-              placeholder="Search users…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </UserSearchWrap> */}
-
           {/* ── Grid ────────────────────────────────────────────────────── */}
           <UserGrid>
             {filtered.length > 0 ? (
               filtered.map((user, index) => {
-                const pal         = PALETTE[index % PALETTE.length];
-                const displayName = user.userName || user.userLoginId || "User";
+                const pal           = PALETTE[index % PALETTE.length];
+                const displayName   = user.userName || user.userLoginId || "User";
                 const assignedExams = user.assignedExams ?? user.examList ?? [];
 
                 return (
                   <UserCard key={user.partyId} $accent={pal.accent} $delay={`${index * 0.03}s`}>
 
-                    {/* Top row: avatar + name + action buttons */}
+                    {/* Top row */}
                     <UserCardTop>
                       <UserAvatar $bg={pal.bg} $color={pal.color} $border={pal.border}>
                         {getInitials(displayName)}
@@ -292,9 +330,17 @@ const UserPage = () => {
                           {assignedExams.map((exam, ei) => {
                             const tc = EXAM_TAG_COLORS[ei % EXAM_TAG_COLORS.length];
                             return (
-                              <ExamTag key={exam.examId ?? ei} $bg={tc.bg} $color={tc.color} $border={tc.border}>
+                              <ExamTag
+                                key={exam.examId ?? ei}
+                                $bg={tc.bg}
+                                $color={tc.color}
+                                $border={tc.border}
+                                style={{ display: "inline-flex", alignItems: "center" }}
+                              >
                                 <FaClipboardList />
                                 {exam.examName ?? exam}
+                                {/* ── Edit button on each exam tag ── */}
+                                <ExamTagEditBtn onClick={() => openEditModal(user, exam)} />
                               </ExamTag>
                             );
                           })}
@@ -351,7 +397,7 @@ const UserPage = () => {
                 </ModalInfoRow>
               </ModalFieldGroup>
 
-              {/* Exam select */}
+              {/* Exam select — only shows exams NOT yet assigned to this user */}
               <ModalFieldGroup>
                 <ModalLabel>Assessment</ModalLabel>
                 <ModalSelect
@@ -359,12 +405,17 @@ const UserPage = () => {
                   onChange={(e) => handleAssignField("examId", e.target.value)}
                 >
                   <option value="">Select an assessment…</option>
-                  {examList.map((exam) => (
+                  {getUnassignedExams(assignTarget).map((exam) => (
                     <option key={exam.examId} value={exam.examId}>
                       {exam.examName}
                     </option>
                   ))}
                 </ModalSelect>
+                {getUnassignedExams(assignTarget).length === 0 && (
+                  <span style={{ fontSize: "12px", color: "#6b7280", marginTop: "6px", display: "block" }}>
+                    All available assessments have already been assigned to this user.
+                  </span>
+                )}
               </ModalFieldGroup>
 
               {/* Allowed attempts */}
@@ -394,8 +445,79 @@ const UserPage = () => {
               <ModalCancelBtn onClick={() => setShowAssign(false)}>
                 <FaX /> Cancel
               </ModalCancelBtn>
-              <ModalSaveBtn onClick={submitAssign}>
+              <ModalSaveBtn
+                onClick={submitAssign}
+                disabled={getUnassignedExams(assignTarget).length === 0}
+                style={
+                  getUnassignedExams(assignTarget).length === 0
+                    ? { opacity: 0.5, cursor: "not-allowed" }
+                    : {}
+                }
+              >
                 <FaUserPlus /> Assign
+              </ModalSaveBtn>
+            </ModalFooter>
+          </AssignModal>
+        </ModalBackdrop>
+      )}
+
+      {/* ── Edit assignment modal ─────────────────────────────────────────── */}
+      {showEdit && editTarget && (
+        <ModalBackdrop>
+          <AssignModal>
+            <ModalHeader>
+              <ModalTitle>Edit Assignment</ModalTitle>
+              <ModalClose onClick={() => setShowEdit(false)}>
+                <FaX />
+              </ModalClose>
+            </ModalHeader>
+
+            <ModalBody>
+              {/* User (read-only) */}
+              <ModalFieldGroup>
+                <ModalLabel>User</ModalLabel>
+                <ModalInfoRow>
+                  {editTarget.user.userName || editTarget.user.userLoginId}
+                </ModalInfoRow>
+              </ModalFieldGroup>
+
+              {/* Exam (read-only — we're editing its assignment config) */}
+              <ModalFieldGroup>
+                <ModalLabel>Assessment</ModalLabel>
+                <ModalInfoRow>
+                  {editTarget.exam.examName ?? editTarget.exam}
+                </ModalInfoRow>
+              </ModalFieldGroup>
+
+              {/* Allowed attempts */}
+              <ModalFieldGroup>
+                <ModalLabel>Allowed Attempts</ModalLabel>
+                <ModalInput
+                  type="number"
+                  placeholder="e.g. 3"
+                  value={editForm.allowedAttempts}
+                  onChange={(e) => handleEditField("allowedAttempts", e.target.value)}
+                />
+              </ModalFieldGroup>
+
+              {/* Timeout days */}
+              <ModalFieldGroup>
+                <ModalLabel>Timeout Days</ModalLabel>
+                <ModalInput
+                  type="number"
+                  placeholder="e.g. 30"
+                  value={editForm.timeoutDays}
+                  onChange={(e) => handleEditField("timeoutDays", e.target.value)}
+                />
+              </ModalFieldGroup>
+            </ModalBody>
+
+            <ModalFooter>
+              <ModalCancelBtn onClick={() => setShowEdit(false)}>
+                <FaX /> Cancel
+              </ModalCancelBtn>
+              <ModalSaveBtn onClick={submitEdit}>
+                <FaSave /> Update
               </ModalSaveBtn>
             </ModalFooter>
           </AssignModal>
