@@ -38,6 +38,7 @@ const DOT_COLORS = [
 
 const TopicPage = () => {
   const { theme }  = useSelector((state) => state.themeReducer);
+  const { partyId }  = useSelector((state) => state.userReducer);
   const location   = useLocation();
   const message    = location.state?.msg;
 
@@ -46,7 +47,7 @@ const TopicPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/topic/getall-topic');
+      const response = await apiGet('/topic/getall-topic/'+partyId);
       setData(response);
     };
     fetchData();

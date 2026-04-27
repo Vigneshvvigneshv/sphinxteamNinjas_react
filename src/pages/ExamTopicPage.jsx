@@ -65,7 +65,7 @@ const modalSelect = { ...modalInput };
 const ExamTopicPage = () => {
   const navigate = useNavigate();
   const { id, examName } = useParams();
-
+  const { partyId }  = useSelector((state) => state.userReducer);
   // ── section 1: assigned topics ────────────────────────────────────────────
   const [assignedTopics, setAssignedTopics] = useState([]);
   const [showAssigned, setShowAssigned]     = useState(false);
@@ -112,7 +112,7 @@ const ExamTopicPage = () => {
   // ── fetch ─────────────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchAllTopics = async () => {
-      const response = await apiGet("/topic/getall-topic");
+      const response = await apiGet("/topic/getall-topic/"+partyId);
       if (response.responseMessage === "success") setAllTopics(response.topicList);
     };
     fetchAllTopics();

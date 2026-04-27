@@ -49,6 +49,7 @@ import {
 const AddTopicsToExam = () => {
   const { id } = useParams();
   const { theme } = useSelector((state) => state.themeReducer);
+  const { partyId }  = useSelector((state) => state.userReducer);
 
   const [allTopics, setAllTopics]   = useState([]);
   const [rows, setRows]             = useState([{ topicId: '', percentage: '', topicPassPercentage: '' }]);
@@ -65,7 +66,7 @@ const AddTopicsToExam = () => {
   // ── Fetch all topics (for dropdown) ────────────────────────────────────────
   useEffect(() => {
     const fetch = async () => {
-      const res = await apiGet('/topic/getall-topic');
+      const res = await apiGet('/topic/getall-topic/'+partyId);
       if (res?.responseMessage === 'success') setAllTopics(res.topicList);
     };
     fetch();
