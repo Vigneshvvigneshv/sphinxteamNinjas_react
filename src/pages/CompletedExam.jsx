@@ -10,8 +10,6 @@ import {
 } from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet } from "../ApiServices/apiServices";
-
-import { UserExamTable } from "../component/UserExamTable";
 import Empty from "../component/Empty";
 import CompletedExamTable from "../component/CompletedExamTable";
 import { EmptyDesc, EmptyIcon, EmptyTitle, EmptyWrap, HeaderLeft, ListWrap, PageHeader, PageLabel, PageSubtitle, PageWrapper, Panel, PanelBadge, PanelHeader, PanelTitle, ResultCount, SearchInput, SearchWrap, SkeletonBar, SkeletonRow, StatCard, StatIcon, StatInfo, StatsRow, Toolbar } from "../styles/CompletedExam_style";

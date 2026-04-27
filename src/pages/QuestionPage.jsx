@@ -4,7 +4,6 @@ import { AddButton, Button, ButtonContainer, CommonContainer, CommonHeader, Comm
 import { NavButton } from '../styles/header_style';
 import Empty from '../component/Empty';
 import {  Navigate, useParams } from 'react-router-dom';
-import QuestionTable from '../component/QuestionTable';
 import { apiDelete, apiGet } from '../ApiServices/apiServices';
 import { PageNo, PaginationContainer, SelectAllContainer, SerialNumber } from '../styles/question_style';
 import { CheckBox } from '../styles/form_style';

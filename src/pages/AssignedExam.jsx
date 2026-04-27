@@ -28,8 +28,6 @@ import { FaSearch, FaPlay, FaWifi, FaInfoCircle, FaClock, FaLock, FaClipboardLis
 import { FaX } from "react-icons/fa6";
 
 
-import { UserExamTable } from "../component/UserExamTable";
-
 import { FileInput } from "../styles/form_style";
 import { AttemptsBar,
          AttemptsBarFill, 
