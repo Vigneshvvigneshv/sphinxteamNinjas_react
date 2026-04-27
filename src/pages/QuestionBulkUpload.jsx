@@ -166,10 +166,7 @@ const QuestionBulkUpload = () => {
 
       {show && (
         <Modal
-          type="info"
-          title="Upload Successful"
-          onCancel={() => setShow(false)}
-          showConfirmButton={false}
+          type="success"
         >
           {data?.successMessage}
         </Modal>
