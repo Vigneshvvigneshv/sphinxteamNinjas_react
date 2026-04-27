@@ -98,6 +98,24 @@ const ExamTagEditBtn = ({ onClick }) => (
   </span>
 );
 
+const ExamTagDeleteBtn = ({ onClick }) => (
+  <span
+    onClick={(e) => { e.stopPropagation(); onClick(); }}
+    title="Delete assignment"
+    style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: "16px", height: "16px", marginLeft: "5px",
+      background: "rgba(255,255,255,0.7)", borderRadius: "4px",
+      cursor: "pointer", fontSize: "9px", color: "inherit",
+      transition: "background 0.15s ease",
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,1)"}
+    onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.7)"}
+  >
+    <FaTrash/>
+  </span>
+);
+
 const UserPage = () => {
   const { theme }   = useSelector((state) => state.themeReducer);
   const { partyId } = useSelector((state) => state.userReducer);
@@ -106,7 +124,9 @@ const UserPage = () => {
   const [examList, setExamList]           = useState([]);
   const [search, setSearch]               = useState("");
   const [showDelete, setShowDelete]       = useState(false);
+  const [showDeleteExam, setShowDeleteExam]       = useState(false);
   const [deletePartyId, setDeletePartyId] = useState();
+  const [deleteExamId, setDeleteExamId] = useState();
 
   // ── Assign modal state ────────────────────────────────────────────────────
   const [showAssign, setShowAssign]     = useState(false);
@@ -143,6 +163,31 @@ const UserPage = () => {
     setShowDelete(!showDelete);
     setDeletePartyId(partyId);
   };
+
+    // ── Delete Assigned Exam ────────────────────────────────────────────────────────────────
+  const changeShowDelete = (examId, pid) => {
+    setShowDeleteExam(!showDeleteExam);
+    setDeleteExamId(examId);
+    setDeletePartyId(pid);
+  };
+  
+  const onDelete = () => {
+    removeExam(deleteExamId, deletePartyId);
+    setShowDeleteExam(!showDeleteExam);
+  };
+
+  const removeExam = async (examId, pid) => {
+    const res = await apiDelete("/exam-assign/remove-assigned-exam", {
+      examId: examId, partyId: pid,
+    });
+    if (res.errorMessage) {
+      toast.error(res.errorMessage, { position: "top-center" });
+    } else if (res.successMessage) {
+      toast.success(res.successMessage, { position: "top-center" });
+      getUsers();
+    }
+  };
+
   const onDeleteLocal = (deletedPartyId) => {
     setData((prev) => ({
       ...prev,
@@ -341,6 +386,7 @@ const UserPage = () => {
                                 {exam.examName ?? exam}
                                 {/* ── Edit button on each exam tag ── */}
                                 <ExamTagEditBtn onClick={() => openEditModal(user, exam)} />
+                                <ExamTagDeleteBtn onClick={() => changeShowDelete(exam.examId,user.partyId)} />
                               </ExamTag>
                             );
                           })}
@@ -376,6 +422,17 @@ const UserPage = () => {
           Are you sure you want to delete this user? This action cannot be undone.
         </Modal>
       )}
+       {showDeleteExam && (
+              <Modal
+                title="Remove Exam"
+                onConfirm={onDelete}
+                onCancel={changeShowDelete}
+                type="delete"
+                showConfirmButton={true}
+              >
+                Are you sure you want to remove this user from the assessment?
+              </Modal>
+            )}
 
       {/* ── Assign exam modal ────────────────────────────────────────────── */}
       {showAssign && assignTarget && (

@@ -1,3 +1,4 @@
+import { theme } from "flowbite-react";
 import styled, { keyframes } from "styled-components";
 
 // ── Animations ────────────────────────────────────────────────────────────────
@@ -171,7 +172,7 @@ export const ETPAddRowBtn = styled.button`
   font-weight: 600;
   font-family: 'Sora', 'Segoe UI', sans-serif;
   color: #ffffff;
-  background: linear-gradient(135deg, #6366f1, #818cf8);
+  background: ${({ theme }) => theme.addButtonBg};
   border: none;
   border-radius: 8px;
   cursor: pointer;
