@@ -14,6 +14,7 @@ const shimmer = keyframes`
 // ── Page Wrapper ──────────────────────────────────────────────────────────────
 export const ETPWrap = styled.div`
   padding: 28px 32px;
+  border-radius:8px;
   min-height: 100vh;
   background: #f8f9fc;
   animation: ${fadeSlideIn} 0.35s ease both;

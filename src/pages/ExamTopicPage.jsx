@@ -249,68 +249,7 @@ const ExamTopicPage = () => {
           </ETPTitle>
         </ETPHeader>
 
-        {/* ── Progress Bar ─────────────────────────────────────────────── */}
-        <ETPProgressWrap>
-          <ETPProgressBar $pct={percentage} />
-          <ETPProgressLabel $pct={percentage}>
-            {percentage}% / 100%
-          </ETPProgressLabel>
-        </ETPProgressWrap>
-
-        {/* ── Assigned Topics Section ───────────────────────────────────── */}
-        <ETPSection $delay="0.05s">
-          <ETPSectionHeader>
-            <ETPSectionTitle>
-              <FaTags />
-              Assigned Topics
-              {assignedTopics.length > 0 && (
-                <span style={{
-                  background: "#eef2ff", color: "#6366f1", border: "1px solid #c7d2fe",
-                  borderRadius: "99px", padding: "1px 9px", fontSize: "12px", fontWeight: 700,
-                }}>
-                  {assignedTopics.length}
-                </span>
-              )}
-            </ETPSectionTitle>
-            <ETPToggleBtn onClick={() => setShowAssigned((prev) => !prev)}>
-              {showAssigned ? <FaAngleDoubleUp /> : <FaAngleDoubleDown />}
-              {showAssigned ? "Hide" : "View Topics"}
-            </ETPToggleBtn>
-          </ETPSectionHeader>
-
-          {showAssigned && (
-            <ETPSectionBody>
-              {assignedTopics.length === 0 ? (
-                <ETPEmpty>
-                  <FaListAlt />
-                  No topics assigned to this exam yet
-                </ETPEmpty>
-              ) : (
-                assignedTopics.map((topic, index) => (
-                  <ETPTopicRow key={topic.topicId}>
-                    <ETPTopicName>{topic.topicName}</ETPTopicName>
-                    <ETPTopicBadge>
-                      {topic.percentage}%
-                    </ETPTopicBadge>
-                    <ETPTopicBadge $type="pass">
-                      Pass {topic.topicPassPercentage}%
-                    </ETPTopicBadge>
-                    <ETPTopicActions>
-                      <ETPEditBtn title="Edit topic" onClick={() => openEditModal(topic)}>
-                        <FaPen />
-                      </ETPEditBtn>
-                      <ETPDeleteBtn title="Remove topic" onClick={() => openDeleteModal(topic.topicId, index)}>
-                        <FaTrash />
-                      </ETPDeleteBtn>
-                    </ETPTopicActions>
-                  </ETPTopicRow>
-                ))
-              )}
-            </ETPSectionBody>
-          )}
-        </ETPSection>
-
-        {/* ── Add Topics Section ────────────────────────────────────────── */}
+         {/* ── Add Topics Section ────────────────────────────────────────── */}
         <ETPSection $delay="0.1s">
           <ETPSectionHeader>
             <ETPSectionTitle>
@@ -328,7 +267,7 @@ const ExamTopicPage = () => {
             {percentage === 100 ? (
               <ETPCompleteBadge>
                 <FaCheckCircle />
-                100% topics added — this exam is fully configured.
+                100% topics added.
               </ETPCompleteBadge>
             ) : allTopics.length > 0 && rows.length > 0 ? (
               rows.map((row, index) => (
@@ -414,6 +353,69 @@ const ExamTopicPage = () => {
             </ETPFooterBtns>
           </ETPFooter>
         </ETPSection>
+
+        {/* ── Progress Bar ─────────────────────────────────────────────── */}
+        <ETPProgressWrap>
+          <ETPProgressBar $pct={percentage} />
+          <ETPProgressLabel $pct={percentage}>
+            {percentage}% / 100%
+          </ETPProgressLabel>
+        </ETPProgressWrap>
+
+        {/* ── Assigned Topics Section ───────────────────────────────────── */}
+        <ETPSection $delay="0.05s">
+          <ETPSectionHeader>
+            <ETPSectionTitle>
+              <FaTags />
+              Assigned Topics
+              {assignedTopics.length > 0 && (
+                <span style={{
+                  background: "#eef2ff", color: "#6366f1", border: "1px solid #c7d2fe",
+                  borderRadius: "99px", padding: "1px 9px", fontSize: "12px", fontWeight: 700,
+                }}>
+                  {assignedTopics.length}
+                </span>
+              )}
+            </ETPSectionTitle>
+            <ETPToggleBtn onClick={() => setShowAssigned((prev) => !prev)}>
+              {showAssigned ? <FaAngleDoubleUp /> : <FaAngleDoubleDown />}
+              {showAssigned ? "Hide" : "View Topics"}
+            </ETPToggleBtn>
+          </ETPSectionHeader>
+
+          {showAssigned && (
+            <ETPSectionBody>
+              {assignedTopics.length === 0 ? (
+                <ETPEmpty>
+                  <FaListAlt />
+                  No topics assigned to this exam yet
+                </ETPEmpty>
+              ) : (
+                assignedTopics.map((topic, index) => (
+                  <ETPTopicRow key={topic.topicId}>
+                    <ETPTopicName>{topic.topicName}</ETPTopicName>
+                    <ETPTopicBadge>
+                      {topic.percentage}%
+                    </ETPTopicBadge>
+                    <ETPTopicBadge $type="pass">
+                      Pass {topic.topicPassPercentage}%
+                    </ETPTopicBadge>
+                    <ETPTopicActions>
+                      <ETPEditBtn title="Edit topic" onClick={() => openEditModal(topic)}>
+                        <FaPen />
+                      </ETPEditBtn>
+                      <ETPDeleteBtn title="Remove topic" onClick={() => openDeleteModal(topic.topicId, index)}>
+                        <FaTrash />
+                      </ETPDeleteBtn>
+                    </ETPTopicActions>
+                  </ETPTopicRow>
+                ))
+              )}
+            </ETPSectionBody>
+          )}
+        </ETPSection>
+
+       
 
       </ETPWrap>
 
