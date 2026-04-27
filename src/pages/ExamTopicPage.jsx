@@ -45,6 +45,7 @@ import {
   ETPEmpty,
   ETPCompleteBadge,
 } from "../styles/examTopicPage_style";
+import { useSelector } from "react-redux";
 
 // ── Edit Modal inline styles (reuse existing Modal component) ─────────────────
 const modalField = {
