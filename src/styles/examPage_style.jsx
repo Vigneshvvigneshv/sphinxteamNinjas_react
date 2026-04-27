@@ -15,7 +15,7 @@ const scaleIn = keyframes`
 
 // ─── Page Wrapper ─────────────────────────────────────────────────────────────
 
-export const TopicPage = styled.div`
+export const ExamPage = styled.div`
   padding: 32px 40px 60px;
   background: ${({ theme }) => theme.colors.background};
   min-height: calc(100vh - 60px - 58px);
@@ -28,7 +28,7 @@ export const TopicPage = styled.div`
 
 // ─── Page Header ──────────────────────────────────────────────────────────────
 
-export const TopicPageHeader = styled.div`
+export const ExamPageHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,7 +38,7 @@ export const TopicPageHeader = styled.div`
   animation: ${fadeUp} 0.35s ease both;
 `;
 
-export const TopicPageTitle = styled.h1`
+export const ExamPageTitle = styled.h1`
   font-size: 22px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.textPrimary};
@@ -55,7 +55,7 @@ export const TopicPageTitle = styled.h1`
   }
 `;
 
-export const TopicAddBtn = styled(NavLink)`
+export const ExamAddBtn = styled(NavLink)`
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -81,15 +81,16 @@ export const TopicAddBtn = styled(NavLink)`
 
 // ─── Stats Strip ──────────────────────────────────────────────────────────────
 
-export const TopicStatStrip = styled.div`
+export const ExamStatStrip = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
   margin-bottom: 22px;
   animation: ${fadeUp} 0.38s ease 0.05s both;
+  flex-wrap: wrap;
 `;
 
-export const TopicStatBadge = styled.div`
+export const ExamStatBadge = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -110,7 +111,7 @@ export const TopicStatBadge = styled.div`
 
 // ─── Search Bar ───────────────────────────────────────────────────────────────
 
-export const TopicSearchWrap = styled.div`
+export const ExamSearchWrap = styled.div`
   position: relative;
   margin-bottom: 22px;
   max-width: 340px;
@@ -127,7 +128,7 @@ export const TopicSearchWrap = styled.div`
   }
 `;
 
-export const TopicSearchInput = styled.input`
+export const ExamSearchInput = styled.input`
   width: 100%;
   padding: 9px 12px 9px 34px;
   border-radius: ${({ theme }) => theme.radius};
@@ -147,40 +148,34 @@ export const TopicSearchInput = styled.input`
   }
 `;
 
-// ─── Topic Grid ───────────────────────────────────────────────────────────────
+// ─── Exam Grid ────────────────────────────────────────────────────────────────
 
-export const TopicGrid = styled.div`
+export const ExamGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 14px;
   animation: ${scaleIn} 0.35s ease 0.1s both;
-  overflow: visible;
 
-  @media (max-width: 540px) {
+  @media (max-width: 640px) {
     grid-template-columns: 1fr;
   }
 `;
 
-// ─── Topic Card ───────────────────────────────────────────────────────────────
+// ─── Exam Card ────────────────────────────────────────────────────────────────
 
-const DOT_COLORS = [
-  '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6',
-  '#EF4444', '#06B6D4', '#EC4899', '#84CC16',
-];
-
-export const TopicCard = styled.div`
+export const ExamCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius};
-  padding: 16px 18px;
+  padding: 18px 18px 14px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
   box-shadow: ${({ theme }) => theme.shadowSm};
   animation: ${fadeUp} 0.35s ease ${({ $delay }) => $delay || '0s'} both;
   transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
   position: relative;
+  overflow: hidden;
 
   /* accent bar */
   &::before {
@@ -192,7 +187,7 @@ export const TopicCard = styled.div`
     width: 3px;
     border-radius: 0 3px 3px 0;
     background: ${({ $accent }) => $accent || '#3B82F6'};
-    opacity: 0.7;
+    opacity: 0.75;
   }
 
   &:hover {
@@ -202,49 +197,84 @@ export const TopicCard = styled.div`
   }
 `;
 
-export const TopicCardLeft = styled.div`
+export const ExamCardTop = styled.div`
   display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding-left: 8px;
 `;
 
-export const TopicDot = styled.div`
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: ${({ $color }) => $color || '#3B82F6'};
-`;
-
-export const TopicCardName = styled.p`
-  font-size: 13px;
-  font-weight: 600;
+export const ExamCardName = styled.p`
+  font-size: 14px;
+  font-weight: 700;
   color: ${({ theme }) => theme.colors.textPrimary};
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.3;
+  flex: 1;
 `;
 
-// ─── Card Action Buttons ──────────────────────────────────────────────────────
+// ─── Meta Chips Row ───────────────────────────────────────────────────────────
 
-export const TopicCardActions = styled.div`
+export const ExamMetaRow = styled.div`
   display: flex;
-  gap: 6px;
   align-items: center;
-  flex-shrink: 0;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-left: 8px;
 `;
+
+export const ExamMetaChip = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: ${({ $bg }) => $bg || '#EFF6FF'};
+  color: ${({ $color }) => $color || '#2563EB'};
+  border: 1px solid ${({ $border }) => $border || '#DBEAFE'};
+  white-space: nowrap;
+
+  svg {
+    font-size: 10px;
+    opacity: 0.8;
+  }
+`;
+
+// ─── Card Divider ─────────────────────────────────────────────────────────────
+
+export const ExamCardDivider = styled.div`
+  height: 1px;
+  background: ${({ theme }) => theme.colors.border};
+  margin: 0 -2px;
+`;
+
+// ─── Card Actions ─────────────────────────────────────────────────────────────
+
+export const ExamCardActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+`;
+
+// ─── Tooltip ─────────────────────────────────────────────────────────────────
 
 export const TooltipWrapper = styled.div`
   position: relative;
   display: inline-flex;
-  &:hover span { opacity: 1; }
+
+  &:hover > span {
+    opacity: 1;
+    pointer-events: none;
+  }
 `;
 
 export const TooltipChip = styled.span`
   position: absolute;
-  top: calc(100% + 6px);
+  bottom: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: ${({ theme }) => theme.colors.headerBackground};
@@ -258,7 +288,17 @@ export const TooltipChip = styled.span`
   opacity: 0;
   transition: opacity 0.15s;
   letter-spacing: 0.03em;
-  z-index: 100;
+  z-index: 20;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: ${({ theme }) => theme.colors.headerBackground};
+  }
 `;
 
 export const CardIconBtn = styled(NavLink)`
@@ -276,10 +316,17 @@ export const CardIconBtn = styled(NavLink)`
   cursor: pointer;
   transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.12s;
 
-  &.view:hover {
+  &.assign:hover {
     color: #059669;
     background: #ECFDF5;
     border-color: #A7F3D0;
+    transform: translateY(-1px);
+  }
+
+  &.topics:hover {
+    color: #7C3AED;
+    background: #F5F3FF;
+    border-color: #DDD6FE;
     transform: translateY(-1px);
   }
 
@@ -291,9 +338,31 @@ export const CardIconBtn = styled(NavLink)`
   }
 `;
 
+export const CardDeleteBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.subtitle};
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.12s;
+
+  &:hover {
+    color: #DC2626;
+    background: #FEF2F2;
+    border-color: #FECACA;
+    transform: translateY(-1px);
+  }
+`;
+
 // ─── Empty State ──────────────────────────────────────────────────────────────
 
-export const TopicEmptyWrap = styled.div`
+export const ExamEmptyWrap = styled.div`
   grid-column: 1 / -1;
   padding: 60px 20px;
   text-align: center;

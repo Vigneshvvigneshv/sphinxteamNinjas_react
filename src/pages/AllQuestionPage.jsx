@@ -116,7 +116,7 @@ const QuestionRow = ({ data, index, selectedIds, onCheck, onDelete, topicMode, t
 // ── Main Page ─────────────────────────────────────────────────────────────────
 const QuestionPage = () => {
   const { theme } = useSelector((state) => state.themeReducer);
-
+  const partyId = useSelector((state) => state.userReducer.partyId);
   // if topicId param exists → topic mode, else → all-questions mode
   const { id: topicId } = useParams();
   const topicMode = Boolean(topicId);
@@ -141,7 +141,7 @@ const QuestionPage = () => {
     try {
       const url = topicMode
         ? `/question/getquestions-by-topic?topicId=${topicId}&pageNo=${page}&pageSize=${customLimit}`
-        : `/question/getall-questions?pageNo=${page}&pageSize=${customLimit}`;
+        : `/question/getall-questions?partyId=${partyId}&pageNo=${page}&pageSize=${customLimit}`;
 
       const response = await apiGet(url);
       if (!response) return;
@@ -241,7 +241,7 @@ const QuestionPage = () => {
     : data.responseMessage === 'success';
 
   return (
-    <ThemeProvider theme={theme}>
+    
       <Layout>
         <QPageWrap>
 
@@ -293,7 +293,7 @@ const QuestionPage = () => {
               )}
             </QStatStrip>
 
-            <QSearchWrap>
+            {/* <QSearchWrap>
               <FaSearch />
               <QSearchInput
                 type="text"
@@ -301,7 +301,7 @@ const QuestionPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-            </QSearchWrap>
+            </QSearchWrap> */}
           </QControlRow>
 
           {/* ── Panel ───────────────────────────────────────────────────── */}
@@ -398,7 +398,7 @@ const QuestionPage = () => {
           </Modal>
         )}
       </Layout>
-    </ThemeProvider>
+    
   );
 };
 

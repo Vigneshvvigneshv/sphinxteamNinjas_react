@@ -250,7 +250,9 @@ export const ModalHeaderLeft = styled.div`
 export const ModalIconWrap = styled.div`
   width: 40px; height: 40px; border-radius: 11px;
   background: rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
   font-size: 18px; color: #fff;
 `;
 

@@ -22,6 +22,7 @@ import ExamQuestionList from "./pages/ExamQuestionList";
 import CompletedExam from "./pages/CompletedExam";
 import AssignedExam from "./pages/AssignedExam";
 import ResultPage from "./pages/ResultPage";
+import ExamPage from "./pages/ExamPage";
 
 const App = () => {
   const { partyId, role } = useSelector((state) => state.userReducer);
@@ -77,6 +78,17 @@ const App = () => {
                 <AdminDashBoard />
               </AdminAuthentication>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/exam-page"
+          element={
+            <ExamPage/>
+            // <ProtectedRoute>
+            //   <AdminAuthentication>
+            //     <ExamPage />
+            //   </AdminAuthentication>
+            // </ProtectedRoute>
           }
         />
         <Route

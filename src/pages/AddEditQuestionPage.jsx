@@ -29,7 +29,7 @@ const AddEditQuestionPage = () => {
   const location   = useLocation();
   const navigate   = useNavigate();
   const isEdit     = id !== undefined;
-
+  const partyId = useSelector((state) => state.userReducer.partyId);
   const topicId   = location.state?.topicId;
   const topicName = location.state?.topicName;
 
@@ -49,6 +49,7 @@ const AddEditQuestionPage = () => {
     difficultyLevel:  '1',
     answerValue:      1,
     negativeMarkValue: 0,
+    partyId:partyId,
   });
 
   console.log('AddEditQuestion',formData);
@@ -83,7 +84,7 @@ const AddEditQuestionPage = () => {
   useEffect(() => {
     if (topicName) return;
     const fetch = async () => {
-      const res = await apiGet('/topic/getall-topic');
+      const res = await apiGet('/topic/getall-topic/'+partyId);
       setTopicList(res.topicList || []);
     };
     fetch();

@@ -7,7 +7,6 @@ import Modal from '../component/Modal';
 import Empty from '../component/Empty';
 import {
   DashboardPage,
-  DashPageHeader,
   DashPageTitle,
   StatRow,
   StatCard,
@@ -36,6 +35,7 @@ import {
   PanelEmpty,
   TooltipWrapper,
   TooltipChip,
+  DashPageHeader,
 } from '../styles/adminDashboard_style';
 import {
   FaBook,
@@ -74,7 +74,7 @@ const AdminDashBoard = () => {
   };
 
   const fetchTopics = async () => {
-    const response = await apiGet('/topic/getall-topic');
+    const response = await apiGet('/topic/getall-topic/'+partyId);
     setTopicData(response);
   };
 
@@ -182,10 +182,10 @@ const AdminDashBoard = () => {
             {/* column headers */}
             <ExamColHeader theme={theme}>
               <span>Name</span>
-              <span style={{ textAlign: 'center' }}>Dur.</span>
+              <span style={{ textAlign: 'center' }}>Duration</span>
               <span style={{ textAlign: 'center' }}>Q&apos;s</span>
               <span style={{ textAlign: 'center' }}>Pass%</span>
-              <span style={{ textAlign: 'right' }}>Actions</span>
+              <span style={{ textAlign: 'center' }}>Actions</span>
             </ExamColHeader>
 
             <PanelBody theme={theme}>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 import { Button } from "flowbite-react";
 import {
   FaAlignLeft,
@@ -107,7 +106,7 @@ export const UserExamTable = ({ data, handleStartExam }) => {
 
       {/* ── Toggle details ── */}
       <DetailsToggle $open={show} onClick={() => setShow(!show)}>
-        {show ? "Hide Details" : "View Details"}
+        {show ? "Hide Description" : "Assesment Description"}
         {show ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
       </DetailsToggle>
 
@@ -124,7 +123,7 @@ export const UserExamTable = ({ data, handleStartExam }) => {
               </DetailText>
             </DetailRow>
           )}
-          {data.duration != null && (
+          {/* {data.duration != null && (
             <DetailRow>
               <DetailIcon $bg="rgba(245,158,11,0.08)" $border="rgba(245,158,11,0.2)" $color="#F59E0B">
                 <FaClock />
@@ -145,8 +144,8 @@ export const UserExamTable = ({ data, handleStartExam }) => {
                 <div className="val">{data.noOfQuestions}</div>
               </DetailText>
             </DetailRow>
-          )}
-          {allowed != null && (
+          )} */}
+          {/* {allowed != null && (
             <DetailRow>
               <DetailIcon $bg="rgba(139,92,246,0.08)" $border="rgba(139,92,246,0.18)" $color="#8B5CF6">
                 <FaRedo />
@@ -173,7 +172,7 @@ export const UserExamTable = ({ data, handleStartExam }) => {
                 </div>
               </DetailText>
             </DetailRow>
-          )}
+          )} */}
         </DetailsPanel>
       )}
 

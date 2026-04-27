@@ -17,6 +17,7 @@ import {
 
 const AddEditTopic = () => {
   const { theme }  = useSelector((state) => state.themeReducer);
+  const { partyId }  = useSelector((state) => state.userReducer);
   const { id }     = useParams();
   const navigate   = useNavigate();
   const isEdit     = id !== undefined;
@@ -48,18 +49,17 @@ const AddEditTopic = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     if (!isEdit) {
-      const res = await apiPost('/topic/create-topic', formData);
+      const res = await apiPost('/topic/create-topic',{ ...formData,partyId:partyId});
       if (res.errorMessage)   { setError(res); return; }
       if (res.successMessage) { setFormData({ topicName: '' }); setError(res); setShow(true); }
     } else {
-      const res = await apiPut('/topic/update-topic', { ...formData, topicId: id });
+      const res = await apiPut('/topic/update-topic', { ...formData, topicId: id,partyId:partyId });
       if (res.errorMessage)   { setError(res); return; }
       if (res.successMessage) { setFormData({ topicName: '' }); setError(res); setShow(true); }
     }
   };
 
   return (
-    <ThemeProvider theme={theme}>
       <Layout>
         <FormPageWrap>
           <FormCard>
@@ -104,7 +104,6 @@ const AddEditTopic = () => {
           </Modal>
         )}
       </Layout>
-    </ThemeProvider>
   );
 };
 
