@@ -30,6 +30,7 @@ import {
 
 const QuestionBulkUpload = () => {
   const theme = useSelector((state) => state.themeReducer.theme);
+  const partyId = useSelector((state) => state.userReducer.partyId);
 
   const [file, setFile]       = useState(null);
   const [error, setError]     = useState(null);
@@ -59,7 +60,7 @@ const QuestionBulkUpload = () => {
     }
     const formData = new FormData();
     formData.append("file", file);
-    const response = await apiFilePost("/question/upload", formData);
+    const response = await apiFilePost("/question/upload/"+partyId, formData);
     if (response.successMessage !== undefined) {
       setData(response);
       setError(null);
