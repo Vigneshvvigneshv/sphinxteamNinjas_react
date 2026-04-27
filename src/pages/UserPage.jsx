@@ -81,6 +81,7 @@ const getInitials = (name) => {
 
 const UserPage = () => {
   const { theme } = useSelector((state) => state.themeReducer);
+  const { partyId } = useSelector((state) => state.userReducer);
 
   const [data, setData]                   = useState();
   const [examList, setExamList]           = useState([]);
@@ -96,40 +97,32 @@ const UserPage = () => {
   });
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
-const getExams = async (userList) => {
-  const allExams = [];
+  const getUsers = async () => {
+    // 1. Fetch all users
+    const userRes = await apiGet('/user/getall-user');
+    const userList = userRes?.userList ?? [];
 
-  await Promise.all(
-    userList.map(async (user) => {
-      const response = await apiGet('/exam/getexam-by-partyId/' + user.partyId);
-      if (response?.examList?.length > 0) {
-        response.examList.forEach((exam) => {
-          if (!allExams.find((e) => e.examId === exam.examId)) {
-            allExams.push(exam);
-          }
-        });
-      }
-    })
-  );
+    // 2. Fetch all available exams for the assign-modal dropdown
+    const examRes = await apiPost('/exam/getall-exam', { partyId });
+    setExamList(examRes?.examList ?? []);
 
-  setExamList(allExams);
-  console.log('Exam list', allExams);
-};
+    // 3. For every user, fetch their assigned exams and attach to the user object
+    const enriched = await Promise.all(
+      userList.map(async (user) => {
+        const assigned = await apiGet('/exam/getexam-by-partyId/' + user.partyId);
+        return {
+          ...user,
+          assignedExams: assigned?.examList ?? [],
+        };
+      })
+    );
 
-const getUsers = async () => {
-  const response = await apiGet('/user/getall-user');
-  setData(response);
-  console.log('get users', response);
+    setData({ ...userRes, userList: enriched });
+  };
 
-  const userList = response?.userList ?? [];
-  if (userList.length > 0) {
-    await getExams(userList);
-  }
-};
-
-useEffect(() => {
-  getUsers();
-}, []);
+  useEffect(() => {
+    getUsers();
+  }, []);
 
 
   // ── Delete ────────────────────────────────────────────────────────────────
@@ -189,9 +182,8 @@ useEffect(() => {
         partyIdList: [assignTarget.partyId],
       });
       setShowAssign(false);
-      // refresh user list so assigned exams update
-      const userRes = await apiGet("/user/getall-user");
-      setData(userRes);
+      // refresh users + their assigned exams
+      await getUsers();
     }
   };
 
@@ -231,7 +223,7 @@ useEffect(() => {
           </UserStatStrip>
 
           {/* ── Search ──────────────────────────────────────────────────── */}
-          <UserSearchWrap>
+          {/* <UserSearchWrap>
             <FaSearch />
             <UserSearchInput
               type="text"
@@ -239,7 +231,7 @@ useEffect(() => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </UserSearchWrap>
+          </UserSearchWrap> */}
 
           {/* ── Grid ────────────────────────────────────────────────────── */}
           <UserGrid>

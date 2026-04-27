@@ -154,6 +154,7 @@ export const TopicGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
   animation: ${scaleIn} 0.35s ease 0.1s both;
+  overflow: visible;
 
   @media (max-width: 540px) {
     grid-template-columns: 1fr;
@@ -180,7 +181,6 @@ export const TopicCard = styled.div`
   animation: ${fadeUp} 0.35s ease ${({ $delay }) => $delay || '0s'} both;
   transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
   position: relative;
-  overflow: hidden;
 
   /* accent bar */
   &::before {
@@ -258,7 +258,7 @@ export const TooltipChip = styled.span`
   opacity: 0;
   transition: opacity 0.15s;
   letter-spacing: 0.03em;
-  z-index: 10;
+  z-index: 100;
 `;
 
 export const CardIconBtn = styled(NavLink)`

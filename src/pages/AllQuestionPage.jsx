@@ -241,7 +241,7 @@ const QuestionPage = () => {
     : data.responseMessage === 'success';
 
   return (
-    <ThemeProvider theme={theme}>
+    
       <Layout>
         <QPageWrap>
 
@@ -293,7 +293,7 @@ const QuestionPage = () => {
               )}
             </QStatStrip>
 
-            <QSearchWrap>
+            {/* <QSearchWrap>
               <FaSearch />
               <QSearchInput
                 type="text"
@@ -301,7 +301,7 @@ const QuestionPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-            </QSearchWrap>
+            </QSearchWrap> */}
           </QControlRow>
 
           {/* ── Panel ───────────────────────────────────────────────────── */}
@@ -398,7 +398,7 @@ const QuestionPage = () => {
           </Modal>
         )}
       </Layout>
-    </ThemeProvider>
+    
   );
 };
 

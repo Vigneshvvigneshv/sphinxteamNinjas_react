@@ -121,7 +121,7 @@ const ExamPage = () => {
             )}
           </ExamStatStrip>
 
-          {/* ── Search ──────────────────────────────────────────────────── */}
+          {/* ── Search ────────────────────────────────────────────────────
           <ExamSearchWrap>
             <FaSearch />
             <ExamSearchInput
@@ -130,7 +130,7 @@ const ExamPage = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </ExamSearchWrap>
+          </ExamSearchWrap> */}
 
           {/* ── Grid ────────────────────────────────────────────────────── */}
           <ExamGrid>

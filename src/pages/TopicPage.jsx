@@ -91,7 +91,7 @@ const TopicPage = () => {
           </TopicStatStrip>
 
           {/* ── Search ─────────────────────────────────────────────────── */}
-          <TopicSearchWrap>
+          {/* <TopicSearchWrap>
             <FaSearch />
             <TopicSearchInput
               type="text"
@@ -99,7 +99,7 @@ const TopicPage = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-          </TopicSearchWrap>
+          </TopicSearchWrap> */}
 
           {/* ── Grid ───────────────────────────────────────────────────── */}
           <TopicGrid>

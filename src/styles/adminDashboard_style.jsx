@@ -145,7 +145,7 @@ export const StatInfo = styled.div`
 
 export const SectionGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 1fr;
   gap: 20px;
   animation: ${fadeUp} 0.45s ease 0.1s both;
 
@@ -261,10 +261,10 @@ export const PanelBody = styled.div`
 
 export const ExamRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr 70px 70px 70px 88px;
+  grid-template-columns: 1fr 70px 70px 70px 120px;
   align-items: center;
   padding: 12px 18px;
-  gap: 8px;
+  gap: 15px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   transition: background 0.15s;
   cursor: default;

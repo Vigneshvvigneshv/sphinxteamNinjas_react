@@ -182,10 +182,10 @@ const AdminDashBoard = () => {
             {/* column headers */}
             <ExamColHeader theme={theme}>
               <span>Name</span>
-              <span style={{ textAlign: 'center' }}>Dur.</span>
+              <span style={{ textAlign: 'center' }}>Duration</span>
               <span style={{ textAlign: 'center' }}>Q&apos;s</span>
               <span style={{ textAlign: 'center' }}>Pass%</span>
-              <span style={{ textAlign: 'right' }}>Actions</span>
+              <span style={{ textAlign: 'center' }}>Actions</span>
             </ExamColHeader>
 
             <PanelBody theme={theme}>

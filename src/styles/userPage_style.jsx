@@ -130,6 +130,7 @@ export const UserGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
   animation: ${scaleIn} 0.35s ease 0.1s both;
+  overflow: visible;
 
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
@@ -146,7 +147,6 @@ export const UserCard = styled.div`
   animation: ${fadeUp} 0.35s ease ${({ $delay }) => $delay || "0s"} both;
   transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
   position: relative;
-  overflow: hidden;
 
   &::before {
     content: "";
@@ -248,7 +248,7 @@ export const TooltipChip = styled.span`
   opacity: 0;
   transition: opacity 0.15s;
   letter-spacing: 0.03em;
-  z-index: 20;
+  z-index: 100;
 
   &::after {
     content: "";
