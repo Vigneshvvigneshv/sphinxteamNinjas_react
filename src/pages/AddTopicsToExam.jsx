@@ -26,6 +26,7 @@ const AddTopicsToExam = () => {
   const [exam, setExam] = useState(null);
   const[examId,setExamId]=useState(null);
  
+   const {partyId}=useSelector((state)=>state.userReducer);
   
   console.log(exam);
 
@@ -92,7 +93,7 @@ const AddTopicsToExam = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet('/topic/getall-topic');
+      const response = await apiGet('/topic/getall-topic/'+partyId);
       console.log("AllTopic ",response)
       setData(response);
     }

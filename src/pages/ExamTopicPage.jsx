@@ -94,9 +94,11 @@ const ExamTopicPage = () => {
   };
 
   // ── fetch: all topics for dropdown ────────────────────────────────────────
+   const {partyId}=useSelector((state)=>state.userReducer);
+
   useEffect(() => {
     const fetchAllTopics = async () => {
-      const response = await apiGet("/topic/getall-topic");
+      const response = await apiGet("/topic/getall-topic/"+partyId);
       if (response.responseMessage === "success") {
         setAllTopics(response.topicList);
       }

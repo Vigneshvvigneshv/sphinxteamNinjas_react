@@ -74,7 +74,7 @@ const AdminDashBoard = () => {
   };
 
   const fetchTopics = async () => {
-    const response = await apiGet('/topic/getall-topic');
+    const response = await apiGet('/topic/getall-topic/'+partyId);
     setTopicData(response);
   };
 

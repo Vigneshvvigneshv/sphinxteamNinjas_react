@@ -25,6 +25,8 @@ const AddEditTopic = () => {
   const [error,    setError]    = useState({});
   const [show,     setShow]     = useState(false);
 
+  const {partyId}=useSelector((state)=>state.userReducer);
+
   // ── Prefill on edit ───────────────────────────────────────────────────────
   useEffect(() => {
     if (!isEdit) return;
@@ -48,11 +50,11 @@ const AddEditTopic = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     if (!isEdit) {
-      const res = await apiPost('/topic/create-topic', formData);
+      const res = await apiPost('/topic/create-topic', {...formData,partyId:partyId});
       if (res.errorMessage)   { setError(res); return; }
       if (res.successMessage) { setFormData({ topicName: '' }); setError(res); setShow(true); }
     } else {
-      const res = await apiPut('/topic/update-topic', { ...formData, topicId: id });
+      const res = await apiPut('/topic/update-topic', { ...formData, topicId: id,partyId:partyId});
       if (res.errorMessage)   { setError(res); return; }
       if (res.successMessage) { setFormData({ topicName: '' }); setError(res); setShow(true); }
     }

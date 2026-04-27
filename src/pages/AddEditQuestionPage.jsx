@@ -51,6 +51,7 @@ const AddEditQuestionPage = () => {
     negativeMarkValue: 0,
   });
 
+   const {partyId}=useSelector((state)=>state.userReducer);
   console.log('AddEditQuestion',formData);
   
 
@@ -83,7 +84,7 @@ const AddEditQuestionPage = () => {
   useEffect(() => {
     if (topicName) return;
     const fetch = async () => {
-      const res = await apiGet('/topic/getall-topic');
+      const res = await apiGet('/topic/getall-topic/'+partyId);
       setTopicList(res.topicList || []);
     };
     fetch();
