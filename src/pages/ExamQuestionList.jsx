@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ActionBar, BodyLayout, DiffBadge, ExamTitle, FreeTextArea, FreeTextInput, GlobalStyle, Legend, LegendDot, LegendRow, LoadWrap, MainPanel, NavBtn, OptionBox, OptionsGrid, PageWrapper, PaletteBtn, PaletteGrid, QLabel, QMeta, QTypeBadge, QuestionCard, QuestionText, ReviewBtn, RightControls, Sidebar, SideCard, SideTitle, Spinner, StatBox, StatLabel, StatsRow, StatVal, SubmitBtn, Timer, TopBar } from '../styles/ExamQuestionList_style'
 
 import Modal from '../component/Modal'
+import { toast } from 'sonner'
 
 const DIFF_LABEL = { 1: 'Easy', 2: 'Easy', 3: 'Medium', 4: 'Hard', 5: 'Hard' }
 const TYPE_LABEL = {
@@ -192,6 +193,15 @@ const ExamQuestionList = () => {
 
   // ── Submit ──
   const handleFinalSubmit = async () => {
+
+    if (data) {
+    const qId = data.question.questionId
+    const selected = answers[qId]
+    if (selected !== undefined) {
+      const formatted = Array.isArray(selected) ? selected.join(',') : selected
+      await saveAnswer(qId, formatted)
+    }
+  }
     try {
       const response = await apiPost('/submit-exam/submit-exam', { examId, partyId })
       if (response.responseMessage === 'SUCCESS') {

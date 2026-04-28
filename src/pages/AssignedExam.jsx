@@ -73,7 +73,7 @@ export default function AssignedExam() {
   const [search, setSearch]         = useState("");
   const [showModal, setShowModal]   = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [examId, setExamId]         = useState("");
+ const [selectedExam, setSelectedExam] = useState(null);
   const [startingId, setStartingId] = useState(null);
   const [userData, setUserData]     = useState({ password: "" });
 
@@ -95,15 +95,19 @@ export default function AssignedExam() {
   };
 
   useEffect(() => { fetchExams(); }, []);
-
+ const openModal = (exam) => {
+    setSelectedExam(exam);
+    setShowModal(true);
+  };
   /* ── Generate questions + open modal ── */
   const handleStartExam = async (id) => {
     setStartingId(id);
-    setExamId(id);
+    
     try {
       const response = await apiPost("/generate-question/generate-questions", { examId: id });
       if (response.status === "SUCCESS") {
-        setShowModal(true);
+        //setShowModal(true);
+        navigate(`/examquestionlist/${id}/${partyId}`);
       } else {
         toast.error("Please try again later", { position: "top-center" });
       }
@@ -115,7 +119,7 @@ export default function AssignedExam() {
   };
 
   /* ── Submit security code ── */
-  const handleSubmit = async () => {
+  const handleSubmit = async (id) => {
     if (!userData.password.trim()) {
       toast.error("Please enter the security code", { position: "top-center" });
       return;
@@ -124,14 +128,14 @@ export default function AssignedExam() {
     try {
       const response = await apiPost("/start-exam/exam-start", {
         ...userData,
-        examId,
+        examId: selectedExam.examId,
         partyId,
       });
       setUserData({ password: "" });
       setShowModal(false);
       if (response.successMessage) {
         toast.success(response.successMessage, { position: "top-center" });
-        navigate(`/examquestionlist/${examId}/${partyId}`);
+        handleStartExam(selectedExam.examId);
       }
       if (response.errorMessage) {
         toast.error(response.errorMessage, { position: "top-center" });
@@ -146,6 +150,7 @@ export default function AssignedExam() {
   /* ── Close modal ── */
   const closeModal = () => {
     setShowModal(false);
+    setSelectedExam(null);
     setUserData({ password: "" });
   };
 
@@ -245,8 +250,8 @@ export default function AssignedExam() {
             /* Card Grid */
             <CardGrid>
               {filtered.map((exam, index) => {
-                const attemptsUsed    = exam?.attemptUsed    ?? 0;
-                const totalAttempts   = exam?.totalAttempts  ?? 1;
+                const attemptsUsed    = exam?.noOfAttempts    ?? 0;
+                const totalAttempts   = exam?.allowedAttempts  ?? 1;
                 const attemptsLeft    = totalAttempts - attemptsUsed;
                 const noAttemptsLeft  = attemptsLeft <= 0;
                 const attemptsPercent = Math.min((attemptsUsed / totalAttempts) * 100, 100);
@@ -283,7 +288,7 @@ export default function AssignedExam() {
                       </MetaChip>
                       <MetaChip $color="#4F46E5">
                         <FaClipboardList size={11} />
-                        {exam?.totalQuestions ?? "—"} Qs
+                        {exam?.noOfQuestions ?? "—"} Qs
                       </MetaChip>
                       <MetaChip $color={noAttemptsLeft ? "#EF4444" : "#10B981"}>
                         <FaRedo size={11} />
@@ -304,7 +309,7 @@ export default function AssignedExam() {
 
                     {/* Start button */}
                     <StartBtn
-                      onClick={() => handleStartExam(exam?.examId)}
+                      onClick={() =>openModal(exam)}//handleStartExam(exam?.examId)}
                       disabled={isStarting || noAttemptsLeft}
                     >
                       {isStarting ? (
@@ -371,7 +376,7 @@ export default function AssignedExam() {
                     onChange={(e) =>
                       setUserData({ ...userData, password: e.target.value })
                     }
-                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmit(examId)}
                     autoFocus
                   />
                 </FieldInputWrap>
