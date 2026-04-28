@@ -424,13 +424,13 @@ const UserPage = () => {
       )}
        {showDeleteExam && (
               <Modal
-                title="Remove Exam"
+                title="Remove Assessment"
                 onConfirm={onDelete}
                 onCancel={changeShowDelete}
                 type="delete"
                 showConfirmButton={true}
               >
-                Are you sure you want to remove this user from the assessment?
+                Are you sure you want to remove this assessment from the user ?
               </Modal>
             )}
 

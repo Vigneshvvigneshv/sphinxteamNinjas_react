@@ -364,7 +364,7 @@ export const TooltipWrapper = styled.div`
 
 export const TooltipChip = styled.span`
   position: absolute;
-  bottom: calc(100% + 6px);
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: ${({ theme }) => theme.colors.headerBackground};
