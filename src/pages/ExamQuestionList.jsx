@@ -285,9 +285,26 @@ const ExamQuestionList = () => {
                     <QuestionText>{q.questionDetail}</QuestionText>
 
                     {/* SINGLE / TRUE-FALSE */}
-                    {(!q.questionTypeId || q.questionTypeId === 'SINGLE_CHOICE' || q.questionTypeId === 'TRUE_FALSE') && (
+                    {(!q.questionTypeId || q.questionTypeId === 'SINGLE_CHOICE' ) && (
                       <OptionsGrid>
                         {['A', 'B', 'C', 'D'].map(opt => {
+                          const txt = q[`option${opt}`]
+                          if (!txt) return null
+                          const sel = answers[q.questionId] === opt
+                          return (
+                            <OptionBox key={opt} $selected={sel} as="label">
+                              <input type="radio" checked={sel} onChange={() => handleOptionChange(opt)} />
+                              <div className="opt-letter">{opt}</div>
+                              <div className="opt-text">{txt}</div>
+                            </OptionBox>
+                          )
+                        })}
+                      </OptionsGrid>
+                    )}
+
+                    {(q.questionTypeId === 'TRUE_FALSE') && (
+                      <OptionsGrid>
+                        {['True', 'False'].map(opt => {
                           const txt = q[`option${opt}`]
                           if (!txt) return null
                           const sel = answers[q.questionId] === opt
