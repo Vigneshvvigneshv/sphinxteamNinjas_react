@@ -143,7 +143,7 @@ const SignUp = () => {
           </Form>
         </FormContainer>
       </CommonContainer>
-            {show && <Modal>{error.successMessage}</Modal>}
+            {show && <Modal type='success' title={formData.roleTypeId==='SPHINX_USER'?' User successfully created':'Admin successfully created'}></Modal>}
     </Layout>
   )
 }
