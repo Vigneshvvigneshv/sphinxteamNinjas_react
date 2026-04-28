@@ -284,7 +284,7 @@ const ExamQuestionList = () => {
 
                     <QuestionText>{q.questionDetail}</QuestionText>
 
-                    {/* SINGLE / TRUE-FALSE */}
+                    {/* SINGLE CHOICE*/}
                     {(!q.questionTypeId || q.questionTypeId === 'SINGLE_CHOICE' ) && (
                       <OptionsGrid>
                         {['A', 'B', 'C', 'D'].map(opt => {
@@ -302,21 +302,21 @@ const ExamQuestionList = () => {
                       </OptionsGrid>
                     )}
 
-                    {(q.questionTypeId === 'TRUE_FALSE') && (
-                      <OptionsGrid>
-                        {['True', 'False'].map(opt => {
+                    {q.questionTypeId === 'TRUE_FALSE' && (
+                        <OptionsGrid>
+                          {[{ opt: 'A', label: 'True' }, { opt: 'B', label: 'False' }].map(({ opt, label }) => {
                           const txt = q[`option${opt}`]
                           if (!txt) return null
                           const sel = answers[q.questionId] === opt
                           return (
-                            <OptionBox key={opt} $selected={sel} as="label">
-                              <input type="radio" checked={sel} onChange={() => handleOptionChange(opt)} />
-                              <div className="opt-letter">{opt}</div>
-                              <div className="opt-text">{txt}</div>
-                            </OptionBox>
-                          )
-                        })}
-                      </OptionsGrid>
+                          <OptionBox key={opt} $selected={sel} as="label">
+                          <input type="radio" checked={sel} onChange={() => handleOptionChange(opt)} />
+                          <div className="opt-letter">{label}</div>
+                          <div className="opt-text">{txt}</div>
+                          </OptionBox>
+                           )
+                     })}
+                    </OptionsGrid>
                     )}
 
                     {/* MULTI */}
