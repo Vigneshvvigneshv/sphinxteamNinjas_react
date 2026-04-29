@@ -160,13 +160,13 @@ const UserDashBoard = () => {
         </CardGrid>
 
         {/* Info banner */}
-        <InfoBanner>
+        {/* <InfoBanner>
           <InfoDot />
           <InfoText>
             <strong>Tip:</strong> Your assessment timer starts as soon as you open an assigned exam.
             Make sure you have a stable internet connection before beginning.
           </InfoText>
-        </InfoBanner>
+        </InfoBanner> */}
       </PageWrapper>
     </Layout>
   );
