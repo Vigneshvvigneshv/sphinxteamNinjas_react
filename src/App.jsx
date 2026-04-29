@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import AdminDashBoard from "./pages/AdminDashBoard";
@@ -13,7 +13,7 @@ import AddTopicsToExam from "./pages/AddTopicsToExam";
 import ExamTopicPage from "./pages/ExamTopicPage";
 import UserPage from "./pages/UserPage";
 import QuestionBulkUpload from "./pages/QuestionBulkUpload";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AssignExamPage from "./pages/AssignExamPage";
 import ErrorPage from "./pages/ErrorPage";
 import AllQuestionPage from "./pages/AllQuestionPage";
@@ -23,11 +23,23 @@ import CompletedExam from "./pages/CompletedExam";
 import AssignedExam from "./pages/AssignedExam";
 import ResultPage from "./pages/ResultPage";
 import ExamPage from "./pages/ExamPage";
+import { apiGet } from "./ApiServices/apiServices";
+import { userAction } from "./store/userSlice";
 
 const App = () => {
+  // const dispatch=useDispatch();
+  // const getCredentials=async()=>{
+  //   if(partyId==null){
+  //     const response=await apiGet('/user/get-credentials');
+  //       console.log('credentials',response);
+  //       dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role}));
+  //     }
+  //   }
+  //   useEffect(()=>{
+  //     getCredentials();
+  //   },[])
   const { partyId, role } = useSelector((state) => state.userReducer);
   console.log("user ", partyId);
-  
   const ProtectedRoute = ({ children }) => {
     console.log("inside if protected");
 

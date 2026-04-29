@@ -240,7 +240,7 @@ const UserPage = () => {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
-      await apiPost("/email/send-email", {
+      await apiPost("/email/send-exam-email", {
         examId:     assignForm.examId,
         partyIdList: [assignTarget.partyId],
       });

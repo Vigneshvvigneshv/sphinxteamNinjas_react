@@ -313,7 +313,7 @@ const QuestionPage = () => {
                 checked={allSelected}
                 onChange={handleSelectAll}
               />
-              <span style={{ textAlign: 'center' }}>No.</span>
+              <span style={{ textAlign: 'center' }}>S.No.</span>
               <span>Question</span>
               {!topicMode && <span className="col-topic">Topic</span>}
               <span>Type</span>

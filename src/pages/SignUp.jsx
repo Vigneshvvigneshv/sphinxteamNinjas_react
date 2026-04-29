@@ -54,6 +54,7 @@ const SignUp = () => {
       showPop();
     }else if(response.responseMessage==='error'){
       toast.error(`Singup failed`,{position:'top-center'})
+      setError(response);
     }
   };
 
@@ -62,15 +63,15 @@ const SignUp = () => {
       <CommonContainer>
         <FormContainer>
           <FormEyebrow>Create account</FormEyebrow>
-          <FormHeading>Sign Up</FormHeading>
-          <FormSubtitle>Register to access the Sphinx platform</FormSubtitle>
+          <FormHeading>Sign up</FormHeading>
+          <FormSubtitle>Register user/admin to the sphinx platform</FormSubtitle>
           <Form onSubmit={handleSubmit}>
             <FieldContainer>
-              <FormLabel htmlFor='userName'>Username</FormLabel>
+              <FormLabel htmlFor='userName'>User name</FormLabel>
               <FormInput
                 type='text'
                 name="userName"
-                placeholder='Enter your username'
+                placeholder='Enter your user name'
                 value={formData.userName}
                 onChange={handleChange}
               />
@@ -78,7 +79,7 @@ const SignUp = () => {
             </FieldContainer>
 
             <FieldContainer>
-              <FormLabel htmlFor='firstName'>First Name</FormLabel>
+              <FormLabel htmlFor='firstName'>First name</FormLabel>
               <FormInput
                 type='text'
                 name="firstName"
@@ -90,7 +91,7 @@ const SignUp = () => {
             </FieldContainer>
 
             <FieldContainer>
-              <FormLabel htmlFor='lastName'>Last Name</FormLabel>
+              <FormLabel htmlFor='lastName'>Last name</FormLabel>
               <FormInput
                 type='text'
                 name="lastName"
@@ -139,7 +140,7 @@ const SignUp = () => {
               </Dropdown>
             </FieldContainer>
 
-            <SubmitButton>Submit</SubmitButton>
+            <SubmitButton>Sign up</SubmitButton>
           </Form>
         </FormContainer>
       </CommonContainer>
