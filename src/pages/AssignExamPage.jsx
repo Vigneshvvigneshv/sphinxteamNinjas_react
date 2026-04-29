@@ -18,8 +18,9 @@ import {
   FaSave,
   FaClock,
   FaRedo,
+  FaArrowLeft,
 } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
+import { FaClipboardList, FaNoteSticky, FaX } from "react-icons/fa6";
 
 import {
   AssignPageWrap,
@@ -69,6 +70,7 @@ import {
   CancelBtn,
   SaveBtn,
 } from "../styles/assignExamPage_style";
+import { FBackBtn } from "../styles/formPage_style";
 
 // ── Avatar palette ────────────────────────────────────────────────────────────
 const PALETTE = [
@@ -185,13 +187,21 @@ const AssignExamPage = () => {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
-      const list = rows.map((d) => d.partyId);
-      await apiPost("/email/send-email", { examId: id, partyIdList: list });
       setRows([]);
       fetchUnassignedUsers();
       fetchAssignedUsers();
     }
   };
+   // ──  Set up exam ───────────────────────────────────────────────────────
+   const setUpExam=async()=>{
+     const list = assignedList.map((d) => d.partyId);
+     const response=await apiPost("/email/send-exam-email", { examId: id, partyIdList: list });
+     if(response.successMessage){
+      toast.success(response.successMessage,{position:'top-center'});
+     }else if(response.errorMessage){
+      toast.error('Set up failed',{position:'top-center'});
+     }
+   }
 
   // ── Update assigned ───────────────────────────────────────────────────────
   const updateExam = async (obj) => {
@@ -223,10 +233,10 @@ const AssignExamPage = () => {
               <span>{examName}</span>
             </AssignPageTitle>
             <AssignPageActions>
-              <HeaderBtn onClick={() => setShowAssigned((v) => !v)}>
-                {showAssigned ? <FaAngleDoubleUp /> : <FaAngleDoubleDown />}
-                {showAssigned ? "Hide assigned" : "View assigned"}
-              </HeaderBtn>
+              <AssignBtn onClick={()=>setUpExam()} >
+                <FaClipboardList/>
+                Set up exam
+              </AssignBtn>
             </AssignPageActions>
           </AssignPageHeader>
 
@@ -240,6 +250,12 @@ const AssignExamPage = () => {
                 <SectionTitle>Assigned Users</SectionTitle>
                 <SectionCount>{assignedList.length}</SectionCount>
               </SectionTitleGroup>
+              <AssignPageActions>
+              <HeaderBtn onClick={() => setShowAssigned((v) => !v)}>
+                {showAssigned ? <FaAngleDoubleUp /> : <FaAngleDoubleDown />}
+                {showAssigned ? "Hide assigned" : "View assigned"}
+              </HeaderBtn>
+            </AssignPageActions>
             </SectionPanelHeader>
 
             {showAssigned && (
@@ -377,7 +393,9 @@ const AssignExamPage = () => {
               )}
             </SectionBody>
           </SectionPanel>
-
+             <FBackBtn onClick={() => navigate(-1)}>
+              <FaArrowLeft size={11} /> Back to Assessment
+            </FBackBtn>
         </AssignPageWrap>
       </Layout>
 

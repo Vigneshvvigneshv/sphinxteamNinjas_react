@@ -1,178 +1,425 @@
 import styled, { keyframes } from "styled-components";
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+// ─── Animations ───────────────────────────────────────────────────────────────
+
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 `;
 
-export const ResultContainer = styled.div`
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 40px;
-  border-radius: 24px;
-  background: #ffffff;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.03);
-  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  animation: ${fadeIn} 0.5s ease-out;
+const scaleIn = keyframes`
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+`;
+
+const pulseRing = keyframes`
+  0%   { box-shadow: 0 0 0 0px rgba(59,130,246,0.25); }
+  100% { box-shadow: 0 0 0 14px rgba(59,130,246,0); }
+`;
+
+const pulseRingGreen = keyframes`
+  0%   { box-shadow: 0 0 0 0px rgba(16,185,129,0.25); }
+  100% { box-shadow: 0 0 0 14px rgba(16,185,129,0); }
+`;
+
+const pulseRingRed = keyframes`
+  0%   { box-shadow: 0 0 0 0px rgba(239,68,68,0.25); }
+  100% { box-shadow: 0 0 0 14px rgba(239,68,68,0); }
+`;
+
+// ─── Page Wrapper ─────────────────────────────────────────────────────────────
+
+export const ResultPage = styled.div`
+  padding: 32px 40px 60px;
+  background: ${({ theme }) => theme.colors.background};
+  min-height: calc(100vh - 60px - 58px);
+  font-family: ${({ theme }) => theme.fontSerif};
 
   @media (max-width: 768px) {
-    padding: 24px;
-    margin: 20px;
+    padding: 20px 16px 40px;
   }
 `;
 
-export const Header = styled.div`
-  text-align: center;
-  margin-bottom: 40px;
+// ─── Page Header ──────────────────────────────────────────────────────────────
 
-  h2 {
-    font-size: 32px;
-    font-weight: 800;
-    margin: 0 0 10px 0;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+export const ResultPageHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+  animation: ${fadeUp} 0.4s ease both;
+`;
+
+export const ResultPageTitle = styled.h1`
+  font-size: 22px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  margin: 0;
+  letter-spacing: -0.3px;
+
+  span {
+    font-size: 13px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.subtitle};
+    margin-left: 10px;
+    letter-spacing: 0;
+  }
+`;
+
+// ─── Score Hero Panel ─────────────────────────────────────────────────────────
+
+export const ScorePanel = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius};
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  padding: 36px 32px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  margin-bottom: 20px;
+  animation: ${scaleIn} 0.35s ease 0.05s both;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadowMd};
   }
 
-  p {
-    color: #64748b;
-    font-size: 16px;
-    margin: 0;
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px 20px;
   }
 `;
 
 export const ScoreCircle = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  margin: 0 auto 40px auto;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border: 8px solid #3b82f6;
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+  border: 5px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.pageBg};
+  transition: border-color 0.3s;
 
-  h3 {
-    margin: 0;
-    font-size: 42px;
-    font-weight: 800;
-    color: #1e3a8a;
-    line-height: 1;
-  }
-
-  span {
-    font-size: 14px;
-    color: #3b82f6;
-    font-weight: 600;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  
   &.pass {
-    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-    border-color: #10b981;
-    h3 { color: #065f46; }
-    span { color: #10b981; }
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+    border-color: ${({ theme }) => theme.colors.success};
+    background: rgba(16, 185, 129, 0.06);
+    animation: ${pulseRingGreen} 2s ease-out infinite;
+
+    .score-val { color: ${({ theme }) => theme.colors.success}; }
+    .score-lbl { color: ${({ theme }) => theme.colors.success}; }
   }
-  
+
   &.fail {
-    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-    border-color: #ef4444;
-    h3 { color: #991b1b; }
-    span { color: #ef4444; }
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2);
+    border-color: ${({ theme }) => theme.colors.error};
+    background: rgba(239, 68, 68, 0.06);
+    animation: ${pulseRingRed} 2s ease-out infinite;
+
+    .score-val { color: ${({ theme }) => theme.colors.error}; }
+    .score-lbl { color: ${({ theme }) => theme.colors.error}; }
+  }
+
+  .score-val {
+    font-size: 32px;
+    font-weight: 800;
+    color: ${({ theme }) => theme.colors.textPrimary};
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .score-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.subtitle};
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
   }
 `;
 
-export const StatsGrid = styled.div`
+export const ScoreInfo = styled.div`
+  flex: 1;
+
+  .exam-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: ${({ theme }) => theme.colors.subtitle};
+    margin-bottom: 6px;
+  }
+
+  .exam-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.textPrimary};
+    margin: 0 0 14px 0;
+    letter-spacing: -0.3px;
+  }
+`;
+
+export const StatusBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  &.pass {
+    background: rgba(16, 185, 129, 0.12);
+    color: ${({ theme }) => theme.colors.success};
+    border: 1px solid ${({ theme }) => theme.colors.successBorder};
+  }
+
+  &.fail {
+    background: rgba(239, 68, 68, 0.1);
+    color: ${({ theme }) => theme.colors.error};
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+`;
+
+// ─── Stats Grid ───────────────────────────────────────────────────────────────
+
+export const StatsRow = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+  animation: ${fadeUp} 0.4s ease 0.1s both;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 `;
 
 export const StatCard = styled.div`
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid #e2e8f0;
-  transition: transform 0.2s ease;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius};
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  animation: ${fadeUp} 0.4s ease ${({ $delay }) => $delay || "0s"} both;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: ${({ $accent }) => $accent || "#3B82F6"};
+    opacity: 0.8;
+  }
 
   &:hover {
+    box-shadow: ${({ theme }) => theme.shadowMd};
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.04);
-  }
-
-  .value {
-    font-size: 24px;
-    font-weight: 700;
-    color: #334155;
-    margin-bottom: 5px;
-  }
-
-  .label {
-    font-size: 13px;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
+    border-color: ${({ theme }) => theme.colors.borderStrong};
   }
 `;
 
-export const DetailsList = styled.div`
-  margin-top: 30px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+export const StatIconBox = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: ${({ $bg }) => $bg || "#EFF6FF"};
+  color: ${({ $color }) => $color || "#3B82F6"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+`;
+
+export const StatInfo = styled.div`
+  .value {
+    font-size: 22px;
+    font-weight: 800;
+    color: ${({ theme }) => theme.colors.textPrimary};
+    line-height: 1;
+    margin-bottom: 3px;
+    letter-spacing: -0.5px;
+  }
+  .label {
+    font-size: 11px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.subtitle};
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+`;
+
+// ─── Details Panel ────────────────────────────────────────────────────────────
+
+export const DetailsPanel = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius};
+  box-shadow: ${({ theme }) => theme.shadowSm};
   overflow: hidden;
+  animation: ${scaleIn} 0.35s ease 0.18s both;
+  margin-bottom: 20px;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadowMd};
+  }
+`;
+
+export const DetailsPanelHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.cream};
+`;
+
+export const DetailsPanelIconBox = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: ${({ $bg }) => $bg || "#EFF6FF"};
+  color: ${({ $color }) => $color || "#3B82F6"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+`;
+
+export const DetailsPanelTitle = styled.h2`
+  font-size: 13px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  margin: 0;
 `;
 
 export const DetailItem = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  transition: background 0.15s;
 
   &:last-child {
     border-bottom: none;
   }
 
+  &:hover {
+    background: ${({ theme }) => theme.colors.pageBg};
+  }
+
   .key {
+    font-size: 13px;
     font-weight: 600;
-    color: #475569;
-    text-transform: capitalize;
+    color: ${({ theme }) => theme.colors.subtitle};
   }
 
   .val {
+    font-size: 13px;
     font-weight: 700;
-    color: #1e293b;
+    color: ${({ theme }) => theme.colors.textPrimary};
   }
 `;
 
-export const ActionContainer = styled.div`
-  margin-top: 40px;
-  text-align: center;
+// ─── Action Row ───────────────────────────────────────────────────────────────
+
+export const ActionRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  animation: ${fadeUp} 0.4s ease 0.22s both;
 `;
 
 export const ActionButton = styled.button`
-  padding: 14px 32px;
-  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  border-radius: ${({ theme }) => theme.radius};
   border: none;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: #ffffff;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: ${({ theme }) => theme.fontSerif};
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  background: ${({ theme }) => theme.buttonBg};
+  color: #fff;
+  box-shadow: ${({ theme }) => theme.shadowSm};
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+    opacity: 0.88;
+    transform: translateY(-1px);
+    box-shadow: ${({ theme }) => theme.shadowMd};
+  }
+`;
+
+// ─── Loading / Empty States ───────────────────────────────────────────────────
+
+export const StatePanel = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius};
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  padding: 60px 32px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textHint};
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: ${scaleIn} 0.35s ease both;
+
+  svg {
+    font-size: 28px;
+    opacity: 0.3;
+    margin-bottom: 4px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.textPrimary};
+    margin: 0;
+  }
+
+  p {
+    font-size: 13px;
+    color: ${({ theme }) => theme.colors.subtitle};
+    margin: 0;
   }
 `;

@@ -1,25 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { apiPost } from '../ApiServices/apiServices';
-
 import Layout from '../component/Layout';
-import { 
- 
-  ResultContainer, 
-  Header, 
-  ScoreCircle, 
-  StatsGrid, 
-  StatCard, 
-  DetailsList, 
-  DetailItem, 
-  ActionContainer, 
-  ActionButton 
-} from '../styles/ResultPage_style'
+import {
+  FaClipboardCheck,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaMinusCircle,
+  FaPercentage,
+  FaCalendarAlt,
+  FaRedo,
+  FaArrowLeft,
+} from 'react-icons/fa';
+import {
+  ResultPage as ResultPageWrapper,
+  ResultPageHeader,
+  ResultPageTitle,
+  ScorePanel,
+  ScoreCircle,
+  ScoreInfo,
+  StatusBadge,
+  StatsRow,
+  StatCard,
+  StatIconBox,
+  StatInfo,
+  DetailsPanel,
+  DetailsPanelHeader,
+  DetailsPanelIconBox,
+  DetailsPanelTitle,
+  DetailItem,
+  ActionRow,
+  ActionButton,
+  StatePanel,
+} from '../styles/ResultPage_style';
 
 const ResultPage = () => {
-
-  const { examId, partyId } = useParams(); // ✅ fixed
+  const { examId, partyId } = useParams();
   const navigate = useNavigate();
+  const theme = useSelector((state) => state.themeReducer.theme);
+
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,123 +47,171 @@ const ResultPage = () => {
     const fetchResult = async () => {
       try {
         const response = await apiPost(`/exam-result/getexam-result`, { examId, partyId });
-        console.log("Result", response);
-
-     
-        const data = response?.resultList || null;
-        setResult(data);
-
+        console.log('Result', response);
+        setResult(response?.resultList || null);
       } catch (error) {
-        console.error("Failed to fetch result", error);
+        console.error('Failed to fetch result', error);
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchResult();
   }, [examId, partyId]);
 
+  const isPassed = result?.passed === 1;
+
   return (
     <Layout>
-  
-      {loading ? (
-        <ResultContainer>
-              <Header>
-                <h2>Loading Result...</h2>
-              </Header>
-            </ResultContainer>
-          ) : !result ? (
-            <ResultContainer>
-              <Header>
-                <h2>No Result Found</h2>
-                <p>We couldn't retrieve the details for this exam.</p>
-              </Header>
-              <ActionContainer>
-                <ActionButton onClick={() => navigate('/user-dashboard')}>
-                  Go to Dashboard
-                </ActionButton>
-              </ActionContainer>
-            </ResultContainer>
-          ) : (
-            <ResultContainer>
-              <Header>
-                <h2>Exam Result</h2>
-                <p>You have successfully completed the exam.</p>
-              </Header>
+      <ResultPageWrapper theme={theme}>
 
-          
-              <ScoreCircle className={result.passed === 1 ? 'pass' : 'fail'}>
-                <h3>{result.score ?? '-'}</h3>
-                <span>Score</span>
+        {/* ── Page header ────────────────────────────────────────────────── */}
+        <ResultPageHeader>
+          <ResultPageTitle theme={theme}>
+            Exam Result
+            <span>Assessment Summary</span>
+          </ResultPageTitle>
+        </ResultPageHeader>
+
+        {/* ── Loading state ──────────────────────────────────────────────── */}
+        {loading && (
+          <StatePanel theme={theme}>
+            <FaClipboardCheck />
+            <h3>Fetching your result…</h3>
+            <p>Please wait a moment.</p>
+          </StatePanel>
+        )}
+
+        {/* ── No result state ────────────────────────────────────────────── */}
+        {!loading && !result && (
+          <StatePanel theme={theme}>
+            <FaClipboardCheck />
+            <h3>No Result Found</h3>
+            <p>We couldn't retrieve the details for this exam.</p>
+            <ActionRow style={{ marginTop: 16, justifyContent: 'center' }}>
+              <ActionButton theme={theme} onClick={() => navigate('/user-dashboard')}>
+                <FaArrowLeft /> Go to Dashboard
+              </ActionButton>
+            </ActionRow>
+          </StatePanel>
+        )}
+
+        {/* ── Result ────────────────────────────────────────────────────── */}
+        {!loading && result && (
+          <>
+            {/* Score hero */}
+            <ScorePanel theme={theme}>
+              <ScoreCircle className={isPassed ? 'pass' : 'fail'} theme={theme}>
+                <span className="score-val">{result.score ?? '-'}</span>
+                <span className="score-lbl">Score</span>
               </ScoreCircle>
 
-             
-              <StatsGrid>
-                <StatCard>
-                  <div className="value">{result.totalMarks ?? '-'}</div>
-                  <div className="label">Total Marks</div>
-                </StatCard>
+              <ScoreInfo theme={theme}>
+                <div className="exam-label">Exam ID</div>
+                <div className="exam-title">{result.examId}</div>
+                <StatusBadge className={isPassed ? 'pass' : 'fail'} theme={theme}>
+                  {isPassed ? 'Passed' : 'Failed'}
+                </StatusBadge>
+              </ScoreInfo>
+            </ScorePanel>
 
-                <StatCard>
-                  <div className="value" style={{ color: '#10b981' }}>
-                    {result.correctCount ?? '-'}
-                  </div>
+            {/* Stats row */}
+            <StatsRow>
+              <StatCard theme={theme} $delay="0s" $accent="#10B981">
+                <StatIconBox $bg="#ECFDF5" $color="#10B981">
+                  <FaCheckCircle />
+                </StatIconBox>
+                <StatInfo theme={theme}>
+                  <div className="value">{result.correctCount ?? '-'}</div>
                   <div className="label">Correct</div>
-                </StatCard>
+                </StatInfo>
+              </StatCard>
 
-                <StatCard>
-                  <div className="value" style={{ color: '#ef4444' }}>
-                    {result.wrongCount ?? '-'}
-                  </div>
+              <StatCard theme={theme} $delay="0.06s" $accent="#EF4444">
+                <StatIconBox $bg="#FEF2F2" $color="#EF4444">
+                  <FaTimesCircle />
+                </StatIconBox>
+                <StatInfo theme={theme}>
+                  <div className="value">{result.wrongCount ?? '-'}</div>
                   <div className="label">Incorrect</div>
-                </StatCard>
+                </StatInfo>
+              </StatCard>
 
-                <StatCard>
-                  <div className="value">
-                    {result.skippedCount ?? '-'}
-                  </div>
+              <StatCard theme={theme} $delay="0.12s" $accent="#F59E0B">
+                <StatIconBox $bg="#FFFBEB" $color="#F59E0B">
+                  <FaMinusCircle />
+                </StatIconBox>
+                <StatInfo theme={theme}>
+                  <div className="value">{result.skippedCount ?? '-'}</div>
                   <div className="label">Skipped</div>
-                </StatCard>
+                </StatInfo>
+              </StatCard>
 
-                <StatCard>
-                  <div className="value">
-                    {result.percentage ?? '-'}%
-                  </div>
+              <StatCard theme={theme} $delay="0.18s" $accent="#3B82F6">
+                <StatIconBox $bg="#EFF6FF" $color="#3B82F6">
+                  <FaPercentage />
+                </StatIconBox>
+                <StatInfo theme={theme}>
+                  <div className="value">{result.percentage ?? '-'}%</div>
                   <div className="label">Percentage</div>
-                </StatCard>
+                </StatInfo>
+              </StatCard>
+            </StatsRow>
 
-                <StatCard>
-                  <div className="value">
-                    {result.passed === 1 ? 'Pass' : 'Fail'}
-                  </div>
-                  <div className="label">Status</div>
-                </StatCard>
-              </StatsGrid>
+            {/* Details panel */}
+            <DetailsPanel theme={theme}>
+              <DetailsPanelHeader theme={theme}>
+                <DetailsPanelIconBox $bg="#EFF6FF" $color="#3B82F6">
+                  <FaClipboardCheck />
+                </DetailsPanelIconBox>
+                <DetailsPanelTitle theme={theme}>Result Details</DetailsPanelTitle>
+              </DetailsPanelHeader>
 
-   
-              <DetailsList>
-                <DetailItem>
-                  <span className="key">Attempt No</span>
-                  <span className="val">{result.attemptNo}</span>
-                </DetailItem>
+              <DetailItem theme={theme}>
+                <span className="key">Total Marks</span>
+                <span className="val">{result.totalMarks ?? '-'}</span>
+              </DetailItem>
 
-                <DetailItem>
-                  <span className="key">Submitted Date</span>
-                  <span className="val">
-                    {new Date(result.submittedDate).toLocaleString()}
-                  </span>
-                </DetailItem>
-              </DetailsList>
+              <DetailItem theme={theme}>
+                <span className="key">Score Obtained</span>
+                <span className="val">{result.score ?? '-'}</span>
+              </DetailItem>
 
-              <ActionContainer>
-                <ActionButton onClick={() => navigate('/user-dashboard')}>
-                  Back to Dashboard
-                </ActionButton>
-              </ActionContainer>
-            </ResultContainer>
-          )}
-    
+              <DetailItem theme={theme}>
+                <span className="key">Attempt No</span>
+                <span className="val">{result.attemptNo ?? '-'}</span>
+              </DetailItem>
+
+              <DetailItem theme={theme}>
+                <span className="key">Submitted Date</span>
+                <span className="val">
+                  {result.submittedDate
+                    ? new Date(result.submittedDate).toLocaleString()
+                    : '-'}
+                </span>
+              </DetailItem>
+
+              <DetailItem theme={theme}>
+                <span className="key">Status</span>
+                <span className="val">
+                  <StatusBadge className={isPassed ? 'pass' : 'fail'} theme={theme}>
+                    {isPassed ? 'Passed' : 'Failed'}
+                  </StatusBadge>
+                </span>
+              </DetailItem>
+            </DetailsPanel>
+
+            {/* Actions */}
+            <ActionRow theme={theme}>
+              <ActionButton theme={theme} onClick={() => navigate('/user-dashboard')}>
+                <FaArrowLeft /> Back to Dashboard
+              </ActionButton>
+            </ActionRow>
+          </>
+        )}
+
+      </ResultPageWrapper>
     </Layout>
-  )
-}
+  );
+};
 
 export default ResultPage;

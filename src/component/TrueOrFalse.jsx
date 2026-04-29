@@ -1,36 +1,35 @@
-import React from 'react'
-import { CheckBox, ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
-import { QuestionFieldContainer } from '../styles/question_style'
+import React from 'react';
+import {
+  QOptionRow,
+  QOptionLabelRow,
+  QOptionControl,
+  QOptionLabel,
+  QError,
+} from '../styles/question_style_unified';
 
 const TrueOrFalse = ({ change, error, data }) => {
   return (
-    <>
-      <QuestionFieldContainer>
-        <LabelContainer>
-           <CheckBox type="radio" 
-                         name="answer"
-                          value="True" 
-                          checked={data.answer?.includes("True")}
-                          onChange={change}></CheckBox>
-        <FormLabel>True</FormLabel>
-        </LabelContainer>
-        {error.optionA && <ErrorMessage>{error.optionA}</ErrorMessage>}
-      </QuestionFieldContainer>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {['True', 'False'].map((val) => (
+        <QOptionRow key={val}>
+          <QOptionLabelRow>
+            <QOptionControl
+              type="radio"
+              id={`tf-${val}`}
+              name="answer"
+              value={val}
+              checked={data.answer === val || data.answer?.includes(val)}
+              onChange={change}
+            />
+            <QOptionLabel htmlFor={`tf-${val}`}>{val}</QOptionLabel>
+          </QOptionLabelRow>
+          {/* TrueOrFalse has no text inputs — errors are rarely used but kept for safety */}
+          {val === 'True'  && error.optionA && <QError>{error.optionA}</QError>}
+          {val === 'False' && error.optionB && <QError>{error.optionB}</QError>}
+        </QOptionRow>
+      ))}
+    </div>
+  );
+};
 
-      <QuestionFieldContainer>
-        <LabelContainer>
-           <CheckBox type="radio"
-                        name="answer"
-                        value="False" 
-                        checked={data.answer?.includes("False")}
-                        onChange={change}></CheckBox>
-        <FormLabel>False</FormLabel>
-        </LabelContainer>
-       
-        {error.optionB && <ErrorMessage>{error.optionB}</ErrorMessage>}
-      </QuestionFieldContainer>
-    </>
-  )
-}
-
-export default TrueOrFalse
+export default TrueOrFalse;

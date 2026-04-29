@@ -1,87 +1,49 @@
-import React from 'react'
-import { CheckBox, ErrorMessage, FormInput, FormLabel, LabelContainer } from '../styles/form_style'
-import { QuestionFieldContainer } from '../styles/question_style'
+import React from 'react';
+import {
+  QOptionRow,
+  QOptionLabelRow,
+  QOptionControl,
+  QOptionLabel,
+  QOptionInput,
+  QError,
+  QOptionsGrid,
+} from '../styles/question_style_unified';
+
+const OPTIONS = ['A', 'B', 'C', 'D'];
 
 const SingleChoice = ({ change, error, data }) => {
   return (
-    <>
-      <QuestionFieldContainer>
-        <LabelContainer>
-      <CheckBox type="radio" 
-               name="answer"
-               value="A" 
-                checked={data.answer?.includes("A")}
-               onChange={change}></CheckBox>
-        <FormLabel>Option A</FormLabel>
-        </LabelContainer>
-        <FormInput
-          name='optionA'
-          placeholder='Enter option A'
-          type='text'
-          value={data.optionA}
-          onChange={change}
-        />
-        {error.optionA && <ErrorMessage>{error.optionA}</ErrorMessage>}
-      </QuestionFieldContainer>
+    <QOptionsGrid>
+      {OPTIONS.map((opt) => {
+        const fieldName = `option${opt}`;
+        return (
+          <QOptionRow key={opt}>
+            <QOptionLabelRow>
+              <QOptionControl
+                type="radio"
+                id={`sc-${opt}`}
+                name="answer"
+                value={opt}
+                checked={data.answer === opt || data.answer?.includes(opt)}
+                onChange={change}
+              />
+              <QOptionLabel htmlFor={`sc-${opt}`}>Option {opt}</QOptionLabel>
+            </QOptionLabelRow>
 
-      <QuestionFieldContainer>
-        <LabelContainer>
-       <CheckBox type="radio" 
-               name="answer" 
-               value="B" 
-               checked={data.answer?.includes("B")}
-               onChange={change}></CheckBox>  
-        <FormLabel>Option B</FormLabel>
-        </LabelContainer>
-        <FormInput
-          name='optionB'
-          placeholder='Enter option B'
-          type='text'
-          value={data.optionB}
-          onChange={change}
-        />
-        {error.optionB && <ErrorMessage>{error.optionB}</ErrorMessage>}
-      </QuestionFieldContainer>
+            <QOptionInput
+              name={fieldName}
+              placeholder={`Enter option ${opt}`}
+              type="text"
+              value={data[fieldName] || ''}
+              onChange={change}
+              $hasError={!!error[fieldName]}
+            />
+            {error[fieldName] && <QError>{error[fieldName]}</QError>}
+          </QOptionRow>
+        );
+      })}
+    </QOptionsGrid>
+  );
+};
 
-      <QuestionFieldContainer>
-        <LabelContainer>
-        <CheckBox type="radio" 
-               name="answer" 
-               value="C" 
-               checked={data.answer?.includes("C")}
-               onChange={change}></CheckBox>
-        <FormLabel>Option C</FormLabel>
-        </LabelContainer>
-        <FormInput
-          name='optionC'
-          placeholder='Enter option C'
-          type='text'
-          value={data.optionC}
-          onChange={change}
-        />
-        {error.optionC && <ErrorMessage>{error.optionC}</ErrorMessage>}
-      </QuestionFieldContainer>
-
-      <QuestionFieldContainer>
-        <LabelContainer>
-        <CheckBox type="radio" 
-               name="answer"
-                value="D" 
-                checked={data.answer?.includes("D")}
-                onChange={change}></CheckBox>
-        <FormLabel>Option D</FormLabel>
-        </LabelContainer>
-        <FormInput
-          name='optionD'
-          placeholder='Enter option D'
-          type='text'
-          value={data.optionD}
-          onChange={change}
-        />
-        {error.optionD && <ErrorMessage>{error.optionD}</ErrorMessage>}
-      </QuestionFieldContainer>
-    </>
-  )
-}
-
-export default SingleChoice
+export default SingleChoice;

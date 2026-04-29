@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ActionBar, BodyLayout, DiffBadge, ExamTitle, FreeTextArea, FreeTextInput, GlobalStyle, Legend, LegendDot, LegendRow, LoadWrap, MainPanel, NavBtn, OptionBox, OptionsGrid, PageWrapper, PaletteBtn, PaletteGrid, QLabel, QMeta, QTypeBadge, QuestionCard, QuestionText, ReviewBtn, RightControls, Sidebar, SideCard, SideTitle, Spinner, StatBox, StatLabel, StatsRow, StatVal, SubmitBtn, Timer, TopBar } from '../styles/ExamQuestionList_style'
 
 import Modal from '../component/Modal'
+import { toast } from 'sonner'
 
 const DIFF_LABEL = { 1: 'Easy', 2: 'Easy', 3: 'Medium', 4: 'Hard', 5: 'Hard' }
 const TYPE_LABEL = {
@@ -192,8 +193,17 @@ const ExamQuestionList = () => {
 
   // ── Submit ──
   const handleFinalSubmit = async () => {
+
+    if (data) {
+    const qId = data.question.questionId
+    const selected = answers[qId]
+    if (selected !== undefined) {
+      const formatted = Array.isArray(selected) ? selected.join(',') : selected
+      await saveAnswer(qId, formatted)
+    }
+  }
     try {
-      const response = await apiPost('/submit-exam/submit-exam', { examId, partyId })
+      const response = await apiPost('/submit-exam/exam-submit', { examId, partyId })
       if (response.responseMessage === 'SUCCESS') {
         setShowSubmitModal(false)
         navigate(`/exam-result/${examId}/${partyId}`)
@@ -274,8 +284,8 @@ const ExamQuestionList = () => {
 
                     <QuestionText>{q.questionDetail}</QuestionText>
 
-                    {/* SINGLE / TRUE-FALSE */}
-                    {(!q.questionTypeId || q.questionTypeId === 'SINGLE_CHOICE' || q.questionTypeId === 'TRUE_FALSE') && (
+                    {/* SINGLE CHOICE*/}
+                    {(!q.questionTypeId || q.questionTypeId === 'SINGLE_CHOICE' ) && (
                       <OptionsGrid>
                         {['A', 'B', 'C', 'D'].map(opt => {
                           const txt = q[`option${opt}`]
@@ -290,6 +300,23 @@ const ExamQuestionList = () => {
                           )
                         })}
                       </OptionsGrid>
+                    )}
+
+                    {q.questionTypeId === 'TRUE_FALSE' && (
+                        <OptionsGrid>
+                          {[{ opt: 'A', label: 'True' }, { opt: 'B', label: 'False' }].map(({ opt, label }) => {
+                          const txt = q[`option${opt}`]
+                          if (!txt) return null
+                          const sel = answers[q.questionId] === opt
+                          return (
+                          <OptionBox key={opt} $selected={sel} as="label">
+                          <input type="radio" checked={sel} onChange={() => handleOptionChange(opt)} />
+                          <div className="opt-letter">{label}</div>
+                          <div className="opt-text">{txt}</div>
+                          </OptionBox>
+                           )
+                     })}
+                    </OptionsGrid>
                     )}
 
                     {/* MULTI */}

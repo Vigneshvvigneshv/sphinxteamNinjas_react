@@ -51,7 +51,7 @@ const LoginPage = () => {
         toast.error(`Invalid credentials`,{position:'top-center'})
     }else if(response.successMessage!==undefined){
       toast.success("Login Sucessfully!", {position: "top-center"});
-      console.log("partyId:", response.partyId);  // 👈 check this
+      console.log("partyId:", response.partyId); 
        console.log("role:", response.role); 
        dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role}));
       if (response.role === "SPHINX_ADMIN") {

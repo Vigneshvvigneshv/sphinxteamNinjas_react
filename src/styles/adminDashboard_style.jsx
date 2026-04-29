@@ -164,7 +164,7 @@ export const Panel = styled.div`
   overflow: hidden;
   transition: box-shadow 0.2s;
   animation: ${scaleIn} 0.35s ease ${({ $delay }) => $delay || "0s"} both;
-
+  
   &:hover {
     box-shadow: ${({ theme }) => theme.shadowMd};
   }
@@ -246,9 +246,9 @@ export const PanelAddBtn = styled(NavLink)`
 // ─── Panel Scrollable Body ────────────────────────────────────────────────────
 
 export const PanelBody = styled.div`
+  min-height:100px;
   max-height: 340px;
   overflow-y: auto;
-
   &::-webkit-scrollbar { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {

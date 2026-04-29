@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   FaAngleDoubleDown, FaAngleDoubleUp, FaPen, FaPlus,
   FaTrash, FaCheckCircle, FaListAlt, FaTags,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { ErrorMessage } from "../styles/form_style";
 import Modal from "../component/Modal";
@@ -46,6 +47,7 @@ import {
   ETPCompleteBadge,
 } from "../styles/examTopicPage_style";
 import { useSelector } from "react-redux";
+import { FBackBtn } from "../styles/formPage_style";
 
 // ── Edit Modal inline styles (reuse existing Modal component) ─────────────────
 const modalField = {
@@ -247,6 +249,9 @@ const ExamTopicPage = () => {
             {examName}
             <span>Manage topics assigned to this exam</span>
           </ETPTitle>
+          <ETPBackBtn type="button" onClick={() => navigate(-1)}>
+                Back
+          </ETPBackBtn>
         </ETPHeader>
 
          {/* ── Add Topics Section ────────────────────────────────────────── */}
@@ -292,7 +297,7 @@ const ExamTopicPage = () => {
 
                   {/* Percentage */}
                   <ETPFieldWrap>
-                    <ETPFieldLabel>Percentage</ETPFieldLabel>
+                    <ETPFieldLabel>Percentage %</ETPFieldLabel>
                     <ETPInput
                       type="text"
                       value={row.percentage}
@@ -342,9 +347,7 @@ const ExamTopicPage = () => {
                 : "All 100% assigned"}
             </ETPFooterNote>
             <ETPFooterBtns>
-              <ETPBackBtn type="button" onClick={() => navigate("/admin-dashboard")}>
-                Back
-              </ETPBackBtn>
+              
               {percentage < 100 && (
                 <ETPAssignBtn type="button" onClick={handleAssign}>
                   <FaCheckCircle /> Assign Topics
@@ -416,7 +419,9 @@ const ExamTopicPage = () => {
         </ETPSection>
 
        
-
+            <FBackBtn onClick={() => navigate(-1)}>
+              <FaArrowLeft size={11} /> Back to Assessment
+            </FBackBtn>
       </ETPWrap>
 
       {/* ── Delete Confirm Modal ──────────────────────────────────────────── */}
