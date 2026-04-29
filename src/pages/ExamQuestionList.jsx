@@ -203,7 +203,7 @@ const ExamQuestionList = () => {
     }
   }
     try {
-      const response = await apiPost('/submit-exam/submit-exam', { examId, partyId })
+      const response = await apiPost('/submit-exam/exam-submit', { examId, partyId })
       if (response.responseMessage === 'SUCCESS') {
         setShowSubmitModal(false)
         navigate(`/exam-result/${examId}/${partyId}`)
