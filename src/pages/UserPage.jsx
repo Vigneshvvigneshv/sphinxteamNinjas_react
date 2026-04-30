@@ -140,7 +140,7 @@ const UserPage = () => {
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
   const getUsers = async () => {
-    const userRes = await apiGet('/user/getall-user');
+    const userRes = await apiGet('/user/getall-user/'+partyId);
     const userList = userRes?.userList ?? [];
 
     const examRes = await apiPost('/exam/getall-exam', { partyId });

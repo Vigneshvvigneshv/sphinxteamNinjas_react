@@ -251,7 +251,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/questionList"
           element={
             <ProtectedRoute>
@@ -260,7 +260,7 @@ const App = () => {
               </AdminAuthentication>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/examquestionlist/:examId/:partyId"

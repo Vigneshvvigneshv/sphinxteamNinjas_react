@@ -1,45 +1,49 @@
 import React, { useState } from 'react'
 import { validate } from '../Validation/SignUpFormValidation';
 import Layout from '../component/Layout';
-import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton, FormEyebrow, FormSubtitle } from '../styles/form_style';
+import { ErrorMessage, FieldContainer, Form, FormContainer, FormHeading, FormInput, FormLabel, SubmitButton, FormSubtitle } from '../styles/form_style';
 import { CommonContainer, Dropdown, PasswordEye } from '../styles/common_style';
 import { apiPost } from '../ApiServices/apiServices';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Modal from '../component/Modal';
-import { SiPayloadcms } from 'react-icons/si';
 import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
+import LoaderComponent from '../component/LoaderComponent';
+
+// ── Overlay loader styles (no extra CSS file needed) ──────────────────────────
+// const overlayStyle = {
+//   position: 'fixed',
+//   inset: 0,
+//   background: 'rgba(0, 0, 0, 0.45)',
+//   display: 'flex',
+//   flexDirection: 'column',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   zIndex: 9999,
+// };
 
 const SignUp = () => {
-  const[error,setError]=useState({});
-  // const[roleTypeId,setRoleTypeId]=useState('SPHINX_USER');
-  const [showPassword,setShowPassword]=useState(true);
-  const[show,setShow]=useState(false);
-  console.log('Singup',error);
-  
-  const showPop=()=>{
-    setShow(!show);
-  }
-  const changeShow=()=>{
-    setShowPassword(!showPassword);
-  }
-  const[formData, setFormData] = useState({
-    userName: "",
-    firstName:"",
-    lastName:"",
-    email:"",
-    password: "",
-    roleTypeId: "SPHINX_USER",
+  const [error, setError] = useState({});
+  const { partyId } = useSelector((state) => state.userReducer);
+  const [showPassword, setShowPassword] = useState(true);
+  const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const showPop = () => setShow(!show);
+  const changeShow = () => setShowPassword(!showPassword);
+
+  const [formData, setFormData] = useState({
+    userName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    roleTypeId: 'SPHINX_USER',
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError({
-      ...error,
-      [e.target.name]: ""
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError({ ...error, [e.target.name]: '' });
   };
 
   const handleSubmit = async (e) => {
@@ -47,31 +51,40 @@ const SignUp = () => {
     const validationErrors = validate(formData);
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
-    const response = await apiPost('/user/signup',formData);
-    if(response.responseMessage==='success'){
-      console.log(response);
+
+    setIsLoading(true); // show loader before API call
+    // setTimeout(()=>{},2000);
+
+    const response = await apiPost('/user/signup', { ...formData, partyId });
+
+    setIsLoading(false); // hide loader after API call
+
+    if (response.responseMessage === 'success') {
       setError(response);
       showPop();
-    }else if(response.responseMessage==='error'){
-      toast.error(`Singup failed`,{position:'top-center'})
+    } else if (response.responseMessage === 'error') {
+      toast.error('Signup failed', { position: 'top-center' });
       setError(response);
     }
   };
 
   return (
     <Layout>
+      {/* ── Full-page overlay spinner ── */}
+      {isLoading && <LoaderComponent text='Loading...' content='Sigining in'/>}
+
       <CommonContainer>
         <FormContainer>
-          <FormEyebrow>Create account</FormEyebrow>
-          <FormHeading>Sign up</FormHeading>
+          <FormHeading>Create account</FormHeading>
           <FormSubtitle>Register user/admin to the sphinx platform</FormSubtitle>
+
           <Form onSubmit={handleSubmit}>
             <FieldContainer>
-              <FormLabel htmlFor='userName'>User name</FormLabel>
+              <FormLabel htmlFor="userName">User name</FormLabel>
               <FormInput
-                type='text'
+                type="text"
                 name="userName"
-                placeholder='Enter your user name'
+                placeholder="Enter your user name"
                 value={formData.userName}
                 onChange={handleChange}
               />
@@ -79,11 +92,11 @@ const SignUp = () => {
             </FieldContainer>
 
             <FieldContainer>
-              <FormLabel htmlFor='firstName'>First name</FormLabel>
+              <FormLabel htmlFor="firstName">First name</FormLabel>
               <FormInput
-                type='text'
+                type="text"
                 name="firstName"
-                placeholder='Enter your first name'
+                placeholder="Enter your first name"
                 value={formData.firstName}
                 onChange={handleChange}
               />
@@ -91,11 +104,11 @@ const SignUp = () => {
             </FieldContainer>
 
             <FieldContainer>
-              <FormLabel htmlFor='lastName'>Last name</FormLabel>
+              <FormLabel htmlFor="lastName">Last name</FormLabel>
               <FormInput
-                type='text'
+                type="text"
                 name="lastName"
-                placeholder='Enter your last name'
+                placeholder="Enter your last name"
                 value={formData.lastName}
                 onChange={handleChange}
               />
@@ -103,50 +116,74 @@ const SignUp = () => {
             </FieldContainer>
 
             <FieldContainer>
-              <FormLabel htmlFor='email'>Email</FormLabel>
+              <FormLabel htmlFor="email">Email</FormLabel>
               <FormInput
-                type='text'
+                type="text"
                 name="email"
-                placeholder='Enter your email'
+                placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
               />
               {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
             </FieldContainer>
 
-            { formData.roleTypeId === 'SPHINX_ADMIN' ?
+            {formData.roleTypeId === 'SPHINX_ADMIN' && (
               <FieldContainer>
-                <FormLabel htmlFor='password'>Password</FormLabel>
+                <FormLabel htmlFor="password">Password</FormLabel>
                 <FormInput
-                  type={showPassword ? "password" : 'text'}
+                  type={showPassword ? 'password' : 'text'}
                   name="password"
-                  placeholder='Enter your password'
+                  placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleChange}
                 />
-                {formData.password !== "" ? (
+                {formData.password !== '' && (
                   <PasswordEye onClick={changeShow}>
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </PasswordEye>
-                ) : ""}
+                )}
                 {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
               </FieldContainer>
-            : ""}
+            )}
 
             <FieldContainer>
-              <Dropdown name='roleTypeId'  onChange={handleChange}>
-                <option value='SPHINX_USER'>User</option>
-                <option value='SPHINX_ADMIN'>Admin</option>
+              <Dropdown name="roleTypeId" onChange={handleChange}>
+                <option value="SPHINX_USER">User</option>
+                <option value="SPHINX_ADMIN">Admin</option>
               </Dropdown>
             </FieldContainer>
 
-            <SubmitButton>Sign up</SubmitButton>
+            {/* ── Submit button with inline spinner ── */}
+            <SubmitButton disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  Creating...
+                </>
+              ) : (
+                'Create'
+              )}
+            </SubmitButton>
           </Form>
         </FormContainer>
       </CommonContainer>
-            {show && <Modal type='success' title={formData.roleTypeId==='SPHINX_USER'?' User successfully created':'Admin successfully created'}></Modal>}
-    </Layout>
-  )
-}
 
-export default SignUp
+      {show && (
+        <Modal
+          type="success"
+          title={
+            formData.roleTypeId === 'SPHINX_USER'
+              ? 'User successfully created'
+              : 'Admin successfully created'
+          }
+        />
+      )}
+    </Layout>
+  );
+};
+
+export default SignUp;

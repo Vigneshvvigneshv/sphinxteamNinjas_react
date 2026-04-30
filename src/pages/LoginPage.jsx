@@ -9,11 +9,13 @@ import { userAction } from '../store/userSlice';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Layout from '../component/Layout';
 import { toast } from 'sonner';
+import LoaderComponent from '../component/LoaderComponent';
 
 const LoginPage = () => {
   
   const[error,setError]=useState("");
   const [showPassword,setShowPassword]=useState(true);
+  const[isLoading,setIsLoading]=useState(false);
   const navigate = useNavigate();
   
   const dispatch=useDispatch();
@@ -44,8 +46,9 @@ const LoginPage = () => {
     const validationErrors = validate(formData);
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
-
+    setIsLoading(true);
     const response=await apiPost('/user/login',formData);
+    setIsLoading(false);
     if(response.errorMessage!==undefined){
         setError(response);
         toast.error(`Invalid credentials`,{position:'top-center'})
@@ -65,6 +68,7 @@ const LoginPage = () => {
 
   return (
     <Layout>
+      {isLoading && <LoaderComponent text='Loading..' content='Logining in...'/>}
       <CommonContainer>
         <FormContainer>
 
@@ -76,7 +80,7 @@ const LoginPage = () => {
             <FormInput 
               type="text"  
               name='userName'
-              placeholder='Enter your username'
+              placeholder='Enter your user name'
               value={formData.userName}
               onChange={handleChange}
             />
