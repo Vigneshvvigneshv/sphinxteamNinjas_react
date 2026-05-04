@@ -90,6 +90,7 @@ const getInitials = (name) => {
 
 const AssignExamPage = () => {
   const { theme }  = useSelector((state) => state.themeReducer);
+  const {userName}   = useSelector((state) => state.userReducer);
   const navigate   = useNavigate();
   const { id }     = useParams();
   const location   = useLocation();
@@ -120,7 +121,7 @@ const AssignExamPage = () => {
     setData(res);
   };
   const fetchUnassignedUsers = async () => {
-    const res = await apiGet("/exam-assign/get-unassigned-user/" + id);
+    const res = await apiGet("/exam-assign/get-unassigned-user/" + id+"/"+userName);
     setUnassignedUser(res);
   };
   useEffect(() => {

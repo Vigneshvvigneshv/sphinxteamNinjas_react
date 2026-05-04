@@ -56,7 +56,7 @@ const LoginPage = () => {
       toast.success("Login Sucessfully!", {position: "top-center"});
       console.log("partyId:", response.partyId); 
        console.log("role:", response.role); 
-       dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role}));
+       dispatch(userAction.addToUserLogin({partyId:response.partyId,role:response.role,userName:response.userName}));
       if (response.role === "SPHINX_ADMIN") {
           console.log(response.role); 
           navigate("/admin-dashboard" , {state:{partyId:response.partyId}});

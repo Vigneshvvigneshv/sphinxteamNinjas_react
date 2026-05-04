@@ -145,7 +145,7 @@ export const StatInfo = styled.div`
 
 export const SectionGrid = styled.div`
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 20px;
   animation: ${fadeUp} 0.45s ease 0.1s both;
 

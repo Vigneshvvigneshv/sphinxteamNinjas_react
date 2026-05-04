@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FaClipboardList, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import { Card, CardAction, CardBadge, CardDesc, CardFooter, CardGrid, CardIconWrap, CardStat, Heading, Hero, InfoBanner, InfoDot, InfoText, PageWrapper, StatChip, StatsBar, Subtitle, WelcomeLabel } from "../styles/UserDashBoard_style";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +50,7 @@ const IconWrapper = styled.div`
 
 const UserDashBoard = () => {
   const navigate = useNavigate();
+  const {userName} =useSelector((state)=> state.userReducer);
 
   const cards = [
     {
@@ -98,10 +100,10 @@ const UserDashBoard = () => {
         <Hero>
           <WelcomeLabel>Student Portal</WelcomeLabel>
           <Heading>
-            Welcome to <span>Sphinx</span>
+            Welcome <span>{userName}</span>
           </Heading>
           <Subtitle>
-            Manage your exams, track your progress, and review your results — all in one place.
+            Manage your assessments, track your progress, and review your results — all in one place.
           </Subtitle>
         </Hero>
 
