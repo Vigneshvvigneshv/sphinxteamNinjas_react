@@ -1,6 +1,6 @@
 
 const USERNAME_REGEX = /^[a-zA-Z]\S{4,}$/;
-const EMAIL_REGEX = /^[A-Za-z0-9]+@[A-Za-z0-9-]+\\.[A-Za-z]{2}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
 const PASSWORD_PATTERN = /^(?=\S{8,}$).*/;
 
 const FIRSTNAME_REGEX=/^[A-Za-z]+$/;
@@ -19,7 +19,7 @@ export const validate = (formData) => {
   if (formData.firstName.trim() === "") {
     newErrors.firstName = "First name is required";
   } else if (!FIRSTNAME_REGEX.test(formData.firstName.trim())) {
-    newErrors.email = "First name must be letters";
+    newErrors.firstName = "First name must be letters";
   }
 
   if (formData.lastName.trim() === "") {

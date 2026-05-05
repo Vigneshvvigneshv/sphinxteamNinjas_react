@@ -427,8 +427,8 @@ const AddEditQuestionPage = () => {
       </QPage>
 
       {show && (
-        <Modal type={isEdit ? 'edit' : 'success'}>
-          {error.successMessage}
+        <Modal type={isEdit ? 'edit' : 'success'} title={error.message}>
+          
         </Modal>
       )}
     </Layout>

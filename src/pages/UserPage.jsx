@@ -118,6 +118,7 @@ const ExamTagDeleteBtn = ({ onClick }) => (
 
 const UserPage = () => {
   const { theme }   = useSelector((state) => state.themeReducer);
+  const { userName } = useSelector((state) => state.userReducer);
   const { partyId } = useSelector((state) => state.userReducer);
 
   const [data, setData]                   = useState();
@@ -140,7 +141,7 @@ const UserPage = () => {
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
   const getUsers = async () => {
-    const userRes = await apiGet('/user/getall-user');
+    const userRes = await apiGet('/user/getall-user/'+userName);
     const userList = userRes?.userList ?? [];
 
     const examRes = await apiPost('/exam/getall-exam', { partyId });

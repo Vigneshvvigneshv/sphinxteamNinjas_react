@@ -22,9 +22,9 @@ export const pulse = keyframes`
 
 // ─── Page wrapper ─────────────────────────────────────────────────────────────
 export const PageWrapper = styled.div`
-  min-height: 100vh;
+  
   background: ${({ theme }) => theme.colors.pageBg};
-  padding: 40px 32px 60px;
+  padding: 20px 16px 30px;
 `;
 
 // ─── Hero section ─────────────────────────────────────────────────────────────
@@ -74,7 +74,7 @@ export const Subtitle = styled.p`
 // ─── Stats bar ────────────────────────────────────────────────────────────────
 export const StatsBar = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 36px;
   animation: ${fadeUp} 0.5s 0.1s ease both;

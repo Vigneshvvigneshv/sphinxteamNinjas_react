@@ -60,16 +60,18 @@ const TOPIC_COLORS = [
 
 const AdminDashBoard = () => {
   const { partyId } = useSelector((state) => state.userReducer);
+  const { userName } = useSelector((state) => state.userReducer);
   const theme = useSelector((state) => state.themeReducer.theme);
 
   const [examData, setExamData]   = useState({ examList: [], responseMessage: '' });
   const [topicData, setTopicData] = useState({ topicList: [], responseMessage: '' });
   const [show, setShow]           = useState(false);
   const [examId, setExamId]       = useState(null);
+  const [topicId, setTopicId]       = useState(null);
 
   // ── Fetch helpers ────────────────────────────────────────────────────────
   const fetchExams = async () => {
-    const response = await apiPost('/exam/getall-exam', { partyId });
+    const response = await apiPost('/exam/getall-exam', { partyId:partyId });
     setExamData(response);
   };
 
@@ -108,6 +110,27 @@ const AdminDashBoard = () => {
     setShow(false);
   };
 
+   // ── Delete Topic ──────────────────────────────────────────────────────────
+  const openDeleteTopicModal = (id) => {
+    setTopicId(id);
+    setShow(true);
+  };
+  const onDeleteTopic = async () => {
+    const response = await apiDelete('/topic/delete-topic', {
+      topicId,
+      partyId,
+    });
+    if (response.responseMessage === 'success') {
+      toast.success(response.successMessage, { position: 'top-center' });
+      fetchTopics();
+      setTopicId(null);
+    } else if (response.responseMessage === 'error') {
+      toast.error(response.errorMessage, { position: 'top-center' });
+      setTopicId(null);
+    }
+    setShow(false);
+  };
+
   // ── Derived counts ───────────────────────────────────────────────────────
   const examCount  = examData?.examList?.length  ?? 0;
   const topicCount = topicData?.topicList?.length ?? 0;
@@ -120,7 +143,7 @@ const AdminDashBoard = () => {
         <DashPageHeader>
           <DashPageTitle theme={theme}>
             Dashboard
-            <span>Welcome back, Admin</span>
+            <span>Welcome back, {userName}</span>
           </DashPageTitle>
         </DashPageHeader>
 
@@ -309,6 +332,17 @@ const AdminDashBoard = () => {
                             <FaPen />
                           </ActionIconBtn>
                         </TooltipWrapper>
+                        {/* Delete */}
+                        <TooltipWrapper>
+                          <TooltipChip theme={theme}>Delete</TooltipChip>
+                          <ActionIconBtn
+                            className="delete"
+                            onClick={() => openDeleteTopicModal(topic.topicId)}
+                            theme={theme}
+                          >
+                            <FaTrash />
+                          </ActionIconBtn>
+                        </TooltipWrapper>
                       </TopicActionGroup>
                     </TopicRow>
                   ))
@@ -325,7 +359,7 @@ const AdminDashBoard = () => {
       </DashboardPage>
 
       {/* ── Delete confirmation modal ─────────────────────────────────── */}
-      {show && (
+      {show && ( topicId===null?
         <Modal
           type="delete"
           title="Delete Exam"
@@ -334,6 +368,15 @@ const AdminDashBoard = () => {
           showConfirmButton={true}
         >
           Are you sure you want to delete this exam? This action cannot be undone.
+        </Modal>:
+         <Modal
+          type="delete"
+          title="Delete Topic"
+          onCancel={() => setShow(false)}
+          onConfirm={onDeleteTopic}
+          showConfirmButton={true}
+        >
+          Are you sure you want to delete this topic? This action cannot be undone.
         </Modal>
       )}
     </Layout>

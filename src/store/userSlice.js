@@ -13,7 +13,7 @@ const userSlice = createSlice({
     addToUserLogin(state, action) {
       state.partyId = action.payload.partyId;
       state.role = action.payload.role;
-     
+      state.userName=action.payload.userName;
     },
     removeFromUserLogin(state) {
       state.partyId = null;

@@ -207,7 +207,7 @@ export default function AssignedExam() {
         </StatsRow>
 
         {/* ── Toolbar ── */}
-        <Toolbar>
+        {/* <Toolbar>
           <SearchWrap>
             <FaSearch />
             <SearchInput
@@ -221,7 +221,7 @@ export default function AssignedExam() {
               ? "Loading..."
               : `${filtered.length} exam${filtered.length !== 1 ? "s" : ""}`}
           </ResultCount>
-        </Toolbar>
+        </Toolbar> */}
 
         {/* ── Panel ── */}
         <Panel>

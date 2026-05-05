@@ -12,6 +12,9 @@ export const validateEmpty=(formData)=>{
   if (formData.topicName.trim() === "") {
     newErrors.errorMessage = "Topic name is required";
   } 
+  else if(formData.topicName.length>50){
+    newErrors.errorMessage = "Topic name must be less than 50 characters";
+  }
   return newErrors;
 }
 
@@ -20,7 +23,7 @@ export const validateExam = (formData) => {
 
   if (formData.examName.trim() === "") {
     newErrors.examName = "Exam name is required";
-  } else if (!NAME_REGEX.test(formData.examName.trim())) {
+  } else if (!NAME_REGEX.test(formData.examName)) {
     newErrors.examName = "Exam name must start with letter";
   }
 

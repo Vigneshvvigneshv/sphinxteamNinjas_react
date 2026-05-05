@@ -116,7 +116,7 @@ const QuestionRow = ({ data, index, selectedIds, onCheck, onDelete, topicMode, t
 // ── Main Page ─────────────────────────────────────────────────────────────────
 const QuestionPage = () => {
   const { theme } = useSelector((state) => state.themeReducer);
-  const partyId = useSelector((state) => state.userReducer.partyId);
+  const partyId = useSelector((state) => state.userReducer);
   // if topicId param exists → topic mode, else → all-questions mode
   const { id: topicId } = useParams();
   const topicMode = Boolean(topicId);

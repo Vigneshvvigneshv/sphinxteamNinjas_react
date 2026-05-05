@@ -39,7 +39,7 @@ const Header = () => {
         <>
         <HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
-        <HeaderButton to="/questionList">Questions</HeaderButton>
+        {/* <HeaderButton to="/questionList">Questions</HeaderButton> */}
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to="/exam-page">Assessments</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
