@@ -234,7 +234,7 @@ export const TooltipWrapper = styled.div`
 
 export const TooltipChip = styled.span`
   position: absolute;
-  bottom: calc(100% + 6px);
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: ${({ theme }) => theme.colors.headerBackground};
@@ -249,16 +249,6 @@ export const TooltipChip = styled.span`
   transition: opacity 0.15s;
   letter-spacing: 0.03em;
   z-index: 100;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid transparent;
-    border-top-color: ${({ theme }) => theme.colors.headerBackground};
-  }
 `;
 
 export const ActionIconBtn = styled.button`

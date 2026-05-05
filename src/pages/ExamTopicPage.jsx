@@ -247,7 +247,7 @@ const ExamTopicPage = () => {
         <ETPHeader>
           <ETPTitle>
             {examName}
-            <span>Manage topics assigned to this exam</span>
+            <span>Manage topics assigned to this assessment</span>
           </ETPTitle>
           <ETPBackBtn type="button" onClick={() => navigate(-1)}>
                 Back
@@ -259,7 +259,7 @@ const ExamTopicPage = () => {
           <ETPSectionHeader>
             <ETPSectionTitle>
               <FaListAlt />
-              Add Topics to Exam
+              Add Topics to Assessment
             </ETPSectionTitle>
             {percentage < 100 && (
               <ETPAddRowBtn type="button" onClick={addRow}>
@@ -420,7 +420,7 @@ const ExamTopicPage = () => {
 
        
             <FBackBtn onClick={() => navigate(-1)}>
-              <FaArrowLeft size={11} /> Back to Assessment
+              <FaArrowLeft size={11} /> Back 
             </FBackBtn>
       </ETPWrap>
 

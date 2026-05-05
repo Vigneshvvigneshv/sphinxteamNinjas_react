@@ -458,14 +458,27 @@ export const EmptyDesc = styled.div`
 ───────────────────────────────────────── */
 export const Overlay = styled.div`
   position: fixed;
-  inset: 0;
+  inset:0;
   background: rgba(15,23,42,0.45);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index:990;
+  z-index:1000;
   padding: 20px;
+`;
+export const Eye = styled.span`
+  font-weight: 700;
+  font-size: 13px;
+  color: ${({theme})=>theme.colors.subtitle};
+  position: absolute;
+  top: 69%;
+  right: 25px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+  &:hover { color:${({theme})=>theme.colors.textPrimary}; }
 `;
 
 export const ModalCard = styled.div`
@@ -482,7 +495,7 @@ export const ModalHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 22px 24px 18px;
+  padding: 11px 12px 9px;
   border-bottom: 1px solid #F1F5F9;
 `;
 
@@ -533,16 +546,16 @@ export const CloseBtn = styled.button`
 `;
 
 export const ModalBody = styled.div`
-  padding: 22px 24px;
+  padding: 11px 12px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
 `;
 
 export const InstructionsList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 `;
 
 export const InstructionItem = styled.div`

@@ -188,15 +188,22 @@ const AssignExamPage = () => {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
-      setRows([]);
-      fetchUnassignedUsers();
-      fetchAssignedUsers();
+      const list = assignedList.map((d) => d.partyId);
+      const res=await apiPost("/email/send-exam-email", { examId: id, partyIdList: list });
+      if(res.successMessage){
+        toast.success(res.successMessage,{position:'top-center'});
+        setRows([]);
+        fetchUnassignedUsers();
+        fetchAssignedUsers();
+      }else if(res.errorMessage){
+        toast.error(res.errorMessage,{position:'top-center'});
+      }
     }
   };
    // ──  Set up exam ───────────────────────────────────────────────────────
    const setUpExam=async()=>{
-     const list = assignedList.map((d) => d.partyId);
-     const response=await apiPost("/email/send-exam-email", { examId: id, partyIdList: list });
+     
+    const response=await apiPost('/exam-setup/setup-exam',{examId: id})
      if(response.successMessage){
       toast.success(response.successMessage,{position:'top-center'});
      }else if(response.errorMessage){
@@ -361,7 +368,7 @@ const AssignExamPage = () => {
                               <InlineFieldInput
                                 type="number"
                                 placeholder="e.g. 3"
-                                value={rowData?.allowedAttempts ?? ""}
+                                value={rowData?.allowedAttempts ?? 3}
                                 onChange={(e) =>
                                   updateRowField(user.partyId, "allowedAttempts", e.target.value)
                                 }
@@ -372,7 +379,7 @@ const AssignExamPage = () => {
                               <InlineFieldInput
                                 type="number"
                                 placeholder="e.g. 30"
-                                value={rowData?.timeoutDays ?? ""}
+                                value={rowData?.timeoutDays ?? 3}
                                 onChange={(e) =>
                                   updateRowField(user.partyId, "timeoutDays", e.target.value)
                                 }

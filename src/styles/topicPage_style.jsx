@@ -151,7 +151,7 @@ export const TopicSearchInput = styled.input`
 
 export const TopicGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
   animation: ${scaleIn} 0.35s ease 0.1s both;
   overflow: visible;

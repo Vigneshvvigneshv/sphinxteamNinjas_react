@@ -22,9 +22,9 @@ export const validateExam = (formData) => {
   let newErrors = {};
 
   if (formData.examName.trim() === "") {
-    newErrors.examName = "Exam name is required";
+    newErrors.examName = "Assessment name is required";
   } else if (!NAME_REGEX.test(formData.examName)) {
-    newErrors.examName = "Exam name must start with letter";
+    newErrors.examName = "Assessment name must start with letter";
   }
 
   if (formData.description.trim() === "") {

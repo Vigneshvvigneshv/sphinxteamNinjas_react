@@ -358,13 +358,12 @@ export const RowActions = styled.div`
 export const TooltipWrapper = styled.div`
   position: relative;
   display: inline-flex;
-
-  &:hover > span { opacity: 1; }
+  &:hover span { opacity: 1; }
 `;
 
 export const TooltipChip = styled.span`
-  position: absolute;
-  bottom: calc(100% + 6px);
+   position: absolute;
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: ${({ theme }) => theme.colors.headerBackground};
@@ -378,17 +377,7 @@ export const TooltipChip = styled.span`
   opacity: 0;
   transition: opacity 0.15s;
   letter-spacing: 0.03em;
-  z-index: 20;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid transparent;
-    border-top-color: ${({ theme }) => theme.colors.headerBackground};
-  }
+  z-index: 100;
 `;
 
 export const RowIconBtn = styled.button`
