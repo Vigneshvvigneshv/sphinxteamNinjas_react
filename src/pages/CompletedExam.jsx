@@ -76,7 +76,7 @@ const [examList, setExamList]   = useState([]);
           <HeaderLeft>
             <PageLabel><FaCheckCircle size={10} /> Completed</PageLabel>
             <PageSubtitle>Completed Assessment</PageSubtitle>
-            <PageSubtitle>Review your past exam history, scores, and results.</PageSubtitle>
+            <PageSubtitle>Review your past assessment history, scores, and results.</PageSubtitle>
           </HeaderLeft>
         </PageHeader>
  
@@ -88,7 +88,7 @@ const [examList, setExamList]   = useState([]);
               iconBg: "rgba(79,70,229,0.08)",
               iconColor: "#4F46E5",
               val: loading ? "—" : total,
-              lbl: "Total Exams",
+              lbl: "Total Assessments",
             },
             // {
             //   icon: <FaTrophy />,
@@ -134,7 +134,7 @@ const [examList, setExamList]   = useState([]);
         <Panel>
           <PanelHeader>
             <PanelTitle>Assessment History</PanelTitle>
-            {!loading && <PanelBadge>{filtered.length} exams</PanelBadge>}
+            {!loading && <PanelBadge>{filtered.length} assessments</PanelBadge>}
           </PanelHeader>
  
           <ListWrap>
@@ -144,12 +144,12 @@ const [examList, setExamList]   = useState([]);
               <EmptyWrap>
                 <EmptyIcon><FaCheckCircle /></EmptyIcon>
                 <EmptyTitle>
-                  {search ? "No results found" : "No completed exams yet"}
+                  {search ? "No results found" : "No completed assessment yet"}
                 </EmptyTitle>
                 <EmptyDesc>
                   {search
                     ? `No exams match "${search}". Try a different keyword.`
-                    : "Once you complete an exam, your results will appear here."}
+                    : "Once you complete an assessment, your results will appear here."}
                 </EmptyDesc>
               </EmptyWrap>
             ) : (<CardGrid style={{flexDirection:"column"}}>{

@@ -98,7 +98,7 @@ const UserDashBoard = () => {
       <PageWrapper>
         {/* Hero */}
         <Hero>
-          <WelcomeLabel>Student Portal</WelcomeLabel>
+          {/* <WelcomeLabel>Student Portal</WelcomeLabel> */}
           <Heading>
             Welcome <span>{userName}</span>
           </Heading>
@@ -134,6 +134,7 @@ const UserDashBoard = () => {
               $delay={c.delay}
               onClick={() => navigate(c.route)}
             >
+              
               <CardBadge $bg={c.badgeBg} $color={c.badgeColor} $border={c.badgeBorder}>
                 {c.badge}
               </CardBadge>

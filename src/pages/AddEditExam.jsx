@@ -71,7 +71,6 @@ const AddEditExam = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
       <Layout>
         <FormPageWrap>
           <FormCard>
@@ -131,7 +130,7 @@ const AddEditExam = () => {
                     name="duration"
                     type="text"
                     placeholder="e.g. 60"
-                    value={formData.duration}
+                    value={formData.duration || '20'}
                     onChange={handleChange}
                   />
                   {error.duration && <FError>{error.duration}</FError>}
@@ -158,19 +157,18 @@ const AddEditExam = () => {
               </FSubmitBtn>
             </form>
 
-            <FBackBtn to="/admin-dashboard">
-              <FaArrowLeft size={11} /> Back to Dashboard
+            <FBackBtn onClick={()=>navigate(-1)}>
+              <FaArrowLeft size={11} /> Back
             </FBackBtn>
           </FormCard>
         </FormPageWrap>
 
         {show && (
-          <Modal onCancel={() => { setShow(false); navigate('/admin-dashboard'); }}>
+          <Modal onCancel={() => { setShow(false); navigate(isEdit?-1:`/getexamtopic/${error.examId}/${formData.examName}`); }}>
             {error.successMessage}
           </Modal>
         )}
       </Layout>
-    </ThemeProvider>
   );
 };
 

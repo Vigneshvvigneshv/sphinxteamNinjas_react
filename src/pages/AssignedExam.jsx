@@ -260,7 +260,7 @@ export default function AssignedExam() {
             </PageLabel>
             <PageTitle>Assigned Assessment</PageTitle>
             <PageSubtitle>
-              View and start your scheduled exams below.
+              View and start your scheduled assessment below.
             </PageSubtitle>
           </div>
         </PageHeader>
@@ -275,13 +275,13 @@ export default function AssignedExam() {
               val: loading ? "—" : examList.length,
               lbl: "Total Assigned",
             },
-            {
-              icon: <FaShieldAlt />,
-              bg: "rgba(16,185,129,0.08)",
-              color: "#10B981",
-              val: "Live",
-              lbl: "Status",
-            },
+            // {
+            //   icon: <FaShieldAlt />,
+            //   bg: "rgba(16,185,129,0.08)",
+            //   color: "#10B981",
+            //   val: "Live",
+            //   lbl: "Status",
+            // },
           ].map((s, i) => (
             <StatCard key={i}>
               <StatIcon $bg={s.bg} $color={s.color}>
@@ -329,12 +329,12 @@ export default function AssignedExam() {
                 <FaClipboardList />
               </EmptyIcon>
               <EmptyTitle>
-                {search ? "No results found" : "No exams assigned"}
+                {search ? "No results found" : "No assessment assigned"}
               </EmptyTitle>
               <EmptyDesc>
                 {search
                   ? `No exams match "${search}". Try a different keyword.`
-                  : "You have no assigned exams at the moment. Check back later."}
+                  : "You have no assigned assessment at the moment. Check back later."}
               </EmptyDesc>
             </EmptyWrap>
           ) : (
