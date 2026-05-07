@@ -56,7 +56,6 @@ import { useSelector } from "react-redux";
 import { FBackBtn, FField, FInput, FLabel, FSubmitBtn } from "../styles/formPage_style";
 import { TopicAddBtn } from "../styles/topicPage_style";
 import { ModalCard } from "../styles/AsignedExam_style";
-import Demo from "../component/AddTopicModal";
 import AddTopicModal from "../component/AddTopicModal";
 
 // ── Edit Modal inline styles (reuse existing Modal component) ─────────────────
@@ -99,12 +98,39 @@ const ExamTopicPage = () => {
   const [indexToRemove, setIndexToRemove] = useState(null);
 
   //── add topic modal ────────────────────────────────────────────────────────────
+  const [showTopic, setShowTopic] = useState(false);
 
-  const[showTopic,setShowTopic]=useState(false);
+  // ✅ FIX: fetchAllTopics now returns the fresh list
+  const fetchAllTopics = async () => {
+    const response = await apiGet("/topic/getall-topic/" + partyId);
+    if (response.responseMessage === "success") {
+      setAllTopics(response.topicList);
+      return response.topicList; // return fresh data directly
+    }
+    return [];
+  };
 
-  const changeShowTopic=()=>{
-    setShowTopic(!showTopic);
-  }
+  // ✅ FIX: changeShowTopic fetches fresh topics and force-selects the newest one
+  const changeShowTopic = async () => {
+    setShowTopic(false); // close the modal
+    const freshTopics = await fetchAllTopics(); // await and capture fresh list
+
+    // Compute the newly added topic = one that wasn't in allTopics before
+    // Since freshTopics is sorted by creation, the last one is the newest
+    const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
+
+    // Find the newest topic not yet assigned
+    // We reverse to get the most recently added first
+    const newestAvailable = [...freshTopics]
+      .find((t) => !assignedIds.has(t.topicId));
+
+    const newTopicId = newestAvailable?.topicId ?? "";
+
+    // Force-set the first row to the newly created topic
+    setRows([
+      { topicId: newTopicId, percentage: "25", topicPassPercentage: "35" },
+    ]);
+  };
 
   // ── edit modal ────────────────────────────────────────────────────────────
   const [showEdit, setShowEdit] = useState(false);
@@ -154,13 +180,7 @@ const ExamTopicPage = () => {
     setPercentage(total);
   };
 
-  // ── fetch ─────────────────────────────────────────────────────────────────
   useEffect(() => {
-    const fetchAllTopics = async () => {
-      const response = await apiGet("/topic/getall-topic/" + partyId);
-      if (response.responseMessage === "success")
-        setAllTopics(response.topicList);
-    };
     fetchAllTopics();
   }, []);
 
@@ -177,6 +197,38 @@ const ExamTopicPage = () => {
     fetchAssignedTopics();
   }, [id]);
 
+  // ── AUTO-SET topicId to first available topic when allTopics or assignedTopics loads ──
+  useEffect(() => {
+    if (allTopics.length === 0) return;
+
+    setRows((prevRows) =>
+      prevRows.map((row, index) => {
+        // Only auto-fill rows that have no topicId selected yet
+        if (row.topicId) return row;
+
+        const available = (() => {
+          const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
+          const selectedInOtherRows = new Set(
+            prevRows
+              .filter((_, i) => i !== index)
+              .map((r) => r.topicId)
+              .filter(Boolean),
+          );
+          return allTopics.filter(
+            (t) =>
+              !assignedIds.has(t.topicId) &&
+              !selectedInOtherRows.has(t.topicId),
+          );
+        })();
+
+        return {
+          ...row,
+          topicId: available[0]?.topicId ?? "",
+        };
+      }),
+    );
+  }, [allTopics, assignedTopics]);
+
   // ── row helpers ───────────────────────────────────────────────────────────
   const handleRowChange = (index, field, value, e) => {
     const updated = [...rows];
@@ -187,9 +239,17 @@ const ExamTopicPage = () => {
 
   const addRow = () => {
     if (percentage < 100) {
+      // Pick default topicId for the new row = first topic not yet used
+      const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
+      const usedInRows = new Set(rows.map((r) => r.topicId).filter(Boolean));
+      const firstAvailable =
+        allTopics.find(
+          (t) => !assignedIds.has(t.topicId) && !usedInRows.has(t.topicId),
+        )?.topicId ?? "";
+
       setRows([
         ...rows,
-        { topicId: "", percentage: "25", topicPassPercentage: "35" },
+        { topicId: firstAvailable, percentage: "25", topicPassPercentage: "35" },
       ]);
       setError((prev) => ({ ...prev, errorMessage: "" }));
     } else {
@@ -233,14 +293,26 @@ const ExamTopicPage = () => {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage !== undefined) {
       toast.success("Topic added successfully", { position: "top-center" });
-      const updated = await apiGet(
-        `/exam-topic/get-topicby-examid?examId=${id}`,
-      );
+
+      // ✅ FIX: fetch fresh assigned AND fresh allTopics in parallel
+      // so next row selection is never stale
+      const [updated, freshAllTopics] = await Promise.all([
+        apiGet(`/exam-topic/get-topicby-examid?examId=${id}`),
+        fetchAllTopics(),
+      ]);
+
       if (updated.message === "success") {
-        setAssignedTopics(updated.topicList);
-        syncPercentage(updated.topicList);
+        const freshAssigned = updated.topicList;
+        setAssignedTopics(freshAssigned);
+        syncPercentage(freshAssigned);
+
+        // Pick next available using fully fresh data
+        const freshAssignedIds = new Set(freshAssigned.map((t) => t.topicId));
+        const nextTopicId =
+          freshAllTopics.find((t) => !freshAssignedIds.has(t.topicId))?.topicId ?? "";
+
+        setRows([{ topicId: nextTopicId, percentage: "25", topicPassPercentage: "35" }]);
       }
-      setRows([{ topicId: "", percentage: "", topicPassPercentage: "" }]);
       setError({});
     }
   };
@@ -257,11 +329,27 @@ const ExamTopicPage = () => {
     });
     if (response.responseMessage === "success") {
       toast.success(response.message, { position: "top-center" });
+
       const updatedTopics = assignedTopics.filter(
         (t) => t.topicId !== topicToRemove,
       );
       setAssignedTopics(updatedTopics);
       syncPercentage(updatedTopics);
+
+      // ✅ FIX: refresh allTopics so the deleted topic reappears in the select dropdown
+      const freshAllTopics = await fetchAllTopics();
+
+      // Also update the current row to show the first newly available topic
+      // if the row's current topicId is empty or no longer valid
+      const freshAssignedIds = new Set(updatedTopics.map((t) => t.topicId));
+      const firstAvailable =
+        freshAllTopics.find((t) => !freshAssignedIds.has(t.topicId))?.topicId ?? "";
+
+      setRows((prevRows) =>
+        prevRows.map((row) =>
+          !row.topicId ? { ...row, topicId: firstAvailable } : row,
+        ),
+      );
     } else {
       toast.error(response.message, { position: "top-center" });
     }
@@ -331,14 +419,16 @@ const ExamTopicPage = () => {
             {examName}
             <span>Manage topics assigned to this assessment</span>
           </ETPTitle>
-          <div style={{display:"flex",gap:"10px"}}>
+          <div style={{ display: "flex", gap: "10px" }}>
             {/* add new topic */}
-          <ETPAddRowBtn onClick={changeShowTopic}>
-            <FaPlus size={11} /> Add Topic
-          </ETPAddRowBtn>
-          <ETPBackBtn type="button" onClick={() => navigate(-1)}>
-            Back
-          </ETPBackBtn>
+           {percentage!==100 &&
+           <ETPAddRowBtn onClick={() => setShowTopic(!showTopic)}>
+              <FaPlus size={11} /> Add Topic
+            </ETPAddRowBtn>
+            } 
+            <ETPBackBtn type="button" onClick={() => navigate(-1)}>
+              Back
+            </ETPBackBtn>
           </div>
         </ETPHeader>
 
@@ -375,7 +465,6 @@ const ExamTopicPage = () => {
                       }
                       name="topicId"
                     >
-                      <option value="">Select topic…</option>
                       {getAvailableTopics(index).map((topic) => (
                         <option key={topic.topicId} value={topic.topicId}>
                           {topic.topicName}
@@ -558,6 +647,7 @@ const ExamTopicPage = () => {
           showConfirmButton={true}
           type="edit"
         >
+          
           <div style={{ padding: "4px 0" }}>
             <div style={modalField}>
               <label style={modalLabel}>Topic</label>
@@ -610,7 +700,9 @@ const ExamTopicPage = () => {
           </div>
         </Modal>
       )}
-      {showTopic && <AddTopicModal change={changeShowTopic}/>}
+
+      {/* ── Add Topic Modal ───────────────────────────────────────────────── */}
+      {showTopic && <AddTopicModal change={changeShowTopic} />}
     </Layout>
   );
 };

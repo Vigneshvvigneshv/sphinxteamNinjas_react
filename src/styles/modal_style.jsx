@@ -35,7 +35,6 @@ export const ModalContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   box-shadow: ${({ theme }) => theme.shadowModal};
   animation: ${slideUp} 0.26s ease;
-  text-align: center;
 `;
 
 export const ModalIconWrap = styled.div`
