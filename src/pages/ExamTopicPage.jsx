@@ -2,8 +2,14 @@ import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  FaAngleDoubleDown, FaAngleDoubleUp, FaPen, FaPlus,
-  FaTrash, FaCheckCircle, FaListAlt, FaTags,
+  FaAngleDoubleDown,
+  FaAngleDoubleUp,
+  FaPen,
+  FaPlus,
+  FaTrash,
+  FaCheckCircle,
+  FaListAlt,
+  FaTags,
   FaArrowLeft,
 } from "react-icons/fa";
 import { ErrorMessage } from "../styles/form_style";
@@ -47,38 +53,92 @@ import {
   ETPCompleteBadge,
 } from "../styles/examTopicPage_style";
 import { useSelector } from "react-redux";
-import { FBackBtn } from "../styles/formPage_style";
+import { FBackBtn, FField, FInput, FLabel, FSubmitBtn } from "../styles/formPage_style";
+import { TopicAddBtn } from "../styles/topicPage_style";
+import { ModalCard } from "../styles/AsignedExam_style";
+import AddTopicModal from "../component/AddTopicModal";
 
 // ── Edit Modal inline styles (reuse existing Modal component) ─────────────────
 const modalField = {
-  display: "flex", flexDirection: "column", gap: "6px", marginBottom: "14px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "6px",
+  marginBottom: "14px",
 };
 const modalLabel = {
-  fontSize: "12px", fontWeight: "600", color: "#6b7280",
-  textTransform: "uppercase", letterSpacing: "0.05em",
+  fontSize: "12px",
+  fontWeight: "600",
+  color: "#6b7280",
+  textTransform: "uppercase",
+  letterSpacing: "0.05em",
 };
 const modalInput = {
-  padding: "9px 12px", fontSize: "13px", color: "#111827",
-  background: "#fff", border: "1px solid #d1d5db",
-  borderRadius: "8px", outline: "none", width: "100%",
-  boxSizing: "border-box", fontFamily: "'Sora','Segoe UI',sans-serif",
+  padding: "9px 12px",
+  fontSize: "13px",
+  color: "#111827",
+  background: "#fff",
+  border: "1px solid #d1d5db",
+  borderRadius: "8px",
+  outline: "none",
+  width: "100%",
+  boxSizing: "border-box",
+  fontFamily: "'Sora','Segoe UI',sans-serif",
 };
 const modalSelect = { ...modalInput };
 
 const ExamTopicPage = () => {
   const navigate = useNavigate();
   const { id, examName } = useParams();
-  const { partyId }  = useSelector((state) => state.userReducer);
+  const { partyId } = useSelector((state) => state.userReducer);
   // ── section 1: assigned topics ────────────────────────────────────────────
   const [assignedTopics, setAssignedTopics] = useState([]);
-  const [showAssigned, setShowAssigned]     = useState(false);
-  const [showDelete, setShowDelete]         = useState(false);
-  const [topicToRemove, setTopicToRemove]   = useState(null);
-  const [indexToRemove, setIndexToRemove]   = useState(null);
+  const [showAssigned, setShowAssigned] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [topicToRemove, setTopicToRemove] = useState(null);
+  const [indexToRemove, setIndexToRemove] = useState(null);
+
+  //── add topic modal ────────────────────────────────────────────────────────────
+  const [showTopic, setShowTopic] = useState(false);
+
+  // ✅ FIX: fetchAllTopics now returns the fresh list
+  const fetchAllTopics = async () => {
+    const response = await apiGet("/topic/getall-topic/" + partyId);
+    if (response.responseMessage === "success") {
+      setAllTopics(response.topicList);
+      return response.topicList; // return fresh data directly
+    }
+    return [];
+  };
+
+  // ✅ FIX: changeShowTopic fetches fresh topics and force-selects the newest one
+  const changeShowTopic = async () => {
+    setShowTopic(false); // close the modal
+    const freshTopics = await fetchAllTopics(); // await and capture fresh list
+
+    // Compute the newly added topic = one that wasn't in allTopics before
+    // Since freshTopics is sorted by creation, the last one is the newest
+    const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
+
+    // Find the newest topic not yet assigned
+    // We reverse to get the most recently added first
+    const newestAvailable = [...freshTopics]
+      .find((t) => !assignedIds.has(t.topicId));
+
+    const newTopicId = newestAvailable?.topicId ?? "";
+
+    // Force-set the first row to the newly created topic
+    setRows([
+      { topicId: newTopicId, percentage: "25", topicPassPercentage: "35" },
+    ]);
+  };
 
   // ── edit modal ────────────────────────────────────────────────────────────
-  const [showEdit, setShowEdit]   = useState(false);
-  const [editData, setEditData]   = useState({ topicId: "", percentage: "", topicPassPercentage: "" });
+  const [showEdit, setShowEdit] = useState(false);
+  const [editData, setEditData] = useState({
+    topicId: "",
+    percentage: "",
+    topicPassPercentage: "",
+  });
   const [editError, setEditError] = useState({});
 
   // ── percentage ────────────────────────────────────────────────────────────
@@ -86,44 +146,49 @@ const ExamTopicPage = () => {
 
   // ── section 2: add topics form ────────────────────────────────────────────
   const [allTopics, setAllTopics] = useState([]);
-  const [rows, setRows] = useState([{ topicId: "", percentage: "", topicPassPercentage: "" }]);
+  const [rows, setRows] = useState([
+    { topicId: "", percentage: "25", topicPassPercentage: "35" },
+  ]);
   const [error, setError] = useState({});
 
   // ── derived: available topics ─────────────────────────────────────────────
   const getAvailableTopics = (currentRowIndex) => {
     const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
     const selectedInOtherRows = new Set(
-      rows.filter((_, i) => i !== currentRowIndex).map((r) => r.topicId).filter(Boolean)
+      rows
+        .filter((_, i) => i !== currentRowIndex)
+        .map((r) => r.topicId)
+        .filter(Boolean),
     );
     return allTopics.filter(
-      (t) => !assignedIds.has(t.topicId) && !selectedInOtherRows.has(t.topicId)
+      (t) => !assignedIds.has(t.topicId) && !selectedInOtherRows.has(t.topicId),
     );
   };
 
   const getEditAvailableTopics = (currentTopicId) => {
     const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
     return allTopics.filter(
-      (t) => !assignedIds.has(t.topicId) || t.topicId === currentTopicId
+      (t) => !assignedIds.has(t.topicId) || t.topicId === currentTopicId,
     );
   };
 
   const syncPercentage = (topicList) => {
-    const total = topicList.reduce((acc, t) => acc + Number(t.percentage || 0), 0);
+    const total = topicList.reduce(
+      (acc, t) => acc + Number(t.percentage || 0),
+      0,
+    );
     setPercentage(total);
   };
 
-  // ── fetch ─────────────────────────────────────────────────────────────────
   useEffect(() => {
-    const fetchAllTopics = async () => {
-      const response = await apiGet("/topic/getall-topic/"+partyId);
-      if (response.responseMessage === "success") setAllTopics(response.topicList);
-    };
     fetchAllTopics();
   }, []);
 
   useEffect(() => {
     const fetchAssignedTopics = async () => {
-      const response = await apiGet(`/exam-topic/get-topicby-examid?examId=${id}`);
+      const response = await apiGet(
+        `/exam-topic/get-topicby-examid?examId=${id}`,
+      );
       if (response.message === "success" && response.topicList.length > 0) {
         setAssignedTopics(response.topicList);
         syncPercentage(response.topicList);
@@ -131,6 +196,38 @@ const ExamTopicPage = () => {
     };
     fetchAssignedTopics();
   }, [id]);
+
+  // ── AUTO-SET topicId to first available topic when allTopics or assignedTopics loads ──
+  useEffect(() => {
+    if (allTopics.length === 0) return;
+
+    setRows((prevRows) =>
+      prevRows.map((row, index) => {
+        // Only auto-fill rows that have no topicId selected yet
+        if (row.topicId) return row;
+
+        const available = (() => {
+          const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
+          const selectedInOtherRows = new Set(
+            prevRows
+              .filter((_, i) => i !== index)
+              .map((r) => r.topicId)
+              .filter(Boolean),
+          );
+          return allTopics.filter(
+            (t) =>
+              !assignedIds.has(t.topicId) &&
+              !selectedInOtherRows.has(t.topicId),
+          );
+        })();
+
+        return {
+          ...row,
+          topicId: available[0]?.topicId ?? "",
+        };
+      }),
+    );
+  }, [allTopics, assignedTopics]);
 
   // ── row helpers ───────────────────────────────────────────────────────────
   const handleRowChange = (index, field, value, e) => {
@@ -142,10 +239,23 @@ const ExamTopicPage = () => {
 
   const addRow = () => {
     if (percentage < 100) {
-      setRows([...rows, { topicId: "", percentage: "", topicPassPercentage: "" }]);
+      // Pick default topicId for the new row = first topic not yet used
+      const assignedIds = new Set(assignedTopics.map((t) => t.topicId));
+      const usedInRows = new Set(rows.map((r) => r.topicId).filter(Boolean));
+      const firstAvailable =
+        allTopics.find(
+          (t) => !assignedIds.has(t.topicId) && !usedInRows.has(t.topicId),
+        )?.topicId ?? "";
+
+      setRows([
+        ...rows,
+        { topicId: firstAvailable, percentage: "25", topicPassPercentage: "35" },
+      ]);
       setError((prev) => ({ ...prev, errorMessage: "" }));
     } else {
-      toast.error("Percentage cannot be more than 100", { position: "top-center" });
+      toast.error("Percentage cannot be more than 100", {
+        position: "top-center",
+      });
     }
   };
 
@@ -153,29 +263,56 @@ const ExamTopicPage = () => {
   const handleAssign = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     if (percentage >= 100) {
-      toast.error("Percentage cannot be more than 100", { position: "top-center" });
+      toast.error("Percentage cannot be more than 100", {
+        position: "top-center",
+      });
       return;
     }
     for (const row of rows) {
       const validationErrors = validateAddTopicExam(row);
-      if (Object.keys(validationErrors).length > 0) { setError(validationErrors); return; }
+      if (Object.keys(validationErrors).length > 0) {
+        setError(validationErrors);
+        return;
+      }
     }
-    const rowsTotal = rows.reduce((acc, row) => acc + Number(row.percentage || 0), 0);
+    const rowsTotal = rows.reduce(
+      (acc, row) => acc + Number(row.percentage || 0),
+      0,
+    );
     if (percentage + rowsTotal > 100) {
-      toast.error("Percentage cannot be more than 100", { position: "top-center" });
+      toast.error("Percentage cannot be more than 100", {
+        position: "top-center",
+      });
       return;
     }
-    const response = await apiPost("/exam-topic/create-topic-in-exam", { examId: id, topics: rows });
+    const response = await apiPost("/exam-topic/create-topic-in-exam", {
+      examId: id,
+      topics: rows,
+    });
     if (response.errorMessage !== undefined) {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage !== undefined) {
       toast.success("Topic added successfully", { position: "top-center" });
-      const updated = await apiGet(`/exam-topic/get-topicby-examid?examId=${id}`);
+
+      // ✅ FIX: fetch fresh assigned AND fresh allTopics in parallel
+      // so next row selection is never stale
+      const [updated, freshAllTopics] = await Promise.all([
+        apiGet(`/exam-topic/get-topicby-examid?examId=${id}`),
+        fetchAllTopics(),
+      ]);
+
       if (updated.message === "success") {
-        setAssignedTopics(updated.topicList);
-        syncPercentage(updated.topicList);
+        const freshAssigned = updated.topicList;
+        setAssignedTopics(freshAssigned);
+        syncPercentage(freshAssigned);
+
+        // Pick next available using fully fresh data
+        const freshAssignedIds = new Set(freshAssigned.map((t) => t.topicId));
+        const nextTopicId =
+          freshAllTopics.find((t) => !freshAssignedIds.has(t.topicId))?.topicId ?? "";
+
+        setRows([{ topicId: nextTopicId, percentage: "25", topicPassPercentage: "35" }]);
       }
-      setRows([{ topicId: "", percentage: "", topicPassPercentage: "" }]);
       setError({});
     }
   };
@@ -187,13 +324,32 @@ const ExamTopicPage = () => {
   // ── delete ────────────────────────────────────────────────────────────────
   const onDelete = async () => {
     const response = await apiDelete("/exam-topic/delete-topic-in-exam-topic", {
-      examId: id, topicId: topicToRemove,
+      examId: id,
+      topicId: topicToRemove,
     });
     if (response.responseMessage === "success") {
       toast.success(response.message, { position: "top-center" });
-      const updatedTopics = assignedTopics.filter((t) => t.topicId !== topicToRemove);
+
+      const updatedTopics = assignedTopics.filter(
+        (t) => t.topicId !== topicToRemove,
+      );
       setAssignedTopics(updatedTopics);
       syncPercentage(updatedTopics);
+
+      // ✅ FIX: refresh allTopics so the deleted topic reappears in the select dropdown
+      const freshAllTopics = await fetchAllTopics();
+
+      // Also update the current row to show the first newly available topic
+      // if the row's current topicId is empty or no longer valid
+      const freshAssignedIds = new Set(updatedTopics.map((t) => t.topicId));
+      const firstAvailable =
+        freshAllTopics.find((t) => !freshAssignedIds.has(t.topicId))?.topicId ?? "";
+
+      setRows((prevRows) =>
+        prevRows.map((row) =>
+          !row.topicId ? { ...row, topicId: firstAvailable } : row,
+        ),
+      );
     } else {
       toast.error(response.message, { position: "top-center" });
     }
@@ -202,7 +358,11 @@ const ExamTopicPage = () => {
 
   // ── edit ──────────────────────────────────────────────────────────────────
   const openEditModal = (topic) => {
-    setEditData({ topicId: topic.topicId, percentage: topic.percentage, topicPassPercentage: topic.topicPassPercentage });
+    setEditData({
+      topicId: topic.topicId,
+      percentage: topic.percentage,
+      topicPassPercentage: topic.topicPassPercentage,
+    });
     setEditError({});
     setShowEdit(true);
   };
@@ -214,16 +374,27 @@ const ExamTopicPage = () => {
 
   const handleEditUpdate = async () => {
     const validationErrors = validateAddTopicExam(editData);
-    if (Object.keys(validationErrors).length > 0) { setEditError(validationErrors); return; }
+    if (Object.keys(validationErrors).length > 0) {
+      setEditError(validationErrors);
+      return;
+    }
     const response = await apiPost("/exam-topic/create-topic-in-exam", {
       examId: id,
-      topics: [{ topicId: editData.topicId, percentage: editData.percentage, topicPassPercentage: editData.topicPassPercentage }],
+      topics: [
+        {
+          topicId: editData.topicId,
+          percentage: editData.percentage,
+          topicPassPercentage: editData.topicPassPercentage,
+        },
+      ],
     });
     if (response.errorMessage !== undefined) {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage !== undefined) {
       toast.success("Topic updated successfully", { position: "top-center" });
-      const updated = await apiGet(`/exam-topic/get-topicby-examid?examId=${id}`);
+      const updated = await apiGet(
+        `/exam-topic/get-topicby-examid?examId=${id}`,
+      );
       if (updated.message === "success") {
         setAssignedTopics(updated.topicList);
         syncPercentage(updated.topicList);
@@ -242,19 +413,26 @@ const ExamTopicPage = () => {
   return (
     <Layout>
       <ETPWrap>
-
         {/* ── Page Header ──────────────────────────────────────────────── */}
         <ETPHeader>
           <ETPTitle>
             {examName}
             <span>Manage topics assigned to this assessment</span>
           </ETPTitle>
-          <ETPBackBtn type="button" onClick={() => navigate(-1)}>
-                Back
-          </ETPBackBtn>
+          <div style={{ display: "flex", gap: "10px" }}>
+            {/* add new topic */}
+           {percentage!==100 &&
+           <ETPAddRowBtn onClick={() => setShowTopic(!showTopic)}>
+              <FaPlus size={11} /> Add Topic
+            </ETPAddRowBtn>
+            } 
+            <ETPBackBtn type="button" onClick={() => navigate(-1)}>
+              Back
+            </ETPBackBtn>
+          </div>
         </ETPHeader>
 
-         {/* ── Add Topics Section ────────────────────────────────────────── */}
+        {/* ── Add Topics Section ────────────────────────────────────────── */}
         <ETPSection $delay="0.1s">
           <ETPSectionHeader>
             <ETPSectionTitle>
@@ -282,10 +460,11 @@ const ExamTopicPage = () => {
                     <ETPFieldLabel>Topic</ETPFieldLabel>
                     <ETPSelect
                       value={row.topicId}
-                      onChange={(e) => handleRowChange(index, "topicId", e.target.value, e)}
+                      onChange={(e) =>
+                        handleRowChange(index, "topicId", e.target.value, e)
+                      }
                       name="topicId"
                     >
-                      <option value="">Select topic…</option>
                       {getAvailableTopics(index).map((topic) => (
                         <option key={topic.topicId} value={topic.topicId}>
                           {topic.topicName}
@@ -301,11 +480,15 @@ const ExamTopicPage = () => {
                     <ETPInput
                       type="text"
                       value={row.percentage}
-                      onChange={(e) => handleRowChange(index, "percentage", e.target.value, e)}
+                      onChange={(e) =>
+                        handleRowChange(index, "percentage", e.target.value, e)
+                      }
                       name="percentage"
                       placeholder="e.g. 40"
                     />
-                    {error.percentage && <ETPError>{error.percentage}</ETPError>}
+                    {error.percentage && (
+                      <ETPError>{error.percentage}</ETPError>
+                    )}
                   </ETPFieldWrap>
 
                   {/* Pass Percentage */}
@@ -314,11 +497,20 @@ const ExamTopicPage = () => {
                     <ETPInput
                       type="text"
                       value={row.topicPassPercentage}
-                      onChange={(e) => handleRowChange(index, "topicPassPercentage", e.target.value, e)}
+                      onChange={(e) =>
+                        handleRowChange(
+                          index,
+                          "topicPassPercentage",
+                          e.target.value,
+                          e,
+                        )
+                      }
                       name="topicPassPercentage"
                       placeholder="e.g. 60"
                     />
-                    {error.topicPassPercentage && <ETPError>{error.topicPassPercentage}</ETPError>}
+                    {error.topicPassPercentage && (
+                      <ETPError>{error.topicPassPercentage}</ETPError>
+                    )}
                   </ETPFieldWrap>
 
                   {/* Remove row */}
@@ -347,7 +539,6 @@ const ExamTopicPage = () => {
                 : "All 100% assigned"}
             </ETPFooterNote>
             <ETPFooterBtns>
-              
               {percentage < 100 && (
                 <ETPAssignBtn type="button" onClick={handleAssign}>
                   <FaCheckCircle /> Assign Topics
@@ -372,10 +563,17 @@ const ExamTopicPage = () => {
               <FaTags />
               Assigned Topics
               {assignedTopics.length > 0 && (
-                <span style={{
-                  background: "#eef2ff", color: "#6366f1", border: "1px solid #c7d2fe",
-                  borderRadius: "99px", padding: "1px 9px", fontSize: "12px", fontWeight: 700,
-                }}>
+                <span
+                  style={{
+                    background: "#eef2ff",
+                    color: "#6366f1",
+                    border: "1px solid #c7d2fe",
+                    borderRadius: "99px",
+                    padding: "1px 9px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                  }}
+                >
                   {assignedTopics.length}
                 </span>
               )}
@@ -397,17 +595,21 @@ const ExamTopicPage = () => {
                 assignedTopics.map((topic, index) => (
                   <ETPTopicRow key={topic.topicId}>
                     <ETPTopicName>{topic.topicName}</ETPTopicName>
-                    <ETPTopicBadge>
-                      {topic.percentage}%
-                    </ETPTopicBadge>
+                    <ETPTopicBadge>{topic.percentage}%</ETPTopicBadge>
                     <ETPTopicBadge $type="pass">
                       Pass {topic.topicPassPercentage}%
                     </ETPTopicBadge>
                     <ETPTopicActions>
-                      <ETPEditBtn title="Edit topic" onClick={() => openEditModal(topic)}>
+                      <ETPEditBtn
+                        title="Edit topic"
+                        onClick={() => openEditModal(topic)}
+                      >
                         <FaPen />
                       </ETPEditBtn>
-                      <ETPDeleteBtn title="Remove topic" onClick={() => openDeleteModal(topic.topicId, index)}>
+                      <ETPDeleteBtn
+                        title="Remove topic"
+                        onClick={() => openDeleteModal(topic.topicId, index)}
+                      >
                         <FaTrash />
                       </ETPDeleteBtn>
                     </ETPTopicActions>
@@ -418,10 +620,9 @@ const ExamTopicPage = () => {
           )}
         </ETPSection>
 
-       
-            <FBackBtn onClick={() => navigate(-1)}>
-              <FaArrowLeft size={11} /> Back 
-            </FBackBtn>
+        <FBackBtn onClick={() => navigate(-1)}>
+          <FaArrowLeft size={11} /> Back
+        </FBackBtn>
       </ETPWrap>
 
       {/* ── Delete Confirm Modal ──────────────────────────────────────────── */}
@@ -446,8 +647,8 @@ const ExamTopicPage = () => {
           showConfirmButton={true}
           type="edit"
         >
+          
           <div style={{ padding: "4px 0" }}>
-
             <div style={modalField}>
               <label style={modalLabel}>Topic</label>
               <select
@@ -462,7 +663,9 @@ const ExamTopicPage = () => {
                   </option>
                 ))}
               </select>
-              {editError.topicId && <ErrorMessage>{editError.topicId}</ErrorMessage>}
+              {editError.topicId && (
+                <ErrorMessage>{editError.topicId}</ErrorMessage>
+              )}
             </div>
 
             <div style={modalField}>
@@ -474,7 +677,9 @@ const ExamTopicPage = () => {
                 placeholder="Enter percentage"
                 style={modalInput}
               />
-              {editError.percentage && <ErrorMessage>{editError.percentage}</ErrorMessage>}
+              {editError.percentage && (
+                <ErrorMessage>{editError.percentage}</ErrorMessage>
+              )}
             </div>
 
             <div style={{ ...modalField, marginBottom: 0 }}>
@@ -482,16 +687,22 @@ const ExamTopicPage = () => {
               <input
                 type="text"
                 value={editData.topicPassPercentage}
-                onChange={(e) => handleEditChange("topicPassPercentage", e.target.value)}
+                onChange={(e) =>
+                  handleEditChange("topicPassPercentage", e.target.value)
+                }
                 placeholder="Enter pass percentage"
                 style={modalInput}
               />
-              {editError.topicPassPercentage && <ErrorMessage>{editError.topicPassPercentage}</ErrorMessage>}
+              {editError.topicPassPercentage && (
+                <ErrorMessage>{editError.topicPassPercentage}</ErrorMessage>
+              )}
             </div>
-
           </div>
         </Modal>
       )}
+
+      {/* ── Add Topic Modal ───────────────────────────────────────────────── */}
+      {showTopic && <AddTopicModal change={changeShowTopic} />}
     </Layout>
   );
 };
