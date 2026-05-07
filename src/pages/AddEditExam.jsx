@@ -23,8 +23,8 @@ const AddEditExam = () => {
   const isEdit      = id !== undefined;
 
   const [formData, setFormData] = useState({
-    examName: '', description: '', noOfQuestions: '',
-    duration: '', passPercentage: '', partyId,
+    examName: '', description: '', noOfQuestions: '5',
+    duration: '20', passPercentage: '35', partyId,
   });
   const [error, setError] = useState({});
   const [show,  setShow]  = useState(false);
@@ -130,7 +130,7 @@ const AddEditExam = () => {
                     name="duration"
                     type="text"
                     placeholder="e.g. 60"
-                    value={formData.duration || '20'}
+                    value={formData.duration}
                     onChange={handleChange}
                   />
                   {error.duration && <FError>{error.duration}</FError>}
@@ -164,8 +164,8 @@ const AddEditExam = () => {
         </FormPageWrap>
 
         {show && (
-          <Modal onCancel={() => { setShow(false); navigate(isEdit?-1:`/getexamtopic/${error.examId}/${formData.examName}`); }}>
-            {error.successMessage}
+          <Modal title=  {error.successMessage} onCancel={() => { setShow(false); navigate(isEdit?-1:`/getexamtopic/${error.examId}/${formData.examName}`); }}>
+          
           </Modal>
         )}
       </Layout>
