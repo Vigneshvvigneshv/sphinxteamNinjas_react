@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Backdrop, ModalContainer, ModalIconWrap, ModalTitle, Message, ModalButtons, ModalGhostBtn, ModalPrimaryBtn } from '../styles/modal_style'
 import { TiTick } from 'react-icons/ti';
 import { FaPen, FaTrash } from 'react-icons/fa';
+import { FaX } from 'react-icons/fa6';
 
 
 
@@ -21,6 +22,8 @@ const Modal = ({ children, title,type='success', onConfirm, onCancel, showConfir
       return <FaTrash style={{ color:'red'}}/>
     }else if(type==="edit"){
       return <FaPen style={{color:'blue'}}/>
+    }else if(type==="fail"){
+      return <FaX  style={{color:'red'}}/>
     }
   }
   
