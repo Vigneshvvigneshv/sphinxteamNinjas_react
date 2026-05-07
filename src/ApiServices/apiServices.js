@@ -93,3 +93,25 @@ export async function apiFilePost(endpoint, formData) {
     return err;
   }
 }
+
+export async function apiPostBlob(endpoint, data) {
+  console.log("Post Blob Method Data => ", data);
+
+  try {
+    const response = await fetch(URL + endpoint, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      
+    });
+    console.log("Response status:", response.status);
+    console.log("Response content-type:", response.headers.get("content-type"));
+    const blob = await response.blob();  // <-- blob instead of json
+    return blob;
+
+  } catch (err) {
+    return err;
+  }
+}

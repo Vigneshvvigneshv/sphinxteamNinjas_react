@@ -367,9 +367,11 @@ const ExamQuestionList = () => {
                       {isReviewMarked ? '🔖 Marked for Review' : '🔖 Mark for Review'}
                     </ReviewBtn>
 
-                    <NavBtn $primary onClick={handleNext} disabled={!data?.hasNext}>
+                  { data.hasNext?(<NavBtn $primary onClick={handleNext} disabled={!data?.hasNext}>
                       Next →
-                    </NavBtn>
+                    </NavBtn>):(<SubmitBtn onClick={() => setShowSubmitModal(true)}>
+                Submit Exam
+              </SubmitBtn>)}
                   </ActionBar>
                 </>
               ) : null}
