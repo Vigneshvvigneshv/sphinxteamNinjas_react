@@ -1,32 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
-import { useParams, NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { ThemeProvider } from "styled-components";
+import { useParams, NavLink, useNavigate } from "react-router-dom";
 import {
-  FaPlus, FaTrash, FaSearch, FaQuestion,
-  FaFile, FaPen, FaChevronDown, FaChevronUp,
-} from 'react-icons/fa';
-import { FaX } from 'react-icons/fa6';
-import { toast } from 'sonner';
+  FaPlus,
+  FaTrash,
+  FaSearch,
+  FaQuestion,
+  FaFile,
+  FaPen,
+  FaChevronDown,
+  FaChevronUp,
+  FaArrowLeft,
+} from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+import { toast } from "sonner";
 
-import Layout from '../component/Layout';
-import Modal from '../component/Modal';
-import { apiDelete, apiGet } from '../ApiServices/apiServices';
+import Layout from "../component/Layout";
+import Modal from "../component/Modal";
+import { apiDelete, apiGet } from "../ApiServices/apiServices";
 
 import {
-  QPageWrap, QPageHeader, QPageTitle, QHeaderActions,
-  QAddBtn, QUploadBtn, QDeleteAllBtn,
-  QControlRow, QStatStrip, QStatBadge, QSearchWrap, QSearchInput,
-  QPanel, QColHeader, QRow,
-  QCheckbox, QSerial, QText, QTopicBadge, QTypeBadge, QRowActions,
-  TooltipWrapper, TooltipChip, QIconBtn,
-  AnswerPanel, AnswerPanelHeader, AnswerPanelTitle, AnswerHideBtn,
-  AnswerOptions, AnswerOptionChip, CorrectAnswer,
-  QEmptyWrap, QPagination, QPageBtn, QPageLabel, QPageSizeWrap, QPageSizeInput,
-} from '../styles/questionPage_style';
+  QPageWrap,
+  QPageHeader,
+  QPageTitle,
+  QHeaderActions,
+  QAddBtn,
+  QUploadBtn,
+  QDeleteAllBtn,
+  QControlRow,
+  QStatStrip,
+  QStatBadge,
+  QSearchWrap,
+  QSearchInput,
+  QPanel,
+  QColHeader,
+  QRow,
+  QCheckbox,
+  QSerial,
+  QText,
+  QTopicBadge,
+  QTypeBadge,
+  QRowActions,
+  TooltipWrapper,
+  TooltipChip,
+  QIconBtn,
+  AnswerPanel,
+  AnswerPanelHeader,
+  AnswerPanelTitle,
+  AnswerHideBtn,
+  AnswerOptions,
+  AnswerOptionChip,
+  CorrectAnswer,
+  QEmptyWrap,
+  QPagination,
+  QPageBtn,
+  QPageLabel,
+  QPageSizeWrap,
+  QPageSizeInput,
+} from "../styles/questionPage_style";
+import { FBackBtn } from "../styles/formPage_style";
 
 // ── Single Question Row (inline, no separate file) ────────────────────────────
-const QuestionRow = ({ data, index, selectedIds, onCheck, onDelete, topicMode, topicName }) => {
+const QuestionRow = ({
+  data,
+  index,
+  selectedIds,
+  onCheck,
+  onDelete,
+  topicMode,
+  topicName,
+}) => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   return (
@@ -46,21 +90,27 @@ const QuestionRow = ({ data, index, selectedIds, onCheck, onDelete, topicMode, t
         <QText title={data.questionDetail}>{data.questionDetail}</QText>
 
         {/* topic badge — only in all-questions mode */}
-        {!topicMode
-          ? <QTopicBadge title={data.topicName}>{data.topicName || '—'}</QTopicBadge>
-          : ""
-        }
+        {!topicMode ? (
+          <QTopicBadge title={data.topicName}>
+            {data.topicName || "—"}
+          </QTopicBadge>
+        ) : (
+          ""
+        )}
 
         {/* type badge */}
         <QTypeBadge title={data.questionTypeId}>
-          {data.questionTypeId?.replace(/_/g, ' ')}
+          {data.questionTypeId?.replace(/_/g, " ")}
         </QTypeBadge>
 
         {/* actions */}
         <QRowActions>
           <TooltipWrapper>
             <TooltipChip>Answers</TooltipChip>
-            <QIconBtn className="answers" onClick={() => setShowAnswer((p) => !p)}>
+            <QIconBtn
+              className="answers"
+              onClick={() => setShowAnswer((p) => !p)}
+            >
               {showAnswer ? <FaChevronUp /> : <FaChevronDown />}
             </QIconBtn>
           </TooltipWrapper>
@@ -70,7 +120,10 @@ const QuestionRow = ({ data, index, selectedIds, onCheck, onDelete, topicMode, t
             <QIconBtn
               as={NavLink}
               to={`/createquestion/${data.questionId}`}
-              state={{ topicId: data.topicId, topicName: topicName || data.topicName }}
+              state={{
+                topicId: data.topicId,
+                topicName: topicName || data.topicName,
+              }}
               className="edit"
             >
               <FaPen />
@@ -95,18 +148,29 @@ const QuestionRow = ({ data, index, selectedIds, onCheck, onDelete, topicMode, t
               <FaX size={9} /> Hide
             </AnswerHideBtn>
           </AnswerPanelHeader>
-          {data.questionTypeId==='FILL_BLANKS' || data.questionTypeId==='TRUE_FALSE' || data.questionTypeId==='DETAILED_ANSWER'?
-          <CorrectAnswer>Correct: {data.answer}</CorrectAnswer>:
-          <>
-          <AnswerOptions>
-            {data.optionA && <AnswerOptionChip>A — {data.optionA}</AnswerOptionChip>}
-            {data.optionB && <AnswerOptionChip>B — {data.optionB}</AnswerOptionChip>}
-            {data.optionC && <AnswerOptionChip>C — {data.optionC}</AnswerOptionChip>}
-            {data.optionD && <AnswerOptionChip>D — {data.optionD}</AnswerOptionChip>}
-          </AnswerOptions>
-          <CorrectAnswer>Correct: {data.answer}</CorrectAnswer>
-          </>
-          }
+          {data.questionTypeId === "FILL_BLANKS" ||
+          data.questionTypeId === "TRUE_FALSE" ||
+          data.questionTypeId === "DETAILED_ANSWER" ? (
+            <CorrectAnswer>Correct: {data.answer}</CorrectAnswer>
+          ) : (
+            <>
+              <AnswerOptions>
+                {data.optionA && (
+                  <AnswerOptionChip>A — {data.optionA}</AnswerOptionChip>
+                )}
+                {data.optionB && (
+                  <AnswerOptionChip>B — {data.optionB}</AnswerOptionChip>
+                )}
+                {data.optionC && (
+                  <AnswerOptionChip>C — {data.optionC}</AnswerOptionChip>
+                )}
+                {data.optionD && (
+                  <AnswerOptionChip>D — {data.optionD}</AnswerOptionChip>
+                )}
+              </AnswerOptions>
+              <CorrectAnswer>Correct: {data.answer}</CorrectAnswer>
+            </>
+          )}
         </AnswerPanel>
       )}
     </>
@@ -120,20 +184,27 @@ const QuestionPage = () => {
   // if topicId param exists → topic mode, else → all-questions mode
   const { id: topicId } = useParams();
   const topicMode = Boolean(topicId);
+  const navigate = useNavigate();
 
   // ── State ───────────────────────────────────────────────────────────────
   const [data, setData] = useState({
-    questionList: [], pageNo: 1, totalPages: 1,
-    hasNext: false, hasPrevious: false,
-    responseMessage: '', topicName: '', topicId: '', totalCount: '',
+    questionList: [],
+    pageNo: 1,
+    totalPages: 1,
+    hasNext: false,
+    hasPrevious: false,
+    responseMessage: "",
+    topicName: "",
+    topicId: "",
+    totalCount: "",
   });
-  const [selectedIds,    setSelectedIds]    = useState([]);
-  const [currentPage,    setCurrentPage]    = useState(1);
-  const [limit,          setLimit]          = useState(10);
-  const [search,         setSearch]         = useState('');
-  const [showBulkModal,  setShowBulkModal]  = useState(false);
-  const [showSingleModal,setShowSingleModal]= useState(false);
-  const [deleteTarget,   setDeleteTarget]   = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [search, setSearch] = useState("");
+  const [showBulkModal, setShowBulkModal] = useState(false);
+  const [showSingleModal, setShowSingleModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   // ── Fetch ───────────────────────────────────────────────────────────────
   const fetchData = async (page, customLimit = limit) => {
@@ -147,15 +218,15 @@ const QuestionPage = () => {
       if (!response) return;
 
       setData({
-        questionList:  response.questionList  || [],
-        pageNo:        response.pageNo,
-        totalPages:    response.totalPages,
-        hasNext:       response.hasNext,
-        hasPrevious:   response.hasPrevious,
+        questionList: response.questionList || [],
+        pageNo: response.pageNo,
+        totalPages: response.totalPages,
+        hasNext: response.hasNext,
+        hasPrevious: response.hasPrevious,
         responseMessage: response.responseMessage,
-        topicName:     response.topicName     || '',
-        topicId:       response.topicId       || '',
-        totalCount:    response.totalCount    || '',
+        topicName: response.topicName || "",
+        topicId: response.topicId || "",
+        totalCount: response.totalCount || "",
       });
       setCurrentPage(response.pageNo);
     } catch (err) {
@@ -171,8 +242,11 @@ const QuestionPage = () => {
   const handleCheck = (e, questionId) => {
     const id = Number(questionId);
     setSelectedIds((prev) =>
-      e.target.checked ? (prev.includes(id) ? prev : [...prev, id])
-                       : prev.filter((x) => x !== id)
+      e.target.checked
+        ? prev.includes(id)
+          ? prev
+          : [...prev, id]
+        : prev.filter((x) => x !== id),
     );
   };
 
@@ -181,7 +255,7 @@ const QuestionPage = () => {
     setSelectedIds((prev) =>
       e.target.checked
         ? [...new Set([...prev, ...allIds])]
-        : prev.filter((id) => !allIds.includes(id))
+        : prev.filter((id) => !allIds.includes(id)),
     );
   };
 
@@ -192,7 +266,9 @@ const QuestionPage = () => {
   // ── Bulk delete ─────────────────────────────────────────────────────────
   const handleBulkDelete = () => {
     if (selectedIds.length === 0) {
-      toast.warning('Please select questions to delete', { position: 'top-center' });
+      toast.warning("Please select questions to delete", {
+        position: "top-center",
+      });
       return;
     }
     setShowBulkModal(true);
@@ -200,12 +276,16 @@ const QuestionPage = () => {
 
   const confirmBulkDelete = async () => {
     try {
-      await apiDelete('/question/delete-question', { questionIds: selectedIds });
-      toast.success('Deleted successfully', { position: 'top-center' });
+      await apiDelete("/question/delete-question", {
+        questionIds: selectedIds,
+      });
+      toast.success("Deleted successfully", { position: "top-center" });
       setSelectedIds([]);
       setShowBulkModal(false);
       fetchData(currentPage);
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // ── Single delete ───────────────────────────────────────────────────────
@@ -217,83 +297,88 @@ const QuestionPage = () => {
   const confirmSingleDelete = async () => {
     if (!deleteTarget) return;
     try {
-      await apiDelete('/question/delete-question', { questionIds: [deleteTarget.questionId] });
-      toast.success('Question deleted', { position: 'top-center' });
+      await apiDelete("/question/delete-question", {
+        questionIds: [deleteTarget.questionId],
+      });
+      toast.success("Question deleted", { position: "top-center" });
       setShowSingleModal(false);
       setDeleteTarget(null);
       fetchData(currentPage);
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // ── Client-side search filter ───────────────────────────────────────────
   const filtered = data.questionList.filter((q) =>
-    q.questionDetail?.toLowerCase().includes(search.toLowerCase())
+    q.questionDetail?.toLowerCase().includes(search.toLowerCase()),
   );
 
   // ── Derived values ──────────────────────────────────────────────────────
-  const pageTitle   = topicMode ? (data.topicName || 'Topic Questions') : 'All Questions';
+  const pageTitle = topicMode
+    ? data.topicName || "Topic Questions"
+    : "All Questions";
   const pageSubtitle = topicMode
-    ? `Questions under "${data.topicName || '...'}"`
-    : 'View and manage all questions across topics';
+    ? `Questions under "${data.topicName || "..."}"`
+    : "View and manage all questions across topics";
 
   const isSuccess = topicMode
-    ? data.responseMessage === 'SUCCESS'
-    : data.responseMessage === 'success';
+    ? data.responseMessage === "SUCCESS"
+    : data.responseMessage === "success";
 
   return (
-    
-      <Layout>
-        <QPageWrap>
+    <Layout>
+      <QPageWrap>
+        {/* ── Header ─────────────────────────────────────────────────── */}
+        <QPageHeader>
+          <QPageTitle>
+            {pageTitle}
+            <span>{pageSubtitle}</span>
+          </QPageTitle>
+          <QHeaderActions>
+            {!topicMode && (
+              <QUploadBtn to="/uploadfile">
+                <FaFile size={11} /> Upload
+              </QUploadBtn>
+            )}
+            <QAddBtn
+              to="/createquestion"
+              state={{ topicId: data.topicId, topicName: data.topicName }}
+            >
+              <FaPlus size={10} /> Add Question
+            </QAddBtn>
+            <QDeleteAllBtn
+              onClick={handleBulkDelete}
+              disabled={selectedIds.length === 0}
+            >
+              <FaTrash size={10} /> Delete ({selectedIds.length})
+            </QDeleteAllBtn>
+          </QHeaderActions>
+        </QPageHeader>
 
-          {/* ── Header ─────────────────────────────────────────────────── */}
-          <QPageHeader>
-            <QPageTitle>
-              {pageTitle}
-              <span>{pageSubtitle}</span>
-            </QPageTitle>
-            <QHeaderActions>
-              {!topicMode && (
-                <QUploadBtn to="/uploadfile">
-                  <FaFile size={11} /> Upload
-                </QUploadBtn>
-              )}
-              <QAddBtn
-                to="/createquestion"
-                state={{ topicId: data.topicId, topicName: data.topicName }}
-              >
-                <FaPlus size={10} /> Add Question
-              </QAddBtn>
-              <QDeleteAllBtn
-                onClick={handleBulkDelete}
-                disabled={selectedIds.length === 0}
-              >
-                <FaTrash size={10} /> Delete ({selectedIds.length})
-              </QDeleteAllBtn>
-            </QHeaderActions>
-          </QPageHeader>
-
-          {/* ── Control row ─────────────────────────────────────────────── */}
-          <QControlRow>
-            <QStatStrip>
-              <QStatBadge $iconColor="#3B82F6">
-                <FaQuestion />
-                {data.totalCount || data.questionList.length} question{data.questionList.length !== 1 ? 's' : ''}
+        {/* ── Control row ─────────────────────────────────────────────── */}
+        <QControlRow>
+          <QStatStrip>
+            <QStatBadge $iconColor="#3B82F6">
+              <FaQuestion />
+              {data.totalCount || data.questionList.length} question
+              {data.questionList.length !== 1 ? "s" : ""}
+            </QStatBadge>
+            {selectedIds.length > 0 && (
+              <QStatBadge $iconColor="#EF4444">
+                <FaTrash />
+                {selectedIds.length} selected
               </QStatBadge>
-              {selectedIds.length > 0 && (
-                <QStatBadge $iconColor="#EF4444">
-                  <FaTrash />
-                  {selectedIds.length} selected
-                </QStatBadge>
-              )}
-              {search && (
-                <QStatBadge $iconColor="#10B981">
-                  <FaSearch />
-                  {filtered.length} result{filtered.length !== 1 ? 's' : ''}
-                </QStatBadge>
-              )}
-            </QStatStrip>
+            )}
+            {search && (
+              <QStatBadge $iconColor="#10B981">
+                <FaSearch />
+                {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+              </QStatBadge>
+            )}
+          </QStatStrip>
 
-            {/* <QSearchWrap>
+          {/* <QSearchWrap>
               <FaSearch />
               <QSearchInput
                 type="text"
@@ -302,103 +387,117 @@ const QuestionPage = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </QSearchWrap> */}
-          </QControlRow>
+        </QControlRow>
 
-          {/* ── Panel ───────────────────────────────────────────────────── */}
-          <QPanel>
-            {/* column headers */}
-            <QColHeader $hideTopic={topicMode}>
-              <QCheckbox
-                type="checkbox"
-                checked={allSelected}
-                onChange={handleSelectAll}
+        {/* ── Panel ───────────────────────────────────────────────────── */}
+        <QPanel>
+          {/* column headers */}
+          <QColHeader $hideTopic={topicMode}>
+            <QCheckbox
+              type="checkbox"
+              checked={allSelected}
+              onChange={handleSelectAll}
+            />
+            <span style={{ textAlign: "center" }}>S.No.</span>
+            <span>Question</span>
+            {!topicMode && <span className="col-topic">Topic</span>}
+            <span>Type</span>
+            <span style={{ textAlign: "right" }}>Actions</span>
+          </QColHeader>
+
+          {/* rows */}
+          {isSuccess && filtered.length > 0 ? (
+            filtered.map((q, idx) => (
+              <QuestionRow
+                key={q.questionId}
+                data={q}
+                index={Number(data.pageNo - 1) * limit + (idx + 1)}
+                selectedIds={selectedIds}
+                onCheck={handleCheck}
+                onDelete={handleSingleDelete}
+                topicMode={topicMode}
+                topicName={data.topicName}
               />
-              <span style={{ textAlign: 'center' }}>S.No.</span>
-              <span>Question</span>
-              {!topicMode && <span className="col-topic">Topic</span>}
-              <span>Type</span>
-              <span style={{ textAlign: 'right' }}>Actions</span>
-            </QColHeader>
+            ))
+          ) : (
+            <QEmptyWrap>
+              <FaQuestion />
+              <p>
+                {search
+                  ? `No questions match "${search}"`
+                  : "No questions available."}
+              </p>
+            </QEmptyWrap>
+          )}
 
-            {/* rows */}
-            {isSuccess && filtered.length > 0
-              ? filtered.map((q, idx) => (
-                  <QuestionRow
-                    key={q.questionId}
-                    data={q}
-                    index={(Number(data.pageNo - 1) * limit) + (idx + 1)}
-                    selectedIds={selectedIds}
-                    onCheck={handleCheck}
-                    onDelete={handleSingleDelete}
-                    topicMode={topicMode}
-                    topicName={data.topicName}
-                  />
-                ))
-              : (
-                <QEmptyWrap>
-                  <FaQuestion />
-                  <p>
-                    {search
-                      ? `No questions match "${search}"`
-                      : 'No questions available.'}
-                  </p>
-                </QEmptyWrap>
-              )}
+          {/* pagination */}
+          {data.questionList.length > 0 && (
+            <QPagination>
+              <QPageBtn
+                onClick={() => fetchData(currentPage - 1)}
+                disabled={!data.hasPrevious}
+              >
+                ← Prev
+              </QPageBtn>
+              <QPageLabel>
+                {data.pageNo} / {data.totalPages}
+              </QPageLabel>
+              <QPageBtn
+                onClick={() => fetchData(currentPage + 1)}
+                disabled={!data.hasNext}
+              >
+                Next →
+              </QPageBtn>
+              <QPageSizeWrap>
+                <label>Per page:</label>
+                <QPageSizeInput
+                  type="number"
+                  min="1"
+                  value={limit}
+                  onChange={(e) =>
+                    setLimit(e.target.value === "" ? "" : e.target.value)
+                  }
+                  onBlur={() => {
+                    if (!limit || limit < 1) setLimit(10);
+                  }}
+                />
+              </QPageSizeWrap>
+            </QPagination>
+          )}
+        </QPanel>
+        <FBackBtn onClick={() => navigate(-1)}>
+          <FaArrowLeft size={11} /> Back
+        </FBackBtn>
+      </QPageWrap>
 
-            {/* pagination */}
-            {data.questionList.length > 0 && (
-              <QPagination>
-                <QPageBtn
-                  onClick={() => fetchData(currentPage - 1)}
-                  disabled={!data.hasPrevious}
-                >
-                  ← Prev
-                </QPageBtn>
-                <QPageLabel>{data.pageNo} / {data.totalPages}</QPageLabel>
-                <QPageBtn
-                  onClick={() => fetchData(currentPage + 1)}
-                  disabled={!data.hasNext}
-                >
-                  Next →
-                </QPageBtn>
-                <QPageSizeWrap>
-                  <label>Per page:</label>
-                  <QPageSizeInput
-                    type="number"
-                    min="1"
-                    value={limit}
-                    onChange={(e) => setLimit(e.target.value === '' ? '' : e.target.value)}
-                    onBlur={() => { if (!limit || limit < 1) setLimit(10); }}
-                  />
-                </QPageSizeWrap>
-              </QPagination>
-            )}
-          </QPanel>
-
-        </QPageWrap>
-
-        {/* ── Modals ─────────────────────────────────────────────────────── */}
-        {showBulkModal && (
-          <Modal
-            type="delete" title="Confirm Bulk Delete"
-            showConfirmButton onConfirm={confirmBulkDelete}
-            onCancel={() => setShowBulkModal(false)}
-          >
-            Delete {selectedIds.length} selected question{selectedIds.length > 1 ? 's' : ''}?
-            This cannot be undone.
-          </Modal>
-        )}
-        {showSingleModal && (
-          <Modal
-            type="delete" title="Confirm Delete"
-            showConfirmButton onConfirm={confirmSingleDelete}
-            onCancel={() => { setShowSingleModal(false); setDeleteTarget(null); }}
-          >
-            Delete this question? This cannot be undone.
-          </Modal>
-        )}
-      </Layout>
-    
+      {/* ── Modals ─────────────────────────────────────────────────────── */}
+      {showBulkModal && (
+        <Modal
+          type="delete"
+          title="Confirm Bulk Delete"
+          showConfirmButton
+          onConfirm={confirmBulkDelete}
+          onCancel={() => setShowBulkModal(false)}
+        >
+          Delete {selectedIds.length} selected question
+          {selectedIds.length > 1 ? "s" : ""}? This cannot be undone.
+        </Modal>
+      )}
+      {showSingleModal && (
+        <Modal
+          type="delete"
+          title="Confirm Delete"
+          showConfirmButton
+          onConfirm={confirmSingleDelete}
+          onCancel={() => {
+            setShowSingleModal(false);
+            setDeleteTarget(null);
+          }}
+        >
+          Delete this question? This cannot be undone.
+        </Modal>
+      )}
+    </Layout>
   );
 };
 

@@ -99,8 +99,8 @@ const AddEditTopic = () => {
         </FormPageWrap>
 
         {show && (
-          <Modal onCancel={() => { setShow(false); navigate('/topic'); }}>
-            {error.successMessage}
+          <Modal onCancel={() => { setShow(false); navigate('/topic'); }} title={error.successMessage}>
+           
           </Modal>
         )}
       </Layout>

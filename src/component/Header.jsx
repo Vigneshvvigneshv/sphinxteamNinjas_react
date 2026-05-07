@@ -39,7 +39,7 @@ const Header = () => {
         <>
         <HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
-        {/* <HeaderButton to="/questionList">Questions</HeaderButton> */}
+        <HeaderButton to="/uploadfile">Upload questions</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
         <HeaderButton to="/exam-page">Assessments</HeaderButton>
         <HeaderButton to={'/admin-dashboard'}>Home</HeaderButton>
@@ -47,8 +47,8 @@ const Header = () => {
         }
          {(role==='SPHINX_USER') &&  
         <>
-        <HeaderButton to="/completedexam">Completed exam</HeaderButton>
-        <HeaderButton to="/assignedexam">Assinged exam</HeaderButton>
+        <HeaderButton to="/completedexam">Completed Assessment</HeaderButton>
+        <HeaderButton to="/assignedexam">Assinged Assessment</HeaderButton>
         <HeaderButton to={'/user-dashboard'}>Home</HeaderButton>
         </>
         }

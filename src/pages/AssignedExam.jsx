@@ -5,14 +5,84 @@ import { apiGet, apiPost } from "../ApiServices/apiServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
-  FaSearch, FaPlay, FaWifi, FaInfoCircle, FaClock,
-  FaLock, FaClipboardList, FaShieldAlt, FaTimes,
-  FaExclamationTriangle, FaArrowAltCircleRight, FaRedo,
+  FaSearch,
+  FaPlay,
+  FaWifi,
+  FaInfoCircle,
+  FaClock,
+  FaLock,
+  FaClipboardList,
+  FaShieldAlt,
+  FaTimes,
+  FaExclamationTriangle,
+  FaArrowAltCircleRight,
+  FaRedo,
+  FaEyeSlash,
+  FaEye,
 } from "react-icons/fa";
-import { AttemptsBar, AttemptsBarFill, AttemptsLabel, BtnSpinner, CancelBtn, CardBadge, CardGrid, CardIconBox, CardId, CardName, CardNameBlock, CardTopRow, CloseBtn, EmptyDesc, EmptyIcon, EmptyTitle, EmptyWrap, ExamCard, FieldInput, FieldInputWrap, FieldLabel, FieldWrap, InstrIcon, InstrText, InstructionItem, InstructionsList, MetaChip, MetaRow, ModalBody, ModalCard, ModalFooter, ModalHeader, ModalHeaderLeft, ModalIconWrap, ModalStartBtn, ModalSubtitle, ModalTitle, Overlay, PageHeader, PageLabel, PageSubtitle, PageTitle, PageWrapper, Panel, PanelBadge, PanelHeader, PanelTitle, ResultCount, SearchInput, SearchWrap, SkeletonBar, SkeletonRow, StartBtn, StatCard, StatIcon, StatInfo, StatsRow, Toolbar, WarnChip } from "../styles/AsignedExam_style";
-
-
-
+import {
+  AttemptsBar,
+  AttemptsBarFill,
+  AttemptsLabel,
+  BtnSpinner,
+  CancelBtn,
+  CardBadge,
+  CardGrid,
+  CardIconBox,
+  CardId,
+  CardName,
+  CardNameBlock,
+  CardTopRow,
+  CloseBtn,
+  EmptyDesc,
+  EmptyIcon,
+  EmptyTitle,
+  EmptyWrap,
+  ExamCard,
+  Eye,
+  FieldInput,
+  FieldInputWrap,
+  FieldLabel,
+  FieldWrap,
+  InstrIcon,
+  InstrText,
+  InstructionItem,
+  InstructionsList,
+  MetaChip,
+  MetaRow,
+  ModalBody,
+  ModalCard,
+  ModalFooter,
+  ModalHeader,
+  ModalHeaderLeft,
+  ModalIconWrap,
+  ModalStartBtn,
+  ModalSubtitle,
+  ModalTitle,
+  Overlay,
+  PageHeader,
+  PageLabel,
+  PageSubtitle,
+  PageTitle,
+  PageWrapper,
+  Panel,
+  PanelBadge,
+  PanelHeader,
+  PanelTitle,
+  ResultCount,
+  SearchInput,
+  SearchWrap,
+  SkeletonBar,
+  SkeletonRow,
+  StartBtn,
+  StatCard,
+  StatIcon,
+  StatInfo,
+  StatsRow,
+  Toolbar,
+  WarnChip,
+} from "../styles/AsignedExam_style";
+import { PasswordEye } from "../styles/common_style";
 
 /* ─────────────────────────────────────────
    Skeleton Loader
@@ -23,7 +93,14 @@ function SkeletonRows() {
       {[75, 55, 85, 65].map((w, i) => (
         <SkeletonRow key={i}>
           <SkeletonBar $w="40px" $h="40px" style={{ borderRadius: 10 }} />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
             <SkeletonBar $w={`${w}%`} $h="13px" />
             <SkeletonBar $w="38%" $h="11px" />
           </div>
@@ -68,18 +145,21 @@ const INSTRUCTIONS = [
    Main Page
 ───────────────────────────────────────── */
 export default function AssignedExam() {
-  const [examList, setExamList]     = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [search, setSearch]         = useState("");
-  const [showModal, setShowModal]   = useState(false);
+  const [examList, setExamList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
- const [selectedExam, setSelectedExam] = useState(null);
+  const [selectedExam, setSelectedExam] = useState(null);
   const [startingId, setStartingId] = useState(null);
-  const [userData, setUserData]     = useState({ password: "" });
+  const [userData, setUserData] = useState({ password: "" });
+  const [showPassword,setShowPassword]=useState(true);
 
-  const partyId  = useSelector((state) => state.userReducer.partyId);
+  const partyId = useSelector((state) => state.userReducer.partyId);
   const navigate = useNavigate();
-
+  const changeShow=()=>{
+    setShowPassword(!showPassword);
+  }
   /* ── Fetch exams ── */
   const fetchExams = async () => {
     setLoading(true);
@@ -94,17 +174,21 @@ export default function AssignedExam() {
     }
   };
 
-  useEffect(() => { fetchExams(); }, []);
- const openModal = (exam) => {
+  useEffect(() => {
+    fetchExams();
+  }, []);
+  const openModal = (exam) => {
     setSelectedExam(exam);
     setShowModal(true);
   };
   /* ── Generate questions + open modal ── */
   const handleStartExam = async (id) => {
     setStartingId(id);
-    
+
     try {
-      const response = await apiPost("/generate-question/generate-questions", { examId: id });
+      const response = await apiPost("/generate-question/generate-questions", {
+        examId: id,
+      });
       if (response.status === "SUCCESS") {
         //setShowModal(true);
         navigate(`/examquestionlist/${id}/${partyId}`);
@@ -159,7 +243,7 @@ export default function AssignedExam() {
     (exam) =>
       !search ||
       exam?.examName?.toLowerCase().includes(search.toLowerCase()) ||
-      exam?.examId?.toLowerCase().includes(search.toLowerCase())
+      exam?.examId?.toLowerCase().includes(search.toLowerCase()),
   );
 
   /* ═══════════════════════════════════════
@@ -168,13 +252,16 @@ export default function AssignedExam() {
   return (
     <Layout>
       <PageWrapper>
-
         {/* ── Page Header ── */}
         <PageHeader>
           <div>
-            <PageLabel><FaClipboardList size={10} /> Assigned</PageLabel>
+            <PageLabel>
+              <FaClipboardList size={10} /> Assigned
+            </PageLabel>
             <PageTitle>Assigned Assessment</PageTitle>
-            <PageSubtitle>View and start your scheduled exams below.</PageSubtitle>
+            <PageSubtitle>
+              View and start your scheduled assessment below.
+            </PageSubtitle>
           </div>
         </PageHeader>
 
@@ -188,16 +275,18 @@ export default function AssignedExam() {
               val: loading ? "—" : examList.length,
               lbl: "Total Assigned",
             },
-            {
-              icon: <FaShieldAlt />,
-              bg: "rgba(16,185,129,0.08)",
-              color: "#10B981",
-              val: "Live",
-              lbl: "Status",
-            },
+            // {
+            //   icon: <FaShieldAlt />,
+            //   bg: "rgba(16,185,129,0.08)",
+            //   color: "#10B981",
+            //   val: "Live",
+            //   lbl: "Status",
+            // },
           ].map((s, i) => (
             <StatCard key={i}>
-              <StatIcon $bg={s.bg} $color={s.color}>{s.icon}</StatIcon>
+              <StatIcon $bg={s.bg} $color={s.color}>
+                {s.icon}
+              </StatIcon>
               <StatInfo>
                 <div className="val">{s.val}</div>
                 <div className="lbl">{s.lbl}</div>
@@ -236,36 +325,40 @@ export default function AssignedExam() {
           ) : filtered.length === 0 ? (
             /* Empty */
             <EmptyWrap>
-              <EmptyIcon><FaClipboardList /></EmptyIcon>
+              <EmptyIcon>
+                <FaClipboardList />
+              </EmptyIcon>
               <EmptyTitle>
-                {search ? "No results found" : "No exams assigned"}
+                {search ? "No results found" : "No assessment assigned"}
               </EmptyTitle>
               <EmptyDesc>
                 {search
                   ? `No exams match "${search}". Try a different keyword.`
-                  : "You have no assigned exams at the moment. Check back later."}
+                  : "You have no assigned assessment at the moment. Check back later."}
               </EmptyDesc>
             </EmptyWrap>
           ) : (
             /* Card Grid */
             <CardGrid>
               {filtered.map((exam, index) => {
-                const attemptsUsed    = exam?.noOfAttempts    ?? 0;
-                const totalAttempts   = exam?.allowedAttempts  ?? 1;
-                const attemptsLeft    = totalAttempts - attemptsUsed;
-                const noAttemptsLeft  = attemptsLeft <= 0;
-                const attemptsPercent = Math.min((attemptsUsed / totalAttempts) * 100, 100);
-                const isStarting      = startingId === exam?.examId;
+                const attemptsUsed = exam?.noOfAttempts ?? 0;
+                const totalAttempts = exam?.allowedAttempts ?? 1;
+                const attemptsLeft = totalAttempts - attemptsUsed;
+                const noAttemptsLeft = attemptsLeft <= 0;
+                const attemptsPercent = Math.min(
+                  (attemptsUsed / totalAttempts) * 100,
+                  100,
+                );
+                const isStarting = startingId === exam?.examId;
 
                 const barColor = noAttemptsLeft
                   ? "#EF4444"
                   : attemptsPercent > 60
-                  ? "#F59E0B"
-                  : "#4F46E5";
+                    ? "#F59E0B"
+                    : "#4F46E5";
 
                 return (
                   <ExamCard key={exam?.examId || index} $i={index}>
-
                     {/* Top row: icon + name + badge */}
                     <CardTopRow>
                       <CardIconBox>
@@ -292,7 +385,8 @@ export default function AssignedExam() {
                       </MetaChip>
                       <MetaChip $color={noAttemptsLeft ? "#EF4444" : "#10B981"}>
                         <FaRedo size={11} />
-                        {attemptsLeft} attempt{attemptsLeft !== 1 ? "s" : ""} left
+                        {attemptsLeft} attempt{attemptsLeft !== 1 ? "s" : ""}{" "}
+                        left
                       </MetaChip>
                     </MetaRow>
 
@@ -300,34 +394,43 @@ export default function AssignedExam() {
                     <div>
                       <AttemptsLabel>
                         <span>Attempts used</span>
-                        <span>{attemptsUsed} / {totalAttempts}</span>
+                        <span>
+                          {attemptsUsed} / {totalAttempts}
+                        </span>
                       </AttemptsLabel>
                       <AttemptsBar>
-                        <AttemptsBarFill $percent={attemptsPercent} $color={barColor} />
+                        <AttemptsBarFill
+                          $percent={attemptsPercent}
+                          $color={barColor}
+                        />
                       </AttemptsBar>
                     </div>
 
                     {/* Start button */}
                     <StartBtn
-                      onClick={() =>openModal(exam)}//handleStartExam(exam?.examId)}
+                      onClick={() => openModal(exam)} //handleStartExam(exam?.examId)}
                       disabled={isStarting || noAttemptsLeft}
                     >
                       {isStarting ? (
-                        <><BtnSpinner /> Preparing...</>
+                        <>
+                          <BtnSpinner /> Preparing...
+                        </>
                       ) : noAttemptsLeft ? (
-                        <><FaTimes size={12} /> No Attempts Left</>
+                        <>
+                          <FaTimes size={12} /> No Attempts Left
+                        </>
                       ) : (
-                        <><FaPlay size={12} /> Start Exam</>
+                        <>
+                          <FaPlay size={12} /> Start Exam
+                        </>
                       )}
                     </StartBtn>
-
                   </ExamCard>
                 );
               })}
             </CardGrid>
           )}
         </Panel>
-
       </PageWrapper>
 
       {/* ═══════════════════════════════════════
@@ -336,17 +439,22 @@ export default function AssignedExam() {
       {showModal && (
         <Overlay onClick={(e) => e.target === e.currentTarget && closeModal()}>
           <ModalCard>
-
             {/* Header */}
             <ModalHeader>
               <ModalHeaderLeft>
-                <ModalIconWrap><FaShieldAlt /></ModalIconWrap>
+                <ModalIconWrap>
+                  <FaShieldAlt />
+                </ModalIconWrap>
                 <div>
                   <ModalTitle>Start Exam</ModalTitle>
-                  <ModalSubtitle>Read instructions before proceeding</ModalSubtitle>
+                  <ModalSubtitle>
+                    Read instructions before proceeding
+                  </ModalSubtitle>
                 </div>
               </ModalHeaderLeft>
-              <CloseBtn onClick={closeModal}><FaTimes /></CloseBtn>
+              <CloseBtn onClick={closeModal}>
+                <FaTimes />
+              </CloseBtn>
             </ModalHeader>
 
             {/* Body */}
@@ -355,7 +463,9 @@ export default function AssignedExam() {
               <InstructionsList>
                 {INSTRUCTIONS.map((ins, i) => (
                   <InstructionItem key={i}>
-                    <InstrIcon $bg={ins.bg} $color={ins.color}>{ins.icon}</InstrIcon>
+                    <InstrIcon $bg={ins.bg} $color={ins.color}>
+                      {ins.icon}
+                    </InstrIcon>
                     <InstrText>{ins.text}</InstrText>
                   </InstructionItem>
                 ))}
@@ -370,7 +480,7 @@ export default function AssignedExam() {
                 <FieldInputWrap>
                   <FaLock />
                   <FieldInput
-                    type="password"
+                    type={showPassword ? "password" : 'text'}
                     placeholder="Enter exam security code"
                     value={userData.password}
                     onChange={(e) =>
@@ -379,13 +489,21 @@ export default function AssignedExam() {
                     onKeyDown={(e) => e.key === "Enter" && handleSubmit(examId)}
                     autoFocus
                   />
+                  {userData.password !== "" ? (
+                    <Eye onClick={changeShow}>
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </Eye>
+                  ) : (
+                    ""
+                  )}
                 </FieldInputWrap>
               </FieldWrap>
 
               {/* Warning */}
               <WarnChip>
                 <FaExclamationTriangle size={13} />
-                Once you start, the timer begins immediately and cannot be paused.
+                Once you start, the timer begins immediately and cannot be
+                paused.
               </WarnChip>
             </ModalBody>
 
@@ -396,13 +514,16 @@ export default function AssignedExam() {
               </CancelBtn>
               <ModalStartBtn onClick={handleSubmit} disabled={submitting}>
                 {submitting ? (
-                  <><BtnSpinner /> Starting...</>
+                  <>
+                    <BtnSpinner /> Starting...
+                  </>
                 ) : (
-                  <><FaArrowAltCircleRight /> Start Exam</>
+                  <>
+                    <FaArrowAltCircleRight /> Start Exam
+                  </>
                 )}
               </ModalStartBtn>
             </ModalFooter>
-
           </ModalCard>
         </Overlay>
       )}

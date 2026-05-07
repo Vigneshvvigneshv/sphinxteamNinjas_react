@@ -24,13 +24,13 @@ export const pulse = keyframes`
 export const PageWrapper = styled.div`
   
   background: ${({ theme }) => theme.colors.pageBg};
-  padding: 20px 16px 30px;
+  padding: 40px 32px 60px;
 `;
 
 // ─── Hero section ─────────────────────────────────────────────────────────────
 export const Hero = styled.div`
   animation: ${fadeUp} 0.5s ease both;
-  margin-bottom: 40px;
+  margin-bottom: 15px;
 `;
 
 export const WelcomeLabel = styled.span`
@@ -118,7 +118,7 @@ export const Card = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 16px 14px;
   cursor: pointer;
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.shadowMd};

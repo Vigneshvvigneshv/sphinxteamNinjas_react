@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import {
   FaSearch, FaUsers, FaTrash, FaUser,
   FaUserPlus, FaClipboardList, FaSave, FaRedo, FaClock, FaPen,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 
@@ -53,6 +54,8 @@ import {
   ModalCancelBtn,
   ModalSaveBtn,
 } from "../styles/userPage_style";
+import { useNavigate } from "react-router-dom";
+import { FBackBtn } from "../styles/formPage_style";
 
 // ── Accent palette ────────────────────────────────────────────────────────────
 const PALETTE = [
@@ -120,7 +123,7 @@ const UserPage = () => {
   const { theme }   = useSelector((state) => state.themeReducer);
   const { userName } = useSelector((state) => state.userReducer);
   const { partyId } = useSelector((state) => state.userReducer);
-
+  const navigate=useNavigate();
   const [data, setData]                   = useState();
   const [examList, setExamList]           = useState([]);
   const [search, setSearch]               = useState("");
@@ -291,7 +294,6 @@ const UserPage = () => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
       <Layout>
         <UserPageWrap>
 
@@ -407,10 +409,11 @@ const UserPage = () => {
               </UserEmptyWrap>
             )}
           </UserGrid>
-
+            <FBackBtn onClick={() => navigate(-1)}>
+              <FaArrowLeft size={11} /> Back
+            </FBackBtn>
         </UserPageWrap>
-      </Layout>
-
+      
       {/* ── Delete modal ────────────────────────────────────────────────── */}
       {showDelete && (
         <Modal
@@ -581,7 +584,7 @@ const UserPage = () => {
           </AssignModal>
         </ModalBackdrop>
       )}
-    </ThemeProvider>
+   </Layout>
   );
 };
 
