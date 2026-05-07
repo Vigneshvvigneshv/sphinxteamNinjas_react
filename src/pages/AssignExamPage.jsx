@@ -166,7 +166,7 @@ const AssignExamPage = () => {
       if (checked) {
         // add with default values
         return [...prev.filter((r) => r.partyId !== user.partyId),
-          { ...user, allowedAttempts: "", timeoutDays: "" }];
+          { ...user, allowedAttempts: "3", timeoutDays: "3" }];
       }
       return prev.filter((r) => r.partyId !== user.partyId);
     });
@@ -179,8 +179,12 @@ const AssignExamPage = () => {
     );
   };
 
+// ── Derived ───────────────────────────────────────────────────────────────
+  const assignedList   = data?.assignedUsers ?? [];
+  const unassignedList = unassignedUser?.unassignedUsers ?? [];
   // ── Assign ────────────────────────────────────────────────────────────────
   const assignUser = async () => {
+    console.log("User Rows ",rows)
     const response = await apiPost("/exam-assign/assign-exam", {
       examId: id, assignedUserList: rows,
     });
@@ -188,7 +192,8 @@ const AssignExamPage = () => {
       toast.error(response.errorMessage, { position: "top-center" });
     } else if (response.successMessage) {
       toast.success(response.successMessage, { position: "top-center" });
-      const list = assignedList.map((d) => d.partyId);
+      const list = rows.map((d) => d.partyId);
+      //  console.log("List ",list)
       const res=await apiPost("/email/send-exam-email", { examId: id, partyIdList: list });
       if(res.successMessage){
         toast.success(res.successMessage,{position:'top-center'});
@@ -225,9 +230,7 @@ const AssignExamPage = () => {
     }
   };
 
-  // ── Derived ───────────────────────────────────────────────────────────────
-  const assignedList   = data?.assignedUsers ?? [];
-  const unassignedList = unassignedUser?.unassignedUsers ?? [];
+  
 
   return (
     <ThemeProvider theme={theme}>
