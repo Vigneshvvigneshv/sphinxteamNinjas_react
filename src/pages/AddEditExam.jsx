@@ -14,6 +14,7 @@ import {
   FormCardSubtitle, FormDivider, FField, FLabel, FLabelOptional,
   FInput, FTextarea, FError, FSubmitBtn, FBackBtn, FRow,
 } from '../styles/formPage_style';
+import { toast } from 'sonner';
 
 const AddEditExam = () => {
   const { theme }   = useSelector((state) => state.themeReducer);
@@ -65,7 +66,9 @@ const AddEditExam = () => {
       if (res.successMessage) { setError(res); setShow(true); }
     } else {
       const res = await apiPut('/exam/update-exam', { ...formData, examId: id });
-      if (res.errorMessage)   { setError(res); return; }
+      if (res.errorMessage)   { setError(res); 
+        toast.error(res.errorMessage,{position:'top-center'});
+        return; }
       if (res.successMessage) { setError(res); setShow(true); }
     }
   };
@@ -150,7 +153,7 @@ const AddEditExam = () => {
                 {error.passPercentage && <FError>{error.passPercentage}</FError>}
               </FField>
 
-              {error.errorMessage && <FError>{error.errorMessage}</FError>}
+              {/* {error.errorMessage && <FError>{error.errorMessage}</FError>} */}
 
               <FSubmitBtn type="submit">
                 {isEdit ? 'Save Changes' : 'Add Assessment'}

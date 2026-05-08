@@ -19,6 +19,7 @@ import {
   FaRedo,
   FaEyeSlash,
   FaEye,
+  FaArrowLeft,
 } from "react-icons/fa";
 import {
   AttemptsBar,
@@ -83,6 +84,7 @@ import {
   WarnChip,
 } from "../styles/AsignedExam_style";
 import { PasswordEye } from "../styles/common_style";
+import { FBackBtn } from "../styles/formPage_style";
 
 /* ─────────────────────────────────────────
    Skeleton Loader
@@ -153,13 +155,13 @@ export default function AssignedExam() {
   const [selectedExam, setSelectedExam] = useState(null);
   const [startingId, setStartingId] = useState(null);
   const [userData, setUserData] = useState({ password: "" });
-  const [showPassword,setShowPassword]=useState(true);
+  const [showPassword, setShowPassword] = useState(true);
 
   const partyId = useSelector((state) => state.userReducer.partyId);
   const navigate = useNavigate();
-  const changeShow=()=>{
+  const changeShow = () => {
     setShowPassword(!showPassword);
-  }
+  };
   /* ── Fetch exams ── */
   const fetchExams = async () => {
     setLoading(true);
@@ -266,7 +268,7 @@ export default function AssignedExam() {
         </PageHeader>
 
         {/* ── Stats ── */}
-        <StatsRow>
+        {/* <StatsRow>
           {[
             {
               icon: <FaClipboardList />,
@@ -293,7 +295,7 @@ export default function AssignedExam() {
               </StatInfo>
             </StatCard>
           ))}
-        </StatsRow>
+        </StatsRow> */}
 
         {/* ── Toolbar ── */}
         {/* <Toolbar>
@@ -431,6 +433,9 @@ export default function AssignedExam() {
             </CardGrid>
           )}
         </Panel>
+        <FBackBtn onClick={() => navigate(-1)}>
+          <FaArrowLeft size={11} /> Back
+        </FBackBtn>
       </PageWrapper>
 
       {/* ═══════════════════════════════════════
@@ -480,7 +485,7 @@ export default function AssignedExam() {
                 <FieldInputWrap>
                   <FaLock />
                   <FieldInput
-                    type={showPassword ? "password" : 'text'}
+                    type={showPassword ? "password" : "text"}
                     placeholder="Enter exam security code"
                     value={userData.password}
                     onChange={(e) =>
