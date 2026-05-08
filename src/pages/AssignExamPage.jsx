@@ -109,6 +109,9 @@ const AssignExamPage = () => {
     partyId: "", allowedAttempts: "", timeoutDays: "",
   });
 
+  //setup failed modal ──────────────────────────────────────────────────────────────────
+  const[showFailedModal,setFailedModal]=useState(false);
+  const [error,setError]=useState();
   useEffect(() => {
     if (location.state !== undefined) setExamName(location.state?.examName);
   }, []);
@@ -212,7 +215,12 @@ const AssignExamPage = () => {
      if(response.successMessage){
       toast.success(response.successMessage,{position:'top-center'});
      }else if(response.errorMessage){
-      toast.error('Set up failed',{position:'top-center'});
+      if(response.errors){
+        setError(response);
+        setFailedModal(true);
+        return;
+      }
+      toast.error(response.errorMessage,{position:'top-center'});
      }
    }
 
@@ -246,7 +254,7 @@ const AssignExamPage = () => {
             <AssignPageActions>
               <AssignBtn onClick={()=>setUpExam()} >
                 <FaClipboardList/>
-                Set up exam
+                Setup exam
               </AssignBtn>
             </AssignPageActions>
           </AssignPageHeader>
@@ -474,6 +482,13 @@ const AssignExamPage = () => {
           </EditModal>
         </EditBackdrop>
       )}
+      {/* ── Edit assigned modal ─────────────────────────────────────────── */}
+      {showFailedModal && <Modal type="fail" title={error.errorMessage} onCancel={()=>setFailedModal(false)}>
+        
+          {error.errors? error.errors.map((e)=>{
+            return <li>{e}</li>
+          }):""}
+        </Modal>}
     </ThemeProvider>
   );
 };

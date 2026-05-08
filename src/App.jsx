@@ -95,12 +95,12 @@ const App = () => {
         <Route
           path="/exam-page"
           element={
-            <ExamPage/>
-            // <ProtectedRoute>
-            //   <AdminAuthentication>
-            //     <ExamPage />
-            //   </AdminAuthentication>
-            // </ProtectedRoute>
+            // <ExamPage/>
+            <ProtectedRoute>
+              <AdminAuthentication>
+                <ExamPage />
+              </AdminAuthentication>
+             </ProtectedRoute>
           }
         />
         <Route
