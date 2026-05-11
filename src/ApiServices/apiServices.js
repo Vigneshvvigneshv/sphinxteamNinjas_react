@@ -104,7 +104,7 @@ export async function apiPostBlob(endpoint, data) {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        "Accept":"application/pdf"
+        "Accept": "application/pdf",
       },
       
     });
