@@ -1,269 +1,159 @@
 import styled, { keyframes } from "styled-components";
 
-export const fadeUp = keyframes`
-  from { opacity: 0; transform: translateY(16px); }
+/* ─────────────────────────────────────────
+   Keyframes
+───────────────────────────────────────── */
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
- 
-export const shimmer = keyframes`
-  0%   { background-position: -600px 0; }
-  100% { background-position:  600px 0; }
+
+const spin = keyframes`
+  to { transform: rotate(360deg); }
 `;
- 
-export const spin = keyframes`to { transform: rotate(360deg); }`;
- 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-export const PageWrapper = styled.div`
-  min-height: 100vh;
-  background: ${({ theme }) => theme.colors.pageBg};
-  padding: 36px 32px 60px;
-`;
- 
-// ─── Header ───────────────────────────────────────────────────────────────────
-export const PageHeader = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 28px;
-  animation: ${fadeUp} 0.4s ease both;
-`;
- 
-export const HeaderLeft = styled.div``;
- 
-export const PageLabel = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.success};
-  background: ${({ theme }) => theme.colors.successBorder};
-  border: 1px solid ${({ theme }) => theme.colors.successBorder};
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-bottom: 10px;
-`;
- 
-export const PageTitle = styled.h1`
-  font-family: ${({ theme }) => theme.fontSerif};
-  font-size: 26px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  letter-spacing: -0.02em;
-  margin: 0 0 6px;
-`;
- 
-export const PageSubtitle = styled.p`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.subtitle};
-  margin: 0;
-`;
- 
-// ─── Stats row ────────────────────────────────────────────────────────────────
-export const StatsRow = styled.div`
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-  animation: ${fadeUp} 0.4s 0.08s ease both;
-`;
- 
-export const StatCard = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius};
-  padding: 14px 20px;
-  box-shadow: ${({ theme }) => theme.shadowSm};
-  min-width: 160px;
-  flex: 1;
-`;
- 
-export const StatIcon = styled.div`
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: ${({ $bg }) => $bg};
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  color: ${({ $color }) => $color};
-  flex-shrink: 0;
-`;
- 
-export const StatInfo = styled.div`
-  .val {
-    font-size: 22px;
-    font-weight: 700;
-    color: ${({ theme }) => theme.colors.textPrimary};
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-  .lbl {
-    font-size: 12px;
-    color: ${({ theme }) => theme.colors.subtitle};
-    margin-top: 3px;
-    font-weight: 500;
-  }
-`;
- 
-// ─── Toolbar ──────────────────────────────────────────────────────────────────
-export const Toolbar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  animation: ${fadeUp} 0.4s 0.12s ease both;
-`;
- 
-export const SearchWrap = styled.div`
-  position: relative;
-  flex: 1;
-  min-width: 220px;
-  max-width: 360px;
- 
-  svg {
-    position: absolute;
-    left: 13px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: ${({ theme }) => theme.colors.textHint};
-    font-size: 13px;
-    pointer-events: none;
-  }
-`;
- 
-export const SearchInput = styled.input`
-  width: 100%;
-  padding: 9px 14px 9px 36px;
-  border-radius: ${({ theme }) => theme.radius};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.surface};
-  font-family: ${({ theme }) => theme.fontSerif};
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-shadow: ${({ theme }) => theme.shadowSm};
- 
-  &::placeholder { color: ${({ theme }) => theme.colors.textHint}; }
-  &:focus {
-    border-color: #4F46E5;
-    box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
-  }
-`;
- 
-export const ResultCount = styled.div`
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.subtitle};
-  font-weight: 500;
-  white-space: nowrap;
-`;
- 
-// ─── Content panel ────────────────────────────────────────────────────────────
-export const Panel = styled.div`
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 14px;
-  box-shadow: ${({ theme }) => theme.shadowMd};
-  overflow: hidden;
-  animation: ${fadeUp} 0.4s 0.16s ease both;
-`;
- 
-export const PanelHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.cream};
-`;
- 
-export const PanelTitle = styled.div`
-  font-size: 13px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-`;
- 
-export const PanelBadge = styled.span`
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: rgba(16,185,129,0.1);
-  color: ${({ theme }) => theme.colors.success};
-  border: 1px solid ${({ theme }) => theme.colors.successBorder};
-`;
- 
-export const ListWrap = styled.div`
+
+/* ─────────────────────────────────────────
+   Completed Card  (mirrors ExamCard from
+   AsignedExam_style with green accent)
+───────────────────────────────────────── */
+export const CompletedCard = styled.div`
+  background: #FAFBFF;
+  border: 1.5px solid #E8EAF0;
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-`;
- 
-// ─── Skeleton loader ──────────────────────────────────────────────────────────
-export const SkeletonRow = styled.div`
-  padding: 18px 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  display: flex;
   gap: 16px;
-  align-items: center;
- 
-  &:last-child { border-bottom: none; }
+  transition: box-shadow 0.22s, transform 0.22s, border-color 0.22s;
+  animation: ${fadeUp} 0.4s ease both;
+  animation-delay: ${({ $i }) => $i * 0.06}s;
+
+  &:hover {
+    box-shadow: 0 8px 28px rgba(16, 185, 129, 0.12);
+    transform: translateY(-3px);
+    border-color: #6ee7b7;
+  }
 `;
- 
-export const SkeletonBar = styled.div`
-  height: ${({ $h }) => $h || "14px"};
-  width: ${({ $w }) => $w || "100%"};
-  border-radius: 6px;
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => theme.colors.border} 25%,
-    ${({ theme }) => theme.colors.cream} 50%,
-    ${({ theme }) => theme.colors.border} 75%
-  );
-  background-size: 600px 100%;
-  animation: ${shimmer} 1.4s ease-in-out infinite;
+
+/* ─────────────────────────────────────────
+   Card Top Row
+───────────────────────────────────────── */
+export const CardTopRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+`;
+
+export const CardIconBox = styled.div`
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background: rgba(16, 185, 129, 0.09);
+  color: #10B981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
   flex-shrink: 0;
 `;
 
-export const EmptyWrap = styled.div`
+export const CardNameBlock = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+export const CardName = styled.div`
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const CardId = styled.div`
+  font-size: 11.5px;
+  color: #94A3B8;
+  margin-top: 3px;
+`;
+
+/* ─────────────────────────────────────────
+   Action Row — Result + Certificate
+───────────────────────────────────────── */
+export const ActionRow = styled.div`
   display: flex;
-  flex-direction: column;
+  gap: 10px;
+`;
+
+/* Result button — indigo, outlined style */
+export const ResultBtn = styled.button`
+  flex: 1;
+  height: 40px;
+  border: 1.5px solid #4F46E5;
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.05);
+  color: #4F46E5;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 64px 24px;
-  gap: 14px;
-  text-align: center;
+  gap: 7px;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
+
+  &:hover {
+    background: rgba(79, 70, 229, 0.1);
+    box-shadow: 0 3px 12px rgba(79, 70, 229, 0.18);
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
 `;
- 
-export const EmptyIcon = styled.div`
-  width: 72px; height: 72px;
-  border-radius: 18px;
-  background: rgba(16,185,129,0.08);
-  border: 1px solid ${({ theme }) => theme.colors.successBorder};
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-  color: ${({ theme }) => theme.colors.success};
-  margin-bottom: 6px;
-`;
- 
-export const EmptyTitle = styled.div`
-  font-size: 17px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.textPrimary};
-`;
- 
-export const EmptyDesc = styled.div`
+
+/* Certificate button — green gradient filled */
+export const CertBtn = styled.button`
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: ${({ $loading }) =>
+    $loading
+      ? "#E2E8F0"
+      : "linear-gradient(135deg, #10B981 0%, #34D399 100%)"};
+  color: ${({ $loading }) => ($loading ? "#94A3B8" : "#fff")};
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.subtitle};
-  max-width: 320px;
-  line-height: 1.6;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: ${({ $loading }) => ($loading ? "not-allowed" : "pointer")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: ${({ $loading }) =>
+    $loading ? "none" : "0 3px 12px rgba(16, 185, 129, 0.28)"};
+
+  &:hover:not([disabled]) {
+    opacity: 0.91;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+  }
+  &:active:not([disabled]) {
+    transform: translateY(0);
+  }
+`;
+
+/* Spinner inside CertBtn while downloading */
+export const CertSpinner = styled.span`
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ${spin} 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
 `;
