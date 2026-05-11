@@ -6,17 +6,41 @@ import {
   CommonHeading,
   CommonSection,
   CommonTable,
-
 } from "../styles/common_style";
 import { useSelector } from "react-redux";
 import { apiGet } from "../ApiServices/apiServices";
 import Empty from "../component/Empty";
 import CompletedExamTable from "../component/CompletedExamTable";
-import { EmptyDesc, EmptyIcon, EmptyTitle, EmptyWrap, HeaderLeft, ListWrap, PageHeader, PageLabel, PageSubtitle, PageWrapper, Panel, PanelBadge, PanelHeader, PanelTitle, ResultCount, SearchInput, SearchWrap, SkeletonBar, SkeletonRow, StatCard, StatIcon, StatInfo, StatsRow, Toolbar } from "../styles/CompletedExam_style";
-import { FaCheckCircle, FaFileAlt, FaSearch, FaTrophy } from "react-icons/fa";
+import {
+  EmptyDesc,
+  EmptyIcon,
+  EmptyTitle,
+  EmptyWrap,
+  HeaderLeft,
+  ListWrap,
+  PageHeader,
+  PageLabel,
+  PageSubtitle,
+  PageWrapper,
+  Panel,
+  PanelBadge,
+  PanelHeader,
+  PanelTitle,
+  ResultCount,
+  SearchInput,
+  SearchWrap,
+  SkeletonBar,
+  SkeletonRow,
+  StatCard,
+  StatIcon,
+  StatInfo,
+  StatsRow,
+  Toolbar,
+} from "../styles/CompletedExam_style";
+import { FaArrowLeft, FaCheckCircle, FaFileAlt, FaSearch, FaTrophy } from "react-icons/fa";
 import { CardGrid } from "../styles/AsignedExam_style";
-
-
+import { FBackBtn } from "../styles/formPage_style";
+import { useNavigate } from "react-router-dom";
 
 function SkeletonRows() {
   return (
@@ -24,7 +48,14 @@ function SkeletonRows() {
       {[80, 60, 90, 70].map((w, i) => (
         <SkeletonRow key={i}>
           <SkeletonBar $w="36px" $h="36px" style={{ borderRadius: 8 }} />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
             <SkeletonBar $w={`${w}%`} $h="13px" />
             <SkeletonBar $w="40%" $h="11px" />
           </div>
@@ -35,15 +66,18 @@ function SkeletonRows() {
   );
 }
 export default function CompletedExam() {
-const [examList, setExamList]   = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [search, setSearch]       = useState("");
+  const [examList, setExamList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const partyId = useSelector((state) => state.userReducer.partyId);
- 
+  const navigate=useNavigate();
+
   const fetchPartyDetails = async () => {
     setLoading(true);
     try {
-      const response = await apiGet(`/exam/getcompletedexam-by-partyId/${partyId}`);
+      const response = await apiGet(
+        `/exam/getcompletedexam-by-partyId/${partyId}`,
+      );
       setExamList(response.completedExamList || []);
     } catch (e) {
       console.error(e);
@@ -52,36 +86,48 @@ const [examList, setExamList]   = useState([]);
       setLoading(false);
     }
   };
- 
-  useEffect(() => { fetchPartyDetails(); }, []);
- 
-  const filtered = examList.filter((exam) =>
-    !search ||
-    exam?.examName?.toLowerCase().includes(search.toLowerCase()) ||
-    exam?.examId?.toLowerCase().includes(search.toLowerCase())
+
+  useEffect(() => {
+    fetchPartyDetails();
+  }, []);
+
+  const filtered = examList.filter(
+    (exam) =>
+      !search ||
+      exam?.examName?.toLowerCase().includes(search.toLowerCase()) ||
+      exam?.examId?.toLowerCase().includes(search.toLowerCase()),
   );
- 
+
   // ── Stats ──
-  const total    = examList.length;
-  const passed   = examList.filter(e => (e.percentage ?? e.score ?? 0) >= 50).length;
+  const total = examList.length;
+  const passed = examList.filter(
+    (e) => (e.percentage ?? e.score ?? 0) >= 50,
+  ).length;
   const avgScore = total
-    ? Math.round(examList.reduce((s, e) => s + (e.percentage ?? e.score ?? 0), 0) / total)
+    ? Math.round(
+        examList.reduce((s, e) => s + (e.percentage ?? e.score ?? 0), 0) /
+          total,
+      )
     : 0;
- 
+
   return (
     <Layout>
       <PageWrapper>
         {/* Header */}
         <PageHeader>
           <HeaderLeft>
-            <PageLabel><FaCheckCircle size={10} /> Completed</PageLabel>
+            <PageLabel>
+              <FaCheckCircle size={10} /> Completed
+            </PageLabel>
             <PageSubtitle>Completed Assessment</PageSubtitle>
-            <PageSubtitle>Review your past assessment history, scores, and results.</PageSubtitle>
+            <PageSubtitle>
+              Review your past assessment history, scores, and results.
+            </PageSubtitle>
           </HeaderLeft>
         </PageHeader>
- 
+
         {/* Stats */}
-        <StatsRow>
+        {/* <StatsRow>
           {[
             {
               icon: <FaFileAlt />,
@@ -106,43 +152,49 @@ const [examList, setExamList]   = useState([]);
             // },
           ].map((s, i) => (
             <StatCard key={i}>
-              <StatIcon $bg={s.iconBg} $color={s.iconColor}>{s.icon}</StatIcon>
+              <StatIcon $bg={s.iconBg} $color={s.iconColor}>
+                {s.icon}
+              </StatIcon>
               <StatInfo>
                 <div className="val">{s.val}</div>
                 <div className="lbl">{s.lbl}</div>
               </StatInfo>
             </StatCard>
           ))}
-        </StatsRow>
- 
+        </StatsRow> */}
+
         {/* Toolbar */}
-        <Toolbar>
+        {/* <Toolbar>
           <SearchWrap>
             <FaSearch />
             <SearchInput
               placeholder="Search by exam name or ID..."
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </SearchWrap>
           <ResultCount>
-            {loading ? "Loading..." : `${filtered.length} result${filtered.length !== 1 ? "s" : ""}`}
+            {loading
+              ? "Loading..."
+              : `${filtered.length} result${filtered.length !== 1 ? "s" : ""}`}
           </ResultCount>
-        </Toolbar>
- 
+        </Toolbar> */}
+
         {/* Panel */}
         <Panel>
           <PanelHeader>
             <PanelTitle>Assessment History</PanelTitle>
             {!loading && <PanelBadge>{filtered.length} assessments</PanelBadge>}
           </PanelHeader>
- 
+
           <ListWrap>
             {loading ? (
               <SkeletonRows />
             ) : filtered.length === 0 ? (
               <EmptyWrap>
-                <EmptyIcon><FaCheckCircle /></EmptyIcon>
+                <EmptyIcon>
+                  <FaCheckCircle />
+                </EmptyIcon>
                 <EmptyTitle>
                   {search ? "No results found" : "No completed assessment yet"}
                 </EmptyTitle>
@@ -152,19 +204,24 @@ const [examList, setExamList]   = useState([]);
                     : "Once you complete an assessment, your results will appear here."}
                 </EmptyDesc>
               </EmptyWrap>
-            ) : (<CardGrid style={{flexDirection:"column"}}>{
-              filtered.map((exam, index) => (
-                <CompletedExamTable
-                  data={exam}
-                  key={exam?.examId || index}
-                  index={index}
-                  total={filtered.length}
-                />
-              ))}</CardGrid>
+            ) : (
+              <CardGrid style={{ flexDirection: "column" }}>
+                {filtered.map((exam, index) => (
+                  <CompletedExamTable
+                    data={exam}
+                    key={exam?.examId || index}
+                    index={index}
+                    total={filtered.length}
+                  />
+                ))}
+              </CardGrid>
             )}
           </ListWrap>
         </Panel>
+        <FBackBtn onClick={() => navigate(-1)}>
+          <FaArrowLeft size={11} /> Back
+        </FBackBtn>
       </PageWrapper>
     </Layout>
-    );
-};
+  );
+}
