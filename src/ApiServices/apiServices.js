@@ -10,6 +10,7 @@ export async function apiPost(endpoint, data) {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
+
       },
       credentials:"include",
     });
@@ -103,6 +104,7 @@ export async function apiPostBlob(endpoint, data) {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/pdf",
       },
       
     });

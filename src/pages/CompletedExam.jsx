@@ -1,49 +1,108 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../component/Layout";
-import {
-  CommonContainer,
-  CommonHeader,
-  CommonHeading,
-  CommonSection,
-  CommonTable,
-
-} from "../styles/common_style";
 import { useSelector } from "react-redux";
-import { apiGet } from "../ApiServices/apiServices";
-import Empty from "../component/Empty";
-import CompletedExamTable from "../component/CompletedExamTable";
-import { EmptyDesc, EmptyIcon, EmptyTitle, EmptyWrap, HeaderLeft, ListWrap, PageHeader, PageLabel, PageSubtitle, PageWrapper, Panel, PanelBadge, PanelHeader, PanelTitle, ResultCount, SearchInput, SearchWrap, SkeletonBar, SkeletonRow, StatCard, StatIcon, StatInfo, StatsRow, Toolbar } from "../styles/CompletedExam_style";
-import { FaCheckCircle, FaFileAlt, FaSearch, FaTrophy } from "react-icons/fa";
-import { CardGrid } from "../styles/AsignedExam_style";
+import { apiGet, apiPostBlob } from "../ApiServices/apiServices";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import {
+  FaArrowLeft,
+  FaCheckCircle,
+  FaClipboardList,
+  FaDownload,
+} from "react-icons/fa";
+import { LuNotepadText } from "react-icons/lu";
+import {
+  CardGrid,
+  EmptyDesc,
+  EmptyIcon,
+  EmptyTitle,
+  EmptyWrap,
+  PageHeader,
+  PageLabel,
+  PageSubtitle,
+  PageTitle,
+  PageWrapper,
+  Panel,
+  PanelBadge,
+  PanelHeader,
+  PanelTitle,
+  SkeletonBar,
+} from "../styles/AsignedExam_style";
+import {
+  CompletedCard,
+  CardTopRow,
+  CardIconBox,
+  CardNameBlock,
+  CardName,
+  CardId,
+  ActionRow,
+  ResultBtn,
+  CertBtn,
+  CertSpinner,
+} from "../styles/CompletedExam_style";
+import { FBackBtn } from "../styles/formPage_style";
 
-
-
-function SkeletonRows() {
+/* ─────────────────────────────────────────
+   Skeleton Loader
+───────────────────────────────────────── */
+function SkeletonCards() {
   return (
     <>
-      {[80, 60, 90, 70].map((w, i) => (
-        <SkeletonRow key={i}>
-          <SkeletonBar $w="36px" $h="36px" style={{ borderRadius: 8 }} />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
-            <SkeletonBar $w={`${w}%`} $h="13px" />
-            <SkeletonBar $w="40%" $h="11px" />
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          style={{
+            background: "#FAFBFF",
+            border: "1.5px solid #E8EAF0",
+            borderRadius: 16,
+            padding: 20,
+            display: "flex",
+            flexDirection: "column",
+            gap: 15,
+          }}
+        >
+          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+            <SkeletonBar $w="44px" $h="44px" style={{ borderRadius: 11 }} />
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <SkeletonBar $w="68%" $h="13px" />
+              <SkeletonBar $w="36%" $h="11px" />
+            </div>
           </div>
-          <SkeletonBar $w="80px" $h="28px" style={{ borderRadius: 20 }} />
-        </SkeletonRow>
+          <div style={{ display: "flex", gap: 10 }}>
+            <SkeletonBar $w="50%" $h="38px" style={{ borderRadius: 10 }} />
+            <SkeletonBar $w="50%" $h="38px" style={{ borderRadius: 10 }} />
+          </div>
+        </div>
       ))}
     </>
   );
 }
+
+/* ─────────────────────────────────────────
+   Main Page
+───────────────────────────────────────── */
 export default function CompletedExam() {
-const [examList, setExamList]   = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [search, setSearch]       = useState("");
+  const [examList, setExamList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [downloadingId, setDownloadingId] = useState(null);
+
   const partyId = useSelector((state) => state.userReducer.partyId);
- 
-  const fetchPartyDetails = async () => {
+  const navigate = useNavigate();
+
+  /* ── Fetch completed exams ── */
+  const fetchCompletedExams = async () => {
     setLoading(true);
     try {
-      const response = await apiGet(`/exam/getcompletedexam-by-partyId/${partyId}`);
+      const response = await apiGet(
+        `/exam/getcompletedexam-by-partyId/${partyId}`
+      );
       setExamList(response.completedExamList || []);
     } catch (e) {
       console.error(e);
@@ -52,119 +111,147 @@ const [examList, setExamList]   = useState([]);
       setLoading(false);
     }
   };
- 
-  useEffect(() => { fetchPartyDetails(); }, []);
- 
-  const filtered = examList.filter((exam) =>
-    !search ||
-    exam?.examName?.toLowerCase().includes(search.toLowerCase()) ||
-    exam?.examId?.toLowerCase().includes(search.toLowerCase())
-  );
- 
-  // ── Stats ──
-  const total    = examList.length;
-  const passed   = examList.filter(e => (e.percentage ?? e.score ?? 0) >= 50).length;
-  const avgScore = total
-    ? Math.round(examList.reduce((s, e) => s + (e.percentage ?? e.score ?? 0), 0) / total)
-    : 0;
- 
+
+  useEffect(() => {
+    fetchCompletedExams();
+  }, []);
+
+  /* ── Download Certificate ── */
+  const handleDownloadCertificate = async (examId) => {
+    setDownloadingId(examId);
+    try {
+      const blob = await apiPostBlob(`/certificate/generate/`, {
+        examId,
+        partyId,
+      });
+
+      if (!blob || blob.size === 0) {
+        toast.error("Failed to download certificate", {
+          position: "top-center",
+        });
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "sphinx-certificate.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Certificate download error:", e);
+      toast.error("Failed to download certificate", { position: "top-center" });
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  /* ═══════════════════════════════════════
+     RENDER
+  ═══════════════════════════════════════ */
   return (
     <Layout>
       <PageWrapper>
-        {/* Header */}
+        {/* ── Page Header ── */}
         <PageHeader>
-          <HeaderLeft>
-            <PageLabel><FaCheckCircle size={10} /> Completed</PageLabel>
-            <PageSubtitle>Completed Assessment</PageSubtitle>
-            <PageSubtitle>Review your past assessment history, scores, and results.</PageSubtitle>
-          </HeaderLeft>
+          <div>
+            <PageLabel>
+              <FaCheckCircle size={11} /> Completed
+            </PageLabel>
+            <PageTitle>Assessment History</PageTitle>
+            <PageSubtitle>
+              Review your past assessments, results, and download certificates.
+            </PageSubtitle>
+          </div>
         </PageHeader>
- 
-        {/* Stats */}
-        <StatsRow>
-          {[
-            {
-              icon: <FaFileAlt />,
-              iconBg: "rgba(79,70,229,0.08)",
-              iconColor: "#4F46E5",
-              val: loading ? "—" : total,
-              lbl: "Total Assessments",
-            },
-            // {
-            //   icon: <FaTrophy />,
-            //   iconBg: "rgba(245,158,11,0.1)",
-            //   iconColor: "#F59E0B",
-            //   val: loading ? "—" : passed,
-            //   lbl: "Passed",
-            // },
-            // {
-            //   icon: <FaCheckCircle />,
-            //   iconBg: "rgba(16,185,129,0.08)",
-            //   iconColor: "#10B981",
-            //   val: loading ? "—" : `${avgScore}%`,
-            //   lbl: "Avg. Score",
-            // },
-          ].map((s, i) => (
-            <StatCard key={i}>
-              <StatIcon $bg={s.iconBg} $color={s.iconColor}>{s.icon}</StatIcon>
-              <StatInfo>
-                <div className="val">{s.val}</div>
-                <div className="lbl">{s.lbl}</div>
-              </StatInfo>
-            </StatCard>
-          ))}
-        </StatsRow>
- 
-        {/* Toolbar */}
-        <Toolbar>
-          <SearchWrap>
-            <FaSearch />
-            <SearchInput
-              placeholder="Search by exam name or ID..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-          </SearchWrap>
-          <ResultCount>
-            {loading ? "Loading..." : `${filtered.length} result${filtered.length !== 1 ? "s" : ""}`}
-          </ResultCount>
-        </Toolbar>
- 
-        {/* Panel */}
+
+        {/* ── Panel ── */}
         <Panel>
           <PanelHeader>
-            <PanelTitle>Assessment History</PanelTitle>
-            {!loading && <PanelBadge>{filtered.length} assessments</PanelBadge>}
-          </PanelHeader>
- 
-          <ListWrap>
-            {loading ? (
-              <SkeletonRows />
-            ) : filtered.length === 0 ? (
-              <EmptyWrap>
-                <EmptyIcon><FaCheckCircle /></EmptyIcon>
-                <EmptyTitle>
-                  {search ? "No results found" : "No completed assessment yet"}
-                </EmptyTitle>
-                <EmptyDesc>
-                  {search
-                    ? `No exams match "${search}". Try a different keyword.`
-                    : "Once you complete an assessment, your results will appear here."}
-                </EmptyDesc>
-              </EmptyWrap>
-            ) : (<CardGrid style={{flexDirection:"column"}}>{
-              filtered.map((exam, index) => (
-                <CompletedExamTable
-                  data={exam}
-                  key={exam?.examId || index}
-                  index={index}
-                  total={filtered.length}
-                />
-              ))}</CardGrid>
+            <PanelTitle>Completed Assessments</PanelTitle>
+            {!loading && (
+              <PanelBadge>{examList.length} completed</PanelBadge>
             )}
-          </ListWrap>
+          </PanelHeader>
+
+          {/* Loading */}
+          {loading ? (
+            <CardGrid>
+              <SkeletonCards />
+            </CardGrid>
+          ) : examList.length === 0 ? (
+            /* Empty state */
+            <EmptyWrap>
+              <EmptyIcon>
+                <FaCheckCircle />
+              </EmptyIcon>
+              <EmptyTitle>No completed assessments yet</EmptyTitle>
+              <EmptyDesc>
+                Once you complete an assessment, your results will appear here.
+              </EmptyDesc>
+            </EmptyWrap>
+          ) : (
+            /* Card Grid */
+            <CardGrid>
+              {examList.map((exam, index) => {
+                const isDownloading = downloadingId === exam?.examId;
+
+                return (
+                  <CompletedCard key={exam?.examId || index} $i={index}>
+                    {/* Top row: icon + name + id */}
+                    <CardTopRow>
+                      <CardIconBox>
+                        <FaClipboardList />
+                      </CardIconBox>
+                      <CardNameBlock>
+                        <CardName>
+                          {exam?.examName || "Untitled Exam"}
+                        </CardName>
+                        <CardId>ID: {exam?.examId || "—"}</CardId>
+                      </CardNameBlock>
+                    </CardTopRow>
+
+                    {/* Action buttons */}
+                    <ActionRow>
+                      <ResultBtn
+                        onClick={() =>
+                          navigate(`/exam-result/${exam?.examId}/${partyId}`)
+                        }
+                      >
+                        <LuNotepadText size={14} /> Result
+                      </ResultBtn>
+
+                      <CertBtn
+                        onClick={() =>
+                          !isDownloading &&
+                          handleDownloadCertificate(exam?.examId)
+                        }
+                        $loading={isDownloading}
+                      >
+                        {isDownloading ? (
+                          <>
+                            <CertSpinner /> Downloading...
+                          </>
+                        ) : (
+                          <>
+                            <FaDownload size={12} /> Certificate
+                          </>
+                        )}
+                      </CertBtn>
+                    </ActionRow>
+                  </CompletedCard>
+                );
+              })}
+            </CardGrid>
+          )}
         </Panel>
+
+        <FBackBtn onClick={() => navigate(-1)}>
+          <FaArrowLeft size={11} /> Back
+        </FBackBtn>
       </PageWrapper>
     </Layout>
-    );
-};
+  );
+}
