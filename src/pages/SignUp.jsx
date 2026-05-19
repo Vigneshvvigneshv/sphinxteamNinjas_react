@@ -25,6 +25,7 @@ import LoaderComponent from '../component/LoaderComponent';
 const SignUp = () => {
   const [error, setError] = useState({});
   const { partyId } = useSelector((state) => state.userReducer);
+  const { userName } = useSelector((state) => state.userReducer);
   const [showPassword, setShowPassword] = useState(true);
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +77,7 @@ const SignUp = () => {
       <CommonContainer>
         <FormContainer>
           <FormHeading>Create account</FormHeading>
-          <FormSubtitle>Register user/admin to the sphinx platform</FormSubtitle>
+          <FormSubtitle>Register user{userName==='super' && '/admin'} to the sphinx platform</FormSubtitle>
 
           <Form onSubmit={handleSubmit}>
             <FieldContainer>
@@ -145,13 +146,14 @@ const SignUp = () => {
                 {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
               </FieldContainer>
             )}
-
+            {userName==='super' &&
             <FieldContainer>
               <Dropdown name="roleTypeId" onChange={handleChange}>
                 <option value="SPHINX_USER">User</option>
                 <option value="SPHINX_ADMIN">Admin</option>
               </Dropdown>
             </FieldContainer>
+            }
 
             {/* ── Submit button with inline spinner ── */}
             <SubmitButton disabled={isLoading}>

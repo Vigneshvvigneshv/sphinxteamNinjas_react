@@ -33,6 +33,7 @@ import { ActionIconBtn } from "../styles/adminDashboard_style";
 import Modal from "../component/Modal";
 import { toast } from "sonner";
 import { FBackBtn } from "../styles/formPage_style";
+import AddTopicModal from "../component/AddTopicModal";
 
 // ── Cycling dot colours ───────────────────────────────────────────────────────
 const DOT_COLORS = [
@@ -56,7 +57,7 @@ const TopicPage = () => {
   const [data, setData] = useState(null);
   const [search, setSearch] = useState("");
   const [topicId, setTopicId] = useState(null);
-
+  const [showTopic,setShowTopic] =useState(false);
   const fetchData = async () => {
     const response = await apiGet("/topic/getall-topic/" + partyId);
     setData(response);
@@ -64,7 +65,11 @@ const TopicPage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+// ──  Topic Modal ──────────────────────────────────────────────────────────
 
+  const openTopicModal=()=>{
+    setShowTopic(!showTopic)
+  }
   // ── Delete Topic ──────────────────────────────────────────────────────────
   const openDeleteTopicModal = (id) => {
     setTopicId(id);
@@ -100,7 +105,7 @@ const TopicPage = () => {
             Topics
             <span>Manage all question topics</span>
           </TopicPageTitle>
-          <TopicAddBtn to="/addtopic">
+          <TopicAddBtn onClick={openTopicModal}>
             <FaPlus size={11} /> Add Topic
           </TopicAddBtn>
         </TopicPageHeader>
@@ -214,6 +219,7 @@ const TopicPage = () => {
           undone.
         </Modal>
       )}
+      {showTopic && <AddTopicModal change={openTopicModal}/>}
     </Layout>
   );
 };

@@ -279,6 +279,12 @@ export const ActionIconBtn = styled.button`
     border-color: #fecaca;
     transform: translateY(-1px);
   }
+  &.edit:hover {
+    color: #2563EB;
+    background: #EFF6FF;
+    border-color: #BFDBFE;
+    transform: translateY(-1px);
+  }
 `;
 
 // ─── Card Divider ─────────────────────────────────────────────────────────────

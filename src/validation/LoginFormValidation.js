@@ -4,7 +4,7 @@ export const validate = (formData) => {
   let newErrors = {};
 
   if (formData.userName.trim() === "") {
-    newErrors.userName = "Username is required";
+    newErrors.userName = "User name is required";
   } 
 
 

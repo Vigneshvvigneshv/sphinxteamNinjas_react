@@ -166,7 +166,7 @@ export default function AssignedExam() {
   const fetchExams = async () => {
     setLoading(true);
     try {
-      const response = await apiGet(`/exam/getexam-by-partyId/${partyId}`);
+      const response = await apiGet(`/exam/getallexam-by-partyId/${partyId}`);
       setExamList(response.examList || []);
     } catch (e) {
       console.error(e);
@@ -345,6 +345,7 @@ export default function AssignedExam() {
               {filtered.map((exam, index) => {
                 const attemptsUsed = exam?.noOfAttempts ?? 0;
                 const totalAttempts = exam?.allowedAttempts ?? 1;
+                const isTimeout = exam?.isTimeout ?? false;
                 const attemptsLeft = totalAttempts - attemptsUsed;
                 const noAttemptsLeft = attemptsLeft <= 0;
                 const attemptsPercent = Math.min(
@@ -409,6 +410,7 @@ export default function AssignedExam() {
                     </div>
 
                     {/* Start button */}
+                    {!isTimeout? 
                     <StartBtn
                       onClick={() => openModal(exam)} //handleStartExam(exam?.examId)}
                       disabled={isStarting || noAttemptsLeft}
@@ -426,7 +428,7 @@ export default function AssignedExam() {
                           <FaPlay size={12} /> Start Exam
                         </>
                       )}
-                    </StartBtn>
+                    </StartBtn>:"Time out for this exam"}
                   </ExamCard>
                 );
               })}

@@ -11,7 +11,6 @@ import QuestionPage from "./pages/QuestionPage";
 import AddExam from "./pages/AddEditExam";
 import AddTopicsToExam from "./pages/AddTopicsToExam";
 import ExamTopicPage from "./pages/ExamTopicPage";
-import UserPage from "./pages/UserPage";
 import QuestionBulkUpload from "./pages/QuestionBulkUpload";
 import { useDispatch, useSelector } from "react-redux";
 import AssignExamPage from "./pages/AssignExamPage";
@@ -25,6 +24,8 @@ import ResultPage from "./pages/ResultPage";
 import ExamPage from "./pages/ExamPage";
 import { apiGet } from "./ApiServices/apiServices";
 import { userAction } from "./store/userSlice";
+import UserList from "./pages/UserList";
+import UserPage from "./pages/UserPage";
 
 const App = () => {
   // const dispatch=useDispatch();
@@ -103,6 +104,7 @@ const App = () => {
              </ProtectedRoute>
           }
         />
+
         <Route
           path="/user-dashboard"
           element={
@@ -243,6 +245,16 @@ const App = () => {
         />
         <Route
           path="/userlist"
+          element={
+            <ProtectedRoute>
+              <AdminAuthentication>
+                <UserList />
+              </AdminAuthentication>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/userpage/:id"
           element={
             <ProtectedRoute>
               <AdminAuthentication>

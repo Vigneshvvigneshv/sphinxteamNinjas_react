@@ -105,7 +105,7 @@ const AddEditExam = () => {
                 <FTextarea
                   id="description"
                   name="description"
-                  placeholder="Brief description of the exam…"
+                  placeholder="Brief description of the assessment…"
                   value={formData.description}
                   onChange={handleChange}
                 />

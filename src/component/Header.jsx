@@ -37,7 +37,7 @@ const Header = () => {
       <HeaderNav>
         {(role==='SPHINX_ADMIN') &&  
         <>
-        <HeaderButton to="/adduser"><FaUserPlus/> user / admin</HeaderButton>
+        <HeaderButton to="/adduser"><FaUserPlus/> Add user</HeaderButton>
         <HeaderButton to="/userlist">Users</HeaderButton>
         <HeaderButton to="/uploadfile">Upload questions</HeaderButton>
         <HeaderButton to="/topic">Topics</HeaderButton>
